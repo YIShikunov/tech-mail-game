@@ -1,22 +1,26 @@
 define([
     'backbone',
-    'tmpl/scoreboard'
+    'tmpl/scoreboard',
+    'models/score'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    ScoreModel
 ){
 
-    var View = Backbone.View.extend({
+    var ScoreView = Backbone.View.extend({
 
+        model: ScoreModel,
         template: tmpl,
         initialize: function () {
             // TODO
         },
+
         render: function () {
-            // TODO
+            return this.template(this.model.toJSON());
         },
         show: function () {
-            // TODO
+            return this.render();
         },
         hide: function () {
             // TODO
@@ -24,5 +28,6 @@ define([
 
     });
 
-    return new View();
+    return new ScoreView();
 });
+

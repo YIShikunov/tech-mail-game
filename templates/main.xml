@@ -1,12 +1,9 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
-    <script src="/js/tmpl/game.js"></script>
-    <script src="/js/tmpl/scoreboard.js"></script>
-    <script src="/js/tmpl/auth.js"></script>
-    <div>
-        <h1>Epic Game</h1>
-    </div>
-    <a class="js-scoreboard" href="#scoreboard">Scoreboard</a>
-    <a class="js-game" href="#game">Game</a>
-    <a class="js-auth" href="#auth">Auth</a>
-
+    <div class="title">WuXing</div>
+    <div class="main">
+    	<div class="main__title">Главное меню</div>
+	    <a class="main__btn" href="#game">Играть</a>
+	    <a class="main__btn" href="#login">Авторизация</a>
+	    <a class="main__btn" href="#scoreboard">Рейтинг</a>
+	</div>
 </fest:template>

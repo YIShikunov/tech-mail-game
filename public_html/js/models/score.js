@@ -4,8 +4,16 @@ define([
     Backbone
 ){
 
-    var Model = Backbone.Model.extend({
+    var ScoreModel = Backbone.Model.extend({
+    	initialize: function () {
+
+    	},
+    	defaults: {
+    		name : "Mikhail",
+    		score: 255
+    	}
+
     });
 
-    return Model;
+    return new ScoreModel();
 });

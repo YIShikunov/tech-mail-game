@@ -1,6 +1,9 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
-    <div>
-        <h1>Epic Game</h1>
-    </div>
-    <a class="js-back" href="#">BACK</a>
+    <div class="title">WuXing</div>
+    <div class="score">
+        <div class="score__title">Рейтинг</div>
+        <p>Name: <fest:value>json.name</fest:value></p>
+    	<p>Score: <fest:value>json.score</fest:value></p>
+    	<a class="main__btn" href="#">НАЗАД</a>
+    </div>  
 </fest:template>
