@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/main.css"/>
+</head><body>
+    <div id="page">
+	<a href="#scoreboard" class="js-scoreboard">Scoreboard</a>
+	<a href="#game" class="js-game">Game</a>
+	<a href="#login" class="js-login">Login</a>
+	<script>
+    		$('.js-scoreborad').on("click", alert("Scorebord"));
+    		$('.js-game').on("click", function () { … });
+    		$('.js-login').on("click", function () { … });
+        </script>		
+    </div>
+	https://github.com/eprev/frontend-stub.git
+	<script src="//tech-mail-java.cloudapp.net:35729/livereload.js"></script>
+	<script src="/js/lib/jquery.js"></script>
+	<script src="/js/tmpl/main.js"></script>
+<script>
+    var $page = $('#page');
+    $page.html(mainTmpl()); // Рендерим шаблон
+</script>
+</body></html>
+
