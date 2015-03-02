@@ -17,3 +17,6 @@ hs_err_pid*
 
 #Node Packets Folder
 node_modules/
+
+#Compiled Templates
+js/tmpl

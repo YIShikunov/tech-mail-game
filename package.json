@@ -3,22 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "doc": "doc"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/YIShikunov/tech-mail-game.git"
-  },
-  "author": "",
+  "author": "VoidChronos@live.com",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/YIShikunov/tech-mail-game/issues"
-  },
-  "homepage": "https://github.com/YIShikunov/tech-mail-game",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-concurrent": "^1.0.0",
