@@ -32,16 +32,16 @@ function hideGameScreen() {
 }
 
 /* Конструктор экрана "Авторизация" */
-function showLoginScreen() {
+function showAuthScreen() {
     hideMainScreen(); // Убиваем экран "Главный"
-    currentScreen = 'login';
-    $page.html(loginTmpl()); // Рендерим шаблон
+    currentScreen = 'auth';
+    $page.html(authTmpl()); // Рендерим шаблон
     // Инициализируем обработчики событий
     $page.find('.js-back').on('click', showMainScreen);
 }
 
 /* Деструктор экрана "Авторизация" */
-function hideLoginScreen() {
+function hideAuthScreen() {
     // Удаляем установленные обработчики событий
     $page.find('.js-back').off('click', showMainScreen);
 }
@@ -53,23 +53,44 @@ function showMainScreen() {
         hideScoreboardScreen();
     } else if (currentScreen === 'game') {
         hideGameScreen();
-    } else if (currentScreen === 'login') {
-        hideLoginScreen();
+    } else if (currentScreen === 'auth') {
+        hideAuthScreen();
     }
     currentScreen = 'main';
     $page.html(mainTmpl()); // Рендерим шаблон
     // Инициализируем обработчики событий
     $page.find('.js-scoreboard').on('click', showScoreboardScreen);
-    $page.find('.js-start-game').on('click', showGameScreen);
-    $page.find('.js-login').on('click', showGameScreen);
+    $page.find('.js-game').on('click', showGameScreen);
+    $page.find('.js-auth').on('click', showAuthScreen);
 }
 
 /* Деструктор экрана "Главный" */
 function hideMainScreen() {
     // Удаляем установленные обработчики событий
     $page.find('.js-scoreboard').off('click', showScoreboardScreen);
-    $page.find('.js-start-game').off('click', showGameScreen);
-    $page.find('.js-login').off('click', showLoginScreen);
+    $page.find('.js-game').off('click', showGameScreen);
+    $page.find('.js-auth').off('click', showAuthScreen);
 }
 
 showMainScreen();
+window.onhashchange = function() {
+    if (currentScreen === 'scoreboard') {
+        hideScoreboardScreen();
+    } else if (currentScreen === 'game') {
+        hideGameScreen();
+    } else if (currentScreen === 'auth') {
+        hideAuthScreen();
+    } else if (currentScreen === 'main') {
+	hideMainScreen();
+    }
+    if (location.hash === '#scoreboard') {
+        showScoreboardScreen();
+    } else if (location.hash === '#game') {
+        showGameScreen();
+    } else if (location.hash === '#auth') {
+        showAuthScreen();
+    } else if (location.hash === '') {
+	showMainScreen();
+    }
+}
+

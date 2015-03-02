@@ -2,4 +2,5 @@
     <div>
         <h1>Epic Game</h1>
     </div>
+    <a class="js-back" href="#">BACK</a>
 </fest:template>
