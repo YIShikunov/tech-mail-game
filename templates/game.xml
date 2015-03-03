@@ -1,6 +1,9 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
     <div>
-        <h1>Epic Game</h1>
-    </div>
+        <h1>Wu Xing</h1>
+    </div><br/>
+    <div>
+	A game screen is supposed to be here
+    </div><br/>
     <a class="js-back" href="#">BACK</a>
 </fest:template>

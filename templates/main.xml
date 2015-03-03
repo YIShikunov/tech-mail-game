@@ -3,10 +3,9 @@
     <script src="/js/tmpl/scoreboard.js"></script>
     <script src="/js/tmpl/auth.js"></script>
     <div>
-        <h1>Epic Game</h1>
+        <h1>Wu Xing</h1>
     </div>
-    <a class="js-scoreboard" href="#scoreboard">Scoreboard</a>
-    <a class="js-game" href="#game">Game</a>
-    <a class="js-auth" href="#auth">Auth</a>
-
+    <a class="js-scoreboard" href="#scoreboard">Scoreboard</a><br/>
+    <a class="js-game" href="#game">Start Game</a><br/>
+    <a class="js-auth" href="#auth">Login</a>
 </fest:template>

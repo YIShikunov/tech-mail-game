@@ -1,6 +1,13 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
     <div>
-        <h1>Epic Game</h1>
+        <h1>Wu Xing</h1>
     </div>
+
+<form action="/api/v1/auth/signin" method="POST">
+    Login: <input type="text" name="email"/><br/>
+    Password:  <input type="text" name="password"/><br/>
+    <input type="submit" value="Ok" />
+</form>
+
     <a class="js-back" href="#">BACK</a>
 </fest:template>
