@@ -4,10 +4,19 @@
     </div>
 
 <form action="/api/v1/auth/signin" method="POST">
-    Login: <input type="text" name="email"/><br/>
-    Password:  <input type="text" name="password"/><br/>
+    <p>Email: <input type="text" name="email"/></p>
+    <p>Password:  <input type="text" name="password"/></p>
     <input type="submit" value="Ok" />
 </form>
+
+	<p>New user? Register.</p>
+	<form action="/api/v1/auth/signin" method="POST">
+		<p>Name: <input name="username" pattern="^[a-zA-Z0-9_]+$" /></p>
+                <p>Email: <input type="email" name="email"/></p>
+                <p>Password: <input name="password" placeholder="******"/></p>
+	<input type="submit" value="Ok" />
+	</form>
+
 
     <a class="js-back" href="#">BACK</a>
 </fest:template>
