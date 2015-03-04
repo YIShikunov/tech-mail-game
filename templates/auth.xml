@@ -4,16 +4,16 @@
     </div>
 
 <form action="/api/v1/auth/signin" method="POST">
-    <p>Email: <input type="text" name="email"/></p>
-    <p>Password:  <input type="text" name="password"/></p>
+    <p>Email: <input type="text" name="email" required=""/></p>
+    <p>Password:  <input type="text" name="password" required=""/></p>
     <input type="submit" value="Ok" />
 </form>
 
 	<p>New user? Register.</p>
 	<form action="/api/v1/auth/signin" method="POST">
-		<p>Name: <input name="username" pattern="^[a-zA-Z0-9_]+$" /></p>
-                <p>Email: <input type="email" name="email"/></p>
-                <p>Password: <input name="password" placeholder="******"/></p>
+		<p>Name: <input name="username" pattern="^[a-zA-Z0-9_]+$" required="" /></p>
+                <p>Email: <input type="email" name="email" required=""/></p>
+                <p>Password: <input name="password" placeholder="******" required=""/></p>
 	<input type="submit" value="Ok" />
 	</form>
 
