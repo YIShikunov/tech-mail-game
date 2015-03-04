@@ -19,4 +19,4 @@ hs_err_pid*
 node_modules/
 
 #Compiled Templates
-js/tmpl
+public_html/js/tmpl
