@@ -20,3 +20,4 @@ node_modules/
 
 #Compiled Templates
 public_html/js/tmpl
+templates/java
