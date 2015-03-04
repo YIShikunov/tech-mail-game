@@ -3,15 +3,15 @@
     <div class="auth">
         <div class="auth__title">Авторизация</div>
 	<div class="form">
-        <form action="/api/v1/auth/signup" method="POST" id="signup-form">
+        <form action="/api/v1/auth/signin" method="POST" id="signup-form">
                 <span class="form__line">Логин:
-                        <input name="login" class="form__input" required type="text">
+                        <input name="login" class="form__input" required="" pattern="^[a-zA-Z0-9_]+$" type="text"/>
                 </span>
                 <span class="form__line">Почта:
-                        <input name="email" class="form__input" required type="text">
+                        <input name="email" class="form__input" required="" type="email"/>
                 </span>
                 <span class="form__line">Пароль:
-                        <input name="password" class="form__input" required type="password">
+                        <input name="password" class="form__input" required="" type="password"/>
                 </span>
                 <button class="form__btn">Войти</button>
         </form>
