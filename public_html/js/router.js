@@ -3,8 +3,9 @@ define([
     'views/scoreboard',
     'views/main',
     'views/login',
+    'views/game'
 ], function(
-    Backbone, ScoreView, MainView, LoginView
+    Backbone, ScoreView, MainView, LoginView, GameView
 ){
     var $page = $('#page'),
     currentScreen = 'main';
@@ -23,8 +24,7 @@ define([
             showScoreboardScreen();
         },
         gameAction: function () {
-            // TODO
-            alert("game");
+            showGameScreen();
         },
         loginAction: function () {
             showLoginScreen();
@@ -48,9 +48,7 @@ define([
     function showGameScreen() {
         hideMainScreen(); // Убиваем экран "Главный"
         currentScreen = 'game';
-        //$page.html(gameTmpl()); // Рендерим шаблон
-        // Инициализируем обработчики событий
-        $page.find('.js-back').on('click', showMainScreen);
+        $page.html(GameView.show()); // Рендерим шаблон
     }
 
     /* Деструктор экрана "Игра" */

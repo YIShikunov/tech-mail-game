@@ -12,7 +12,6 @@ define([
     		name : "Mikhail",
     		score: 255
     	}
-
     });
 
     return new ScoreModel();

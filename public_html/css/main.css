@@ -1,7 +1,7 @@
 html, body {
 	width: 100%;
 	height: 100%;
-	background: #00FF7F;
+	background: url(../images/background.jpg);
 	margin: 0;
 	padding: 0;
 }
@@ -20,7 +20,7 @@ html, body {
     text-shadow: 2px 0px 0px #000000, -2px 0px 0px #000000, 0px 2px 0px #000000, 0px -2px 0px #000000, 1px 1px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000;
 }
 
-.main, .score, .auth {
+.main, .score, .auth, .game {
 	text-align: center;
 }
 
@@ -31,7 +31,7 @@ html, body {
     font-weight: bold;
 }
 
-.main__btn, .score__bthn, .auth__btn {
+.main__btn, .score__bth, .auth__btn, .game__btn {
     display: block;
     width: 300px;
     margin: 10px auto 0px;
@@ -87,4 +87,8 @@ html, body {
     cursor: pointer;
     outline: medium none;
     text-align: center;
+}
+
+.game__field {
+    height: 650px;
 }
