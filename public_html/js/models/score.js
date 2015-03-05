@@ -6,7 +6,6 @@ define([
 
     var ScoreModel = Backbone.Model.extend({
     	initialize: function () {
-
     	},
     	defaults: {
     		name : "Mikhail",

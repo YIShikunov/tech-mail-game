@@ -6,10 +6,10 @@ define([
 ){
 
     var ScoreCollection = Backbone.Collection.extend({
-    	initialize: function () {
-		},
-		model: ScoreModel,
+		model: ScoreModel
     });
 
-    return new ScoreCollection();
+    console.log(ScoreModel);
+
+    return new ScoreCollection(ScoreModel);
 });

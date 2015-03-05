@@ -2,7 +2,6 @@ define([
     //'jquery',
     'backbone',
     'tmpl/scoreboard',
-    'models/score',
     'collections/scores',
 ], function(
     Backbone,
@@ -19,8 +18,9 @@ define([
         },
 
         render: function () {
-            //this.collection.add(ScoreModel);
-            //console.log(this.collection.toJSON());
+            //ScoreCollection.add({name: "Mikhail"});
+            //console.log(this.collection.reset([{name: "tatal", score: 25}]));
+            console.log(this.collection.toJSON());
             return this.template(this.collection.toJSON());
         },
         show: function () {

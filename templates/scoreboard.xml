@@ -2,8 +2,12 @@
     <div class="title">WuXing</div>
     <div class="score">
         <div class="score__title">Рейтинг</div>
-        <p>Name: <fest:value>json.name</fest:value></p>
-    	<p>Score: <fest:value>json.score</fest:value></p>
+			<fest:each iterate="json" index="i" value="score">
+				<div>
+				<p>Name: <fest:value>score.name</fest:value></p>
+    			<p>Score: <fest:value>score.score</fest:value></p>
+				</div>
+			</fest:each>
     	<a class="main__btn" href="#">НАЗАД</a>
     </div>  
 </fest:template>
