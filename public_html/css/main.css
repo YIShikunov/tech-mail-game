@@ -31,7 +31,7 @@ html, body {
     font-weight: bold;
 }
 
-.main__btn, .score__bth, .auth__btn, .game__btn {
+.main__btn, .score__btn, .auth__btn, .game__btn {
     display: block;
     width: 300px;
     margin: 10px auto 0px;

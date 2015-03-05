@@ -9,7 +9,8 @@ define([
     ScoreCollection,
     ScoreModel
 ){
-
+    //ScoreCollection.add({name: "LOL"});
+    
     var ScoreView = Backbone.View.extend({
 
         collection: ScoreCollection,
@@ -18,9 +19,6 @@ define([
         },
 
         render: function () {
-            //ScoreCollection.add({name: "Mikhail"});
-            //console.log(this.collection.reset([{name: "tatal", score: 25}]));
-            console.log(this.collection.toJSON());
             return this.template(this.collection.toJSON());
         },
         show: function () {

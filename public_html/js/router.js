@@ -93,50 +93,6 @@ define([
         $page.find('.js-game').off('click', showGameScreen);
         $page.find('.js-login').off('click', showLoginScreen);
     }
-
-    function test() {
-    // Person Model
-        var Person = Backbone.Model.extend({
-          defaults: {
-              name: 'Guest User',
-              age: 30
-          }
-        });
-
-
-        // A List of People
-        var PeopleCollection = Backbone.Collection.extend({
-          model: Person
-        });
-
-
-        var peopleCollection = new PeopleCollection([
-      {
-          name: 'Mohit Jain',
-          age: 26
-      },
-      {
-          name: 'Taroon Tyagi',
-          age: 25,
-          occupation: 'web designer'
-      },
-      {
-          name: 'Rahul Narang',
-          age: 26,
-          occupation: 'Java Developer'
-      }
-    ]);
-
-        peopleCollection.add({name: "Mikhail"});
-
-        console.log(peopleCollection.toJSON())
-
-
-        alert(125);
-    }   
-
-
-
     return new Router();
 });
 
