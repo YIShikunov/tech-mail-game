@@ -25,8 +25,6 @@ define([
         },
         gameAction: function () {
             showGameScreen();
-            test();
-
         },
         loginAction: function () {
             showLoginScreen();
