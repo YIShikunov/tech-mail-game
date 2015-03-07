@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+	<link rel="stylesheet" href="/css/main.css">
+    <title>Authorization</title>
+</head>
+<body>
+<div class="form">
+    <form action="/api/v1/auth/signin" method="POST" id="signup-form">
+        <span class="form__line">Login:<input name="login" class="form__input" required="" pattern="^[a-zA-Z0-9_]+$" type="text"></span><br\>
+        <span class="form__line">Paswd:<input name="password" class="form__input" required="" type="password"></span><br\>
+        <button class="form__btn">SIGIN</button>
+    </form>
+</div>
+<h1 align="center">${loginStatus}</h1>
+    <#if online == 1 >
+        <center><a href="/api/v1/auth/signout"><button type="submit">Logout</button></a></center>
+    </#if>
+
+</body>
+</html>
