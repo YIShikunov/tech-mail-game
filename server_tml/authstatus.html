@@ -6,17 +6,26 @@
     <title>Authorization</title>
 </head>
 <body>
+    <h1 align="center" class="title">${loginStatus}</h1>
+
+
+    <#if online != 1 >
 <div class="form">
     <form action="/api/v1/auth/signin" method="POST" id="signup-form">
         <span class="form__line">Login:<input name="login" class="form__input" required="" pattern="^[a-zA-Z0-9_]+$" type="text"></span><br\>
-        <span class="form__line">Paswd:<input name="password" class="form__input" required="" type="password"></span><br\>
-        <button class="form__btn">SIGIN</button>
+        <span class="form__line">Password:<input name="password" class="form__input" required="" type="password"></span><br\>
+        <button class="form__btn">LOGIN</button>
     </form>
 </div>
-<h1 align="center">${loginStatus}</h1>
-    <#if online == 1 >
-        <center><a href="/api/v1/auth/signout"><button type="submit">Logout</button></a></center>
     </#if>
+
+    <#if online == 1 >
+        <center><a href="/api/v1/auth/signout"><button type="submit" class="form__btn">LOGOUT</button></a></center>
+    </#if>
+
+    <a class="main__btn" href="/">BACK</a>   
+
+
 
 </body>
 </html>

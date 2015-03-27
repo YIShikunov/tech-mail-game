@@ -3,9 +3,6 @@ package main;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by v.chibrikov on 13.09.2014.
- */
 public class AccountService {
     private static Map<String, UserProfile> users = new HashMap<>();
     private static Map<String, UserProfile> sessions = new HashMap<>();

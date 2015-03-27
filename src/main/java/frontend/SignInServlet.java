@@ -14,9 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * @author v.chibrikov
- */
 public class SignInServlet extends HttpServlet {
     private AccountService accountService;
 
@@ -64,7 +61,7 @@ public class SignInServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
-            pageVariables.put("loginStatus", "Hello, "+profile.getLogin());
+            pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+"<br>"+profile.getEmail());
             pageVariables.put("online", 1);
 
             final Random random = new Random();

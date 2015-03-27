@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author v.chibrikov
- */
 public class SignOutServlet extends HttpServlet {
     private AccountService accountService;
 
