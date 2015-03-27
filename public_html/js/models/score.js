@@ -13,5 +13,5 @@ define([
     	}
     });
 
-    return new ScoreModel();
+    return ScoreModel;
 });

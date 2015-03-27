@@ -1,2 +1,6 @@
-<fest:template xmlns:fest="http://fest.mail.ru">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+    <div class="game">
+        <a class="game__btn" href="#">НАЗАД</a>
+        <img class="game__field" src="./images/field.png" height="300" />
+    </div>  
 </fest:template>

@@ -1,7 +1,7 @@
 html, body {
 	width: 100%;
 	height: 100%;
-	background: url(../images/background.jpg);
+	background: url(../images/graphics.jpg);
 	margin: 0;
 	padding: 0;
 }
@@ -27,7 +27,7 @@ html, body {
 .main__title, .score__title, .auth__title   {
     font-size: 20px;
     margin: 50px auto 20px;
-    color: #333333;
+    color: #FFFFFF;
     font-weight: bold;
 }
 
@@ -48,12 +48,36 @@ html, body {
     text-align: center;
 }
 
+.score__table {
+    margin: 50px auto 0px;
+    width: 200px;
+    border-radius: 20px;
+}
+
+.score__tr {
+    width: 100%;
+    background: #FFFFFF;
+}
+
+.score__tr:first-child {
+    width: 100%;
+    background: #22BB7F;
+    border-radius: 20px;
+}
+.score__td_name {
+    width: 70%;
+}
+.score__td_score {
+    width: 30%;
+}
+
 .form {
     width: 400px;
     padding: 20px;
     margin: 50px auto 0px;
     border: 5px solid #00AA7F;
     border-radius: 20px;
+    background: #0066AA; 
 }
 
 .form__input {
@@ -70,6 +94,7 @@ html, body {
 
 .form__line {
     display: block;
+    color: #FFFFFF;
 }
 
 .form__btn {

@@ -7,16 +7,16 @@ define([
 ){
 
     var LoginView = Backbone.View.extend({
-
+        el: $("#page"),
         template: tmpl,
         initialize: function () {
-            // TODO
         },
         render: function () {
-            return this.template();
+            //return this.template();
         },
         show: function () {
-            return this.render();
+            this.$el.html(this.template());
+            this.$el.show();
         },
         hide: function () {
             // TODO
