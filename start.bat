@@ -1,1 +1,1 @@
-java -jar server.jar 8080
+java -jar Tech-Mail.jar 8080
