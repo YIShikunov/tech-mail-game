@@ -1,4 +1,4 @@
-package main;
+package AccountService;
 
 public class UserProfile {
     private String login;

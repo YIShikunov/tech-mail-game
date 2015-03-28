@@ -1,7 +1,7 @@
-package frontend;
+package servlets;
 
-import main.AccountService;
-import main.UserProfile;
+import AccountService.AccountService;
+import AccountService.UserProfile;
 import templater.PageGenerator;
 
 import javax.servlet.ServletException;

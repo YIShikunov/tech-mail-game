@@ -1,8 +1,8 @@
-package admin;
-import main.TimeHelper;
+package servlets;
+import utils.TimeHelper;
 import templater.PageGenerator;
 
-import main.AccountService;
+import AccountService.AccountService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

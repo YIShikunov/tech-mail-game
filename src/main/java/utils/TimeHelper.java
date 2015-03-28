@@ -1,4 +1,4 @@
-package main;
+package utils;
 
 public class TimeHelper {
 	public static void sleep(int period){
