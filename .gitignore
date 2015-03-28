@@ -1,3 +1,4 @@
+# Compile files
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -11,6 +12,7 @@
 # IDE Config Folder
 target/
 out/
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -19,15 +21,14 @@ node_modules/
 
 #Compiled Templates
 public_html/js/tmpl
-templates/java
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
-*.iml
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 # Directory-based project format:
 
 # User-specific stuff:
  .idea/workspace.xml
+ .idea/misc.xml
  .idea/tasks.xml
  .idea/dictionaries
 
