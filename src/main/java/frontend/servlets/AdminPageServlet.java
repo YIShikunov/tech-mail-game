@@ -1,8 +1,8 @@
-package frontend;
+package frontend.servlets;
 import utils.TimeHelper;
-import templater.PageGenerator;
+import utils.PageGenerator;
 
-import AccountService.AccountService;
+import frontend.AccountService.AccountService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

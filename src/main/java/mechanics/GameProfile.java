@@ -1,4 +1,4 @@
-package game;
+package mechanics;
 
 /**
  * Created by Artem on 3/29/2015.

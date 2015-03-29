@@ -1,0 +1,10 @@
+{
+	type: "alive"
+	turn: $(turn)
+	playerID: $(playerID)
+	mouse:
+	{
+		x: $(X)
+		y: $(Y)
+	}
+}

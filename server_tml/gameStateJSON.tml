@@ -1,0 +1,13 @@
+{
+	type: "state",
+	turn: $(turn),
+	playerID: $(playerID),
+	opponentPieces: 
+	[	{ pieceID: $(pieceID), fieldID: $(fieldID), type: "$(type)" },
+		{}
+	],
+	playerPieces:
+	[	{ pieceID: $(pieceID), fieldID: $(fieldID), type: "$(type)" },
+		{}
+	]
+}

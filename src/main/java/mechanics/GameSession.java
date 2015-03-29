@@ -1,4 +1,4 @@
-package game;
+package mechanics;
 
 import java.util.HashMap;
 import java.util.Map;

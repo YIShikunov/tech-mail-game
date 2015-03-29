@@ -1,4 +1,4 @@
-package AccountService;
+package frontend.AccountService;
 
 public class UserProfile {
     private String login;

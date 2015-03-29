@@ -1,11 +1,9 @@
-package utils;
+package frontend.websockets;
+
+import mechanics.GameProfile;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import game.GameProfile;
-import game.GameWebSocket;
-
 
 /**
  * Created by Artem on 3/28/2015.

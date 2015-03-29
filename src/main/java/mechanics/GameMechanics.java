@@ -1,11 +1,13 @@
-package game;
+package mechanics;
 
-import utils.WebSocketService;
+import frontend.websockets.WebSocketService;
+import mechanics.GameProfile;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 
 public class GameMechanics {
     private WebSocketService webSocketService;
@@ -23,7 +25,7 @@ public class GameMechanics {
     public void addUser(String user) {
         if (waiting != null) {
             startGame(user);
-            waiting = null;
+            waiting = user;
         } else {
             waiting = user;
         }

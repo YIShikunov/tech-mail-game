@@ -1,4 +1,4 @@
-package AccountService;
+package frontend.AccountService;
 
 import java.util.HashMap;
 import java.util.Map;
