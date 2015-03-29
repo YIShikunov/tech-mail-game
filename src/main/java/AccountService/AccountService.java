@@ -41,6 +41,6 @@ public class AccountService {
 
     public static String getUsernameBySession(String sessionID) {
         UserProfile user = getSessions(sessionID);
-        return "Bob"; //user.getLogin();
+        return user.getLogin();
     }
 }
