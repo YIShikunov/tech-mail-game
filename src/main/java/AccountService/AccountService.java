@@ -7,15 +7,15 @@ public class AccountService {
     private static Map<String, UserProfile> users = new HashMap<>();
     private static Map<String, UserProfile> sessions = new HashMap<>();
 
-    public boolean addUser(String userName, UserProfile userProfile) {
+    public boolean addUser(String userName, UserProfile gameProfile) {
         if (users.containsKey(userName))
             return false;
-        users.put(userName, userProfile);
+        users.put(userName, gameProfile);
         return true;
     }
 
-    public static void addSessions(String sessionId, UserProfile userProfile) {
-        sessions.put(sessionId, userProfile);
+    public static void addSessions(String sessionId, UserProfile gameProfile) {
+        sessions.put(sessionId, gameProfile);
     }
     public static void delSessions(String sessionId) {
         sessions.remove(sessionId);
@@ -38,4 +38,9 @@ public class AccountService {
     }
 
     public static boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); };
+
+    public static String getUsernameBySession(String sessionID) {
+        UserProfile user = getSessions(sessionID);
+        return user.getLogin();
+    }
 }
