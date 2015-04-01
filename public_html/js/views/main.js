@@ -7,20 +7,24 @@ define([
 ){
 
     var MainView = Backbone.View.extend({
-        tag: 'div',
+        tagName: "div",
+        className: "mainView",
         template: tmpl,
+
         initialize: function () {
-            this.$el.addClass("mainView");
             this.$el.appendTo('#page');
+            this.render();  
         },
+
         render: function () {
             this.$el.html(this.template());
         },
 
         show: function () {
-            this.render();
             this.$el.show();
+            this.trigger('show',this);
         },
+        
         hide: function () {
             this.$el.hide();
         }
