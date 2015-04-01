@@ -71,7 +71,7 @@ html, body {
     width: 30%;
 }
 
-.form {
+.auth__form {
     width: 400px;
     padding: 20px;
     margin: 50px auto 0px;
@@ -80,7 +80,7 @@ html, body {
     background: #0066AA; 
 }
 
-.form__input {
+.auth__form__input {
     width: 200px;
     height: 30px;
     border: 1px solid #00AA00;
@@ -92,12 +92,12 @@ html, body {
     font-family: "robotol",Helvetica,Arial;
 }
 
-.form__line {
+.auth__form__line {
     display: block;
     color: #FFFFFF;
 }
 
-.form__btn {
+.auth__form__btn {
     display: block;
     width: 200px;
     margin: 10px auto 0px;

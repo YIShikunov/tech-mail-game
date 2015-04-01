@@ -12,11 +12,12 @@ define([
     //ScoreCollection.add({name: "LOL"});
     
     var ScoreView = Backbone.View.extend({
-        el: $("#page"),
+        tag: 'div',
         collection: scoreCollection,
         template: tmpl,
-        initialize: function () {   
-            //alert("scire");  
+        initialize: function () {
+            this.$el.addClass("scoreView");
+            this.$el.appendTo('#page');
             scoreCollection.add({name: "Boris", score: 20});
             scoreCollection.add({name: "Alex", score: 45});
             scoreCollection.add({name: "Loure", score: 15});
@@ -25,14 +26,14 @@ define([
         },
 
         render: function () {
-            //return this.template(this.collection.toJSON());
+            this.$el.html(this.template(this.collection.toJSON()));
         },
         show: function () {
-            this.$el.html(this.template(this.collection.toJSON()));
+            this.render();
             this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         }
 
     });

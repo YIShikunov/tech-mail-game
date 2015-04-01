@@ -20,7 +20,6 @@ define([
             loginView.hide();
             gameView.hide();
             mainView.show();
-            
         },
         scoreboardAction: function () {
             mainView.hide();

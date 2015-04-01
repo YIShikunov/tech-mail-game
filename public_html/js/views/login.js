@@ -7,19 +7,22 @@ define([
 ){
 
     var LoginView = Backbone.View.extend({
-        el: $("#page"),
+        tag: 'div',
         template: tmpl,
         initialize: function () {
+            this.$el.addClass("loginView");
+            this.$el.appendTo('#page');
         },
         render: function () {
-            //return this.template();
-        },
-        show: function () {
             this.$el.html(this.template());
+        },
+
+        show: function () {
+            this.render();
             this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         }
 
     });
