@@ -43,8 +43,9 @@ public class GameWebSocket {
         try {
             JSONObject jsonStart = new JSONObject();
             jsonStart.put("status", "start");
-            jsonStart.put("enemy", user.getEnemy());
+            jsonStart.put("enemyName", user.getEnemy());
             jsonStart.put("amIFirst", amIFirst);
+            System.out.print(jsonStart.toJSONString());
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -67,6 +68,7 @@ public class GameWebSocket {
             JSONObject jsonStart = new JSONObject();
             jsonStart.put("status", "turn");
             jsonStart.put("state", newFieldState);
+            jsonStart.put("isMyTurn", false);
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -78,6 +80,7 @@ public class GameWebSocket {
             JSONObject jsonStart = new JSONObject();
             jsonStart.put("status", "turn");
             jsonStart.put("state", newFieldState);
+            jsonStart.put("isMyTurn", true);
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -115,6 +118,7 @@ public class GameWebSocket {
 
     @OnWebSocketMessage
     public void onMessage(String data) {
+        //System.out.print(data);
         gameMechanics.makeTurn(name, data);
     }
 

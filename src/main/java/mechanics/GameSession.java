@@ -16,7 +16,7 @@ public class GameSession {
         gameProfile1.setEnemy(user2);
 
         GameProfile gameProfile2 = new GameProfile(user2);
-        gameProfile1.setEnemy(user1);
+        gameProfile2.setEnemy(user1);
 
         users.put(user1, gameProfile1);
         users.put(user2, gameProfile2);

@@ -25,7 +25,7 @@ public class GameMechanics {
     public void addUser(String user) {
         if (waiting != null) {
             startGame(user);
-            waiting = user;
+            waiting = null;
         } else {
             waiting = user;
         }

@@ -27,6 +27,11 @@
                     document.getElementById("gameplay").style.display = "block";
                     document.getElementById("enemyName").innerHTML = data.enemyName;
                     document.getElementById("state").innerHTML = "The pieces are in their starting positions.";
+                    if (data.amIFirst) {
+                        document.getElementById("turn").innerHTML = "Your turn.";
+                    } else {
+                        document.getElementById("turn").innerHTML = "Enemy turn.";
+                    }
                 }
 
                 if(data.status == "finish"){
@@ -43,9 +48,14 @@
                 if(data.status == "turn"){
                     document.getElementById("state").innerHTML = data.state;
                     document.getElementById("message").innerHTML = "A turn is made!";
+                    if (data.isMyTurn)  {
+                       document.getElementById("turn").innerHTML = "Your turn.";
+                    } else {
+                       document.getElementById("turn").innerHTML = "Enemy turn.";
+                    }
                 }
                 if(data.status == "rejected"){
-                    document.getElementById("message").innerHTML = data.errorMsg;
+                    document.getElementById("message").innerHTML = data.message;
                 }
             }
 
@@ -55,7 +65,7 @@
 
         };
 
-        function sendMessage(action) {
+        sendMessage = function (action) {
             ws.send(action);
         }
     </script>
@@ -88,15 +98,16 @@
         </div>
 
         <div>
+            <span id="turn"></span>
+        </div>
+
+        <div>
             <span id="message"></span>
         </div>
 
-        <form name="legalAction" action="">
-            <input type="button" name="submit" value="Make a legal turn!" onclick="sendMessage("legal");"/>
-        </form>
-
-        <form name="illegalAction" action="">
-            <input type="button" name="submit" value="Try to cheat!" onclick="sendMessage("illegal");"/>
+        <form name="chooseAction" action="">
+            <input type="button" name="submit" value="Make a legal turn!" onclick="sendMessage('legal');"/>
+            <input type="button" name="submit" value="Try to cheat!" onclick="sendMessage('illegal');"/>
         </form>
     </div>
 
