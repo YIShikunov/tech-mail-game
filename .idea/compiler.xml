@@ -23,11 +23,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="Tech-Mail" />
+        <module name="Tech-mail" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Tech-Mail" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -16,7 +16,8 @@
             ws = new WebSocket("ws://localhost:8080/gameplay");
 
             ws.onopen = function (event) {
-
+                document.getElementById("prepare").style.display = "none";
+                document.getElementById("wait").style.display = "block";
             }
 
             ws.onmessage = function (event) {
@@ -61,13 +62,19 @@
 
 
 </head>
-<body onLoad="init();">
+<body>
 <div id="body">
     <div id="hello">
         <p>Hello, ${name}!</p>
     </div>
 
-    <div id="wait">
+    <div id="prepare">
+        <form name="lookForOpponent" action="">
+            <input type="button" name="submit" value="Look for opponent." onclick="init();"/>
+        </form>
+    </div>
+
+    <div id="wait" style="display: none">
         <p>Waiting for an enemy to start the game.</p>
     </div>
 
