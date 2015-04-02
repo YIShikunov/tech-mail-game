@@ -1,5 +1,3 @@
-# Compile files
-*.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -17,7 +15,7 @@ node_modules/
 
 #Compiled Templates
 public_html/js/tmpl
-
+target/
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 # Directory-based project format:
@@ -58,3 +56,5 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+
+src/main/java/META-INF/MANIFEST.MF

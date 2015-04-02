@@ -1,6 +1,7 @@
 package main;
 
-import base.SettingsService;
+import base.GSResources;
+import base.resourcesService;
 import frontend.AccountService.AccountService;
 import frontend.AccountService.UserProfile;
 import frontend.SignUpServlet;
@@ -17,21 +18,27 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
+        GSResources serverSettings = resourcesService.getInstance().getResources("settings");
+        String portString = "8080";
+        if (serverSettings.getSetting("__status__").equals("OK"))
+        {
+            portString = serverSettings.getSetting("port");
+        }
+        else
+        {
+            System.out.println(serverSettings.getSetting("__status__"));
+        }
+        /*if (args.length != 1) {
             System.out.append("Use port as the first argument");
             System.exit(1);
         }
-
-        String portString = args[0];
+        String portString = args[0];*/
         int port = Integer.valueOf(portString);
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
         //AuthServiceImpl authService = new AuthServiceImpl();
         AccountService accountService = new AccountService();
-        SettingsService settingsService = SettingsService.getInstance();
-        System.out.append(settingsService.getSetting("root", "path"));
-        System.out.append(settingsService.getSetting("root", "paths"));
 
         WebSocketService webSocketService = new WebSocketService();
         GameMechanics gameMechanics = new GameMechanics(webSocketService);
