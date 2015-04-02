@@ -42,7 +42,7 @@
     var springX = 0.9;
     var springY = 0.6;
 
-    //booble
+    //bubble
     var arc = {
         radius: 50,
         x: canvas.width / 5, 
@@ -88,6 +88,7 @@
         ctxGraph.stroke();
         ctxGraph.beginPath();
         ctxGraph.strokeStyle = "blue";
+        time=0;
     }
 
     function draw_graph() {
@@ -99,12 +100,12 @@
         context.clearRect(0, 0, width, height);
     }
     
-    function draw_booble() {
+    function draw_bubble() {
         clear_field();
         context.drawImage(thumbImg, arc.x-arc.radius, arc.y-arc.radius, 100, 100);
     }
 
-    function in_booble(x,y) {
+    function in_bubble(x,y) {
         dist = Math.sqrt( Math.pow(x-arc.x,2) + Math.pow(y-arc.y,2) );
         return (dist <= arc.radius)? true:false;
     }
@@ -132,12 +133,12 @@
                 arc.y += arc.dy;
             }
         } else cancelAnimationFrame(anime);
-        draw_booble();
+        draw_bubble();
         draw_graph();
     }
 
     window.addEventListener("load", function load() {
-        draw_booble();
+        draw_bubble();
         clear_graph();
         action();
         window.removeEventListener("load", load, false);
@@ -158,7 +159,7 @@
         document.body.addEventListener("mousedown", function(e) {
             x = e.pageX - (innerWidth-width)/2;
             y = e.pageY;
-            if ( in_booble(x,y) ) {
+            if ( in_bubble(x,y) ) {
                 dragX = x-arc.x;
                 dragY = y-arc.y;
                 drag = true;
@@ -168,8 +169,7 @@
             if (drag) {
                 arc.x = e.pageX - dragX - (innerWidth-width)/2;
                 arc.y = e.pageY - dragY;
-                draw_booble();
-                time=0;
+                draw_bubble();
                 posX[1] = posX[0];
                 posX[0] = e.pageX;
                 posY[1] = posY[0];
