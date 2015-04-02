@@ -1,5 +1,6 @@
 package main;
 
+import base.SettingsService;
 import frontend.AccountService.AccountService;
 import frontend.AccountService.UserProfile;
 import frontend.SignUpServlet;
@@ -12,6 +13,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -27,6 +29,10 @@ public class Main {
 
         //AuthServiceImpl authService = new AuthServiceImpl();
         AccountService accountService = new AccountService();
+        SettingsService settingsService = SettingsService.getInstance();
+        System.out.append(settingsService.getSetting("root", "path"));
+        System.out.append(settingsService.getSetting("root", "paths"));
+
         WebSocketService webSocketService = new WebSocketService();
         GameMechanics gameMechanics = new GameMechanics(webSocketService);
 

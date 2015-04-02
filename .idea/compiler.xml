@@ -24,7 +24,11 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Tech-mail" />
+        <module name="Tech-Mail" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Tech-Mail" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
