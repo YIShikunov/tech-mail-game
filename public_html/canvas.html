@@ -3,166 +3,192 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <title>Canvas - Line</title>
-	<style type="text/css">
-		html, body {
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             background: black;
-		}
-
+        }
         #field {
             border: 10px solid gray;
-            background: white;
+            background: url('images/wall.jpg') repeat;
             margin: 0px auto;
             display: block;
-            width: 800px;
-            height: 400px
         }
         #graph {
             border: 10px solid gray;
             background: #EEE;
             margin: 0px auto;
             display: block;
-            width: 800px;
-            height: 270px
         }
 
-	</style>
+    </style>
 </head>
 <body>
-	<canvas width="800" height="400" id="field"></canvas>
-    <canvas width="800" height="220" id="graph"></canvas>
+    <canvas width="1300" height="380" id="field"></canvas>
+    <canvas width="1300" height="220" id="graph"></canvas>
 <script>
-    
     var graph = document.getElementById("graph");
-    var ctxGraph = graph.getContext('2d');
-    ctxGraph.font = "30pt Arial";
-    ctxGraph.strokeStyle = "gray";
-    ctxGraph.beginPath();
-    ctxGraph.moveTo(800,145);
-    ctxGraph.lineTo(0,145);
-    ctxGraph.stroke();
-    ctxGraph.beginPath();
-    ctxGraph.strokeStyle = "blue";
-
-
     var canvas = document.getElementById("field");
+    var ctxGraph = graph.getContext('2d');
     var context = canvas.getContext('2d');
     var width = canvas.width;
     var height = canvas.height;
-    var dx = 0;
-    var dy = -5;
-    var speed = 0.3;
-    var springing = 0.5;
+    context.fillStyle = "green";
 
-    var radius = 50;
-    var arcX = canvas.width / 5;
-    var arcY = canvas.height - radius -100;
+    //phisics
+    var speed = 0.4;
+    var springX = 0.9;
+    var springY = 0.6;
+
+    //booble
+    var arc = {
+        radius: 50,
+        x: canvas.width / 5, 
+        y: canvas.height/2,
+        dx: 1,
+        dy: -5
+    };
+
+    var thumbImg = document.createElement('img');
+    thumbImg.src = 'images/ball.png';
+
+    thumbImg.onload = function() {
+        context.save();
+        context.beginPath();
+        context.arc(25, 25, 25, 0, Math.PI * 2, true);
+        context.closePath();
+        context.clip();
+
+        context.drawImage(thumbImg, 0, 0, 50, 50);
+
+        context.beginPath();
+        context.arc(0, 0, 25, 0, Math.PI * 2, true);
+        context.clip();
+        context.closePath();
+        context.restore();
+    };
+
     var drag = false;
-    var dragX = 0;
-    var dragY = 0;
-    var count = 0;
-    var anime;
     var play = true;
-
     var time = 0;
 
-//debugger
+    var posX = [0,0];
+    var posY= [0,0];
+
+
+
+    function clear_graph() {
+        ctxGraph.clearRect(0, 0, width, height);
+        ctxGraph.strokeStyle = "gray";
+        ctxGraph.beginPath();
+        ctxGraph.moveTo(width,200);
+        ctxGraph.lineTo(0,200);
+        ctxGraph.stroke();
+        ctxGraph.beginPath();
+        ctxGraph.strokeStyle = "blue";
+    }
+
+    function draw_graph() {
+        ctxGraph.lineTo(time+=2,200-Math.sqrt(Math.pow(arc.dx,2)+Math.pow(arc.dy,2))*5);
+        ctxGraph.stroke();
+    }
+
+    function clear_field() {
+        context.clearRect(0, 0, width, height);
+    }
     
     function draw_booble() {
-        this.radius = radius;
-        this.draw = function(context) {
-            context.clearRect(0, 0, width, height);
-            this.x = arcX;
-            this.y = arcY;
-            context.fillStyle = "green";
-            context.beginPath();
-            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-            context.closePath();
-            context.fill();
-
-            ///ctxGraph.clearRect(0, 0, width, height);
-            
-            
-            if (!drag) {
-                ctxGraph.lineTo(time+=5,145-dy*10);
-                ctxGraph.stroke();
-            }
-            
-            //ctxGraph.fillText(Math.round(dy*100), 20, 50);
-        };
+        clear_field();
+        context.drawImage(thumbImg, arc.x-arc.radius, arc.y-arc.radius, 100, 100);
     }
 
-    var booble = new draw_booble();
-
+    function in_booble(x,y) {
+        dist = Math.sqrt( Math.pow(x-arc.x,2) + Math.pow(y-arc.y,2) );
+        return (dist <= arc.radius)? true:false;
+    }
 
     function action() {
-        count++;
-        
-        (function animation() {
-            anime = requestAnimationFrame(animation);
-            if (!drag && play) {
-                if (arcX + booble.radius > width || arcX - booble.radius < 0 || arcY + booble.radius > height) {
-                    arcY = canvas.height - booble.radius;
-                    dy *= - springing;
-                    if (Math.round(dy) == 0) {play = false; dy = 0}
-                } else 
-                {
-                    dy += speed;
-                    arcX += dx;
-                    arcY += dy;
-                }
-
-            } else cancelAnimationFrame(anime);
-
-            booble.draw(context);
-        }());
+        anime = requestAnimationFrame(action);
+        if (!drag && play) {
+            if ( arc.y + arc.radius > height ) {   //BOTTOM
+                arc.y = height - arc.radius;
+                arc.dy *= -springY;
+                arc.dx *= springX;
+                if ( Math.round((arc.dx+arc.dy)*500) == 0 ) play = false;
+            } else if ( arc.y - arc.radius < 0) {     //TOP
+                arc.y = arc.radius;
+                arc.dy = -arc.dy;
+            } else if (arc.x + arc.radius > width ) {  //RIGHT
+                arc.x = width - arc.radius;
+                arc.dx = -arc.dx;
+            } else if ( arc.x - arc.radius < 0) {     //LEFT  
+                arc.x = arc.radius;
+                arc.dx = -arc.dx;
+            } else {
+                arc.dy += speed;
+                arc.x += arc.dx;
+                arc.y += arc.dy;
+            }
+        } else cancelAnimationFrame(anime);
+        draw_booble();
+        draw_graph();
     }
 
-    window.addEventListener("load", function load(ttt) {
-        booble.draw(context);
+    window.addEventListener("load", function load() {
+        draw_booble();
+        clear_graph();
         action();
         window.removeEventListener("load", load, false);
 
-        document.body.addEventListener("mousedown", function(e) {
+        document.body.addEventListener("dblclick", function(e) {
             cursorX = e.pageX - (innerWidth-width)/2;
             cursorY = e.pageY;
-            dist = Math.sqrt( Math.pow(cursorX-arcX,2) + Math.pow(cursorY-arcY,2) );
-            if (dist <= radius) {
-                dragX = cursorX-arcX;
-                dragY = cursorY-arcY;
+            dist = Math.sqrt( Math.pow(cursorX-arc.x,2) + Math.pow(cursorY-arc.y,2) );
+            if (dist <= arc.radius) {
+                arc.dy=Math.random()*(50);
+                arc.dx = 0;
+                clear_graph();
+                time=0;
+                play=true;
+            } 
+        });
+
+        document.body.addEventListener("mousedown", function(e) {
+            x = e.pageX - (innerWidth-width)/2;
+            y = e.pageY;
+            if ( in_booble(x,y) ) {
+                dragX = x-arc.x;
+                dragY = y-arc.y;
                 drag = true;
             }
         });
         document.body.addEventListener("mousemove", function(e) {
             if (drag) {
-                arcX = e.pageX - dragX - (innerWidth-width)/2;
-                arcY = e.pageY - dragY;
-                booble.draw(context);
-
-                ctxGraph.clearRect(0, 0, width, height);
-                ctxGraph.strokeStyle = "gray";
-                ctxGraph.beginPath();
-                ctxGraph.moveTo(800,145);
-                ctxGraph.lineTo(0,145);
-                ctxGraph.stroke();
-                ctxGraph.beginPath();
-                ctxGraph.strokeStyle = "blue";
+                arc.x = e.pageX - dragX - (innerWidth-width)/2;
+                arc.y = e.pageY - dragY;
+                draw_booble();
                 time=0;
-
+                posX[1] = posX[0];
+                posX[0] = e.pageX;
+                posY[1] = posY[0];
+                posY[0] = e.pageX;
             }
         });
 
         document.body.addEventListener("mouseup", function(e) {
-            play=true;
-            drag=false;
-            action();
+            if (drag) {
+                clear_graph();
+                arc.dx=posX[0]-posX[1];
+                arc.dy=posY[0]-posY[1];
+                drag=false;
+                play=true;
+                action();
+            }
         });
+
     }, false);
 
-
 </script>
-
-
 </body></html>

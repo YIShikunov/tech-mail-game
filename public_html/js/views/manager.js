@@ -1,8 +1,7 @@
 define([
     'backbone',
-    'views/game',
 ], function(
-    Backbone, gameView
+    Backbone
 ){
 
     var Manager = Backbone.View.extend({
