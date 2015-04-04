@@ -1,5 +1,7 @@
 package frontend.servlets;
 
+import ResourceLoader.GSResources;
+import ResourceLoader.resourcesService;
 import mechanics.GameMechanics;
 import frontend.AccountService.AccountService;
 import utils.PageGenerator;
@@ -33,12 +35,20 @@ public class FrontendServlet extends HttpServlet {
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
 
+        GSResources serverSettings = resourcesService.getInstance().getResources("settings");
+        String portString = "8080";
+        if (serverSettings.getSetting("__status__").equals("OK"))
+        {
+            portString = serverSettings.getSetting("port");
+        }
+        else
+        {
+            System.out.println(serverSettings.getSetting("__status__"));
+        }
+
         Map<String, Object> pageVariables = new HashMap<>();
-        /*String name = request.getParameter("name");
-        String safeName = name == null ? "NoName" : name;
-        String safeName = "Bob";
-        authService.saveUserName(request.getSession().getId(), safeName);*/
         pageVariables.put("name", AccountService.getUsernameBySession(request.getSession().getId()));
+        pageVariables.put("port", portString);
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
 

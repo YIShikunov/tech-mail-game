@@ -1,4 +1,6 @@
-package base;
+package ResourceLoader;
+
+import base.Resources;
 
 import java.util.HashMap;
 

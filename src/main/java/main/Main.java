@@ -1,7 +1,7 @@
 package main;
 
-import base.GSResources;
-import base.resourcesService;
+import ResourceLoader.GSResources;
+import ResourceLoader.resourcesService;
 import frontend.AccountService.AccountService;
 import frontend.AccountService.UserProfile;
 import frontend.SignUpServlet;
