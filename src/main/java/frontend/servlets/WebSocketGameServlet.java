@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import mechanics.GameMechanics;
 import frontend.websockets.WebSocketService;
 import frontend.websockets.CustomWebSocketCreator;
@@ -15,11 +15,11 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(name = "WebSocketGameServlet", urlPatterns = {"/game"})
 public class WebSocketGameServlet extends WebSocketServlet {
     private final static int IDLE_TIME = 60 * 1000;
-    private AccountService authService;
+    private AccountServiceImpl authService;
     private GameMechanics gameMechanics;
     private WebSocketService webSocketService;
 
-    public WebSocketGameServlet(AccountService authService,
+    public WebSocketGameServlet(AccountServiceImpl authService,
                                 GameMechanics gameMechanics,
                                 WebSocketService webSocketService) {
         this.authService = authService;

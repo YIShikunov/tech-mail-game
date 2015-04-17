@@ -1,7 +1,7 @@
 package frontend.servlets;
 
 import mechanics.GameMechanics;
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -18,9 +18,9 @@ import java.util.Map;
 public class FrontendServlet extends HttpServlet {
 
     private GameMechanics gameMechanics;
-    private AccountService authService;
+    private AccountServiceImpl authService;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountService authService) {
+    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService) {
         this.gameMechanics = gameMechanics;
         this.authService = authService;
     }
@@ -38,7 +38,7 @@ public class FrontendServlet extends HttpServlet {
         String safeName = name == null ? "NoName" : name;
         String safeName = "Bob";
         authService.saveUserName(request.getSession().getId(), safeName);*/
-        pageVariables.put("name", AccountService.getUsernameBySession(request.getSession().getId()));
+        pageVariables.put("name", AccountServiceImpl.getUsernameBySession(request.getSession().getId()));
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
 

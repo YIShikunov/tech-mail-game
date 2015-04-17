@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import utils.PageGenerator;
 
@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.Random;
 
 public class SignInServlet extends HttpServlet {
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
-    public SignInServlet(AccountService accountService) {
-        this.accountService = accountService;
+    public SignInServlet(AccountServiceImpl accountServiceImpl) {
+        this.accountServiceImpl = accountServiceImpl;
     }
 
     public void doGet(HttpServletRequest request,
@@ -38,8 +38,8 @@ public class SignInServlet extends HttpServlet {
         pageVariables.put("email", email);
         pageVariables.put("login", login);
 
-        if (AccountService.isAuthorised(session.getId())) {
-            pageVariables.put("loginStatus", "Hello, "+ AccountService.getSessions(session.getId()).getLogin());
+        if (AccountServiceImpl.isAuthorised(session.getId())) {
+            pageVariables.put("loginStatus", "Hello, "+ AccountServiceImpl.getSessions(session.getId()).getLogin());
             pageVariables.put("online", 1);
         }
 
@@ -56,7 +56,7 @@ public class SignInServlet extends HttpServlet {
 
         response.setStatus(HttpServletResponse.SC_OK);
 
-        UserProfile profile = accountService.getUser(login);
+        UserProfile profile = accountServiceImpl.getUser(login);
 
         Map<String, Object> pageVariables = new HashMap<>();
 
@@ -67,7 +67,7 @@ public class SignInServlet extends HttpServlet {
             final Random random = new Random();
             session.setAttribute("ID" + Integer.toString(random.nextInt()), profile);
 
-            accountService.addSessions(session.getId(), profile);
+            accountServiceImpl.addSessions(session.getId(), profile);
         } else {
             pageVariables.put("loginStatus", "Wrong login/password");
             pageVariables.put("online", 0);

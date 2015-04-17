@@ -1,9 +1,11 @@
 package frontend.AccountService;
 
+import base.AccountService;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountService {
+public class AccountServiceImpl implements AccountService {
     private static Map<String, UserProfile> users = new HashMap<>();
     private static Map<String, UserProfile> sessions = new HashMap<>();
 
@@ -12,6 +14,14 @@ public class AccountService {
             return false;
         users.put(userName, gameProfile);
         return true;
+    }
+
+    public AccountServiceImpl()
+    {
+        //Debug
+        addUser("123", new UserProfile("123", "123", "123@123"));
+        addUser("234", new UserProfile("234", "234", "123@123"));
+        //Debug
     }
 
     public static void addSessions(String sessionId, UserProfile gameProfile) {
