@@ -5,14 +5,12 @@ import org.junit.*;
 
 public class SignUpServletTest
 {
-    private java.util.List emptyList;
     private AccountService accountService;
     SignUpServlet servlet;
 
     @Before
     public void setUp()
     {
-        emptyList = new java.util.ArrayList();
         accountService = new AccountService();
         servlet = new SignUpServlet(accountService);
     }
@@ -20,7 +18,6 @@ public class SignUpServletTest
     @After
     public void tearDown()
     {
-        emptyList = null;
         servlet = null;
         accountService = null;
     }
