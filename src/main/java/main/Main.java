@@ -4,7 +4,6 @@ import base.GSResources;
 import base.resourcesService;
 import frontend.AccountService.AccountService;
 import frontend.AccountService.UserProfile;
-import frontend.SignUpServlet;
 import frontend.servlets.*;
 import frontend.websockets.WebSocketService;
 import mechanics.GameMechanics;
