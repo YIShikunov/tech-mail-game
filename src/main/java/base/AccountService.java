@@ -5,14 +5,14 @@ import frontend.AccountService.UserProfile;
 public interface AccountService
 {
     boolean addUser(String name, UserProfile user);
-    static void addSessions(String name, UserProfile gameProfile){}
-    static void delSessions(String name, UserProfile gameProfile){}
+    void addSessions(String sessionId, UserProfile gameProfile);
+    void delSessions(String sessionId);
     UserProfile getUser(String username);
-    static UserProfile getSessions(String session){return null;}
-    static Integer getCountUsers() { return 0; }
-    static Integer getCountLogUsers() { return 0; }
-    static boolean isAuthorised(String sessionId) {return false;}
-    static String getUsernameBySession(String sessionID)  {return null;}
+    UserProfile getSessions(String session);
+    Integer getCountUsers();
+    Integer getCountLogUsers();
+    boolean isAuthorised(String sessionId);
+    String getUsernameBySession(String sessionID);
 
 
 
