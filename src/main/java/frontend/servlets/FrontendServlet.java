@@ -34,11 +34,8 @@ public class FrontendServlet extends HttpServlet {
                        HttpServletResponse response) throws ServletException, IOException {
 
         Map<String, Object> pageVariables = new HashMap<>();
-        /*String name = request.getParameter("name");
-        String safeName = name == null ? "NoName" : name;
-        String safeName = "Bob";
-        authService.saveUserName(request.getSession().getId(), safeName);*/
-        pageVariables.put("name", AccountServiceImpl.getUsernameBySession(request.getSession().getId()));
+
+        pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
 

@@ -26,8 +26,8 @@ public class SignOutServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         Map<String, Object> pageVariables = new HashMap<>();
 
-        if (AccountServiceImpl.isAuthorised(session.getId())) {
-            AccountServiceImpl.delSessions(session.getId());
+        if (accountServiceImpl.isAuthorised(session.getId())) {
+            accountServiceImpl.delSessions(session.getId());
         }
 
         response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));
@@ -40,8 +40,8 @@ public class SignOutServlet extends HttpServlet {
 
         Map<String, Object> pageVariables = new HashMap<>();
 
-        if (AccountServiceImpl.isAuthorised(session.getId())) {
-            AccountServiceImpl.delSessions(session.getId());
+        if (accountServiceImpl.isAuthorised(session.getId())) {
+            accountServiceImpl.delSessions(session.getId());
         }
 
         response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));

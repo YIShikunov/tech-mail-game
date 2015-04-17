@@ -27,8 +27,6 @@ public class SignInServlet extends HttpServlet {
         String email = "none";
         HttpSession session = request.getSession();
 
-
-
         response.setStatus(HttpServletResponse.SC_OK);
 
         Map<String, Object> pageVariables = new HashMap<>();
@@ -38,8 +36,8 @@ public class SignInServlet extends HttpServlet {
         pageVariables.put("email", email);
         pageVariables.put("login", login);
 
-        if (AccountServiceImpl.isAuthorised(session.getId())) {
-            pageVariables.put("loginStatus", "Hello, "+ AccountServiceImpl.getSessions(session.getId()).getLogin());
+        if (accountServiceImpl.isAuthorised(session.getId())) {
+            pageVariables.put("loginStatus", "Hello, "+ accountServiceImpl.getSessions(session.getId()).getLogin());
             pageVariables.put("online", 1);
         }
 
@@ -50,9 +48,8 @@ public class SignInServlet extends HttpServlet {
                        HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String email = "";
+        String email = "none";
         HttpSession session = request.getSession();
-
 
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -75,7 +72,7 @@ public class SignInServlet extends HttpServlet {
 
 
 
-        pageVariables.put("email", email == null ? "none" : email);
+        pageVariables.put("email", email);
         pageVariables.put("login", login == null ? "none" : login);
 
         response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
