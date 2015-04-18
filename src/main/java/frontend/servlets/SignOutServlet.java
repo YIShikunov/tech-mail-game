@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignOutServlet extends HttpServlet {
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
-    public SignOutServlet(AccountService accountService) {
-        this.accountService = accountService;
+    public SignOutServlet(AccountServiceImpl accountServiceImpl) {
+        this.accountServiceImpl = accountServiceImpl;
     }
 
     public void doGet(HttpServletRequest request,
@@ -26,8 +26,8 @@ public class SignOutServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         Map<String, Object> pageVariables = new HashMap<>();
 
-        if (AccountService.isAuthorised(session.getId())) {
-            AccountService.delSessions(session.getId());
+        if (accountServiceImpl.isAuthorised(session.getId())) {
+            accountServiceImpl.delSessions(session.getId());
         }
 
         response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));
@@ -40,8 +40,8 @@ public class SignOutServlet extends HttpServlet {
 
         Map<String, Object> pageVariables = new HashMap<>();
 
-        if (AccountService.isAuthorised(session.getId())) {
-            AccountService.delSessions(session.getId());
+        if (accountServiceImpl.isAuthorised(session.getId())) {
+            accountServiceImpl.delSessions(session.getId());
         }
 
         response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));

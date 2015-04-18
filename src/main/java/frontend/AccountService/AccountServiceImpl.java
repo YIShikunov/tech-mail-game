@@ -1,9 +1,11 @@
 package frontend.AccountService;
 
+import base.AccountService;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountService {
+public class AccountServiceImpl implements AccountService {
     private static Map<String, UserProfile> users = new HashMap<>();
     private static Map<String, UserProfile> sessions = new HashMap<>();
 
@@ -14,10 +16,18 @@ public class AccountService {
         return true;
     }
 
-    public static void addSessions(String sessionId, UserProfile gameProfile) {
+    public AccountServiceImpl()
+    {
+        //Debug
+        addUser("123", new UserProfile("123", "123", "123@123"));
+        addUser("234", new UserProfile("234", "234", "123@123"));
+        //Debug
+    }
+
+    public void addSessions(String sessionId, UserProfile gameProfile) {
         sessions.put(sessionId, gameProfile);
     }
-    public static void delSessions(String sessionId) {
+    public void delSessions(String sessionId) {
         sessions.remove(sessionId);
     }
 
@@ -25,21 +35,21 @@ public class AccountService {
         return users.get(userName);
     }
 
-    public static UserProfile getSessions(String sessionId) {
+    public UserProfile getSessions(String sessionId) {
         return sessions.get(sessionId);
     }
 
-    public static Integer getCountUsers() {
+    public Integer getCountUsers() {
         return users.size();
     }
 
-    public static Integer getCountLogUsers() {
+    public Integer getCountLogUsers() {
         return sessions.size();
     }
 
-    public static boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); };
+    public boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); }
 
-    public static String getUsernameBySession(String sessionID) {
+    public String getUsernameBySession(String sessionID) {
         UserProfile user = getSessions(sessionID);
         return user.getLogin();
     }

@@ -1,6 +1,6 @@
-package frontend;
+package frontend.servlets;
 
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import utils.PageGenerator;
 
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpServlet extends HttpServlet {
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
-    public SignUpServlet(AccountService accountService) {
-        this.accountService = accountService;
+    public SignUpServlet(AccountServiceImpl accountServiceImpl) {
+        this.accountServiceImpl = accountServiceImpl;
     }
 
     public void doGet(HttpServletRequest request,
@@ -25,7 +25,7 @@ public class SignUpServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         Map<String, Object> pageVariables = new HashMap<>();
-        if (accountService.addUser(name, new UserProfile(name, password, ""))) {
+        if (accountServiceImpl.addUser(name, new UserProfile(name, password, ""))) {
             pageVariables.put("signUpStatus", "New user created");
         } else {
             pageVariables.put("signUpStatus", "User with name: " + name + " already exists");
@@ -52,7 +52,7 @@ public class SignUpServlet extends HttpServlet {
         pageVariables.put("login", password == null ? "" : login);
 
 
-        if (accountService.addUser(login, new UserProfile(login, password, email))) {
+        if (accountServiceImpl.addUser(login, new UserProfile(login, password, email))) {
             pageVariables.put("signUpStatus", "New user created");
             status = "Congratulations!!!";
         } else {

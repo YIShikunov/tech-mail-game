@@ -2,7 +2,7 @@ package frontend.servlets;
 import utils.TimeHelper;
 import utils.PageGenerator;
 
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,15 +13,20 @@ import java.util.Map;
 
 public class AdminPageServlet extends HttpServlet {
     public static final String adminPageURL = "/admin";
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
+
+    public AdminPageServlet(AccountServiceImpl accountService)
+    {
+        accountServiceImpl = accountService;
+    }
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        Integer users = accountService.getCountUsers();
-        Integer logusers = accountService. getCountLogUsers();
+        Integer users = accountServiceImpl.getCountUsers();
+        Integer logusers = accountServiceImpl. getCountLogUsers();
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("users", users == null ? 0 :users );
         pageVariables.put("logusers", logusers == null ? 0 :logusers );

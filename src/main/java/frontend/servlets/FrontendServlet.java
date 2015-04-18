@@ -2,8 +2,9 @@ package frontend.servlets;
 
 import ResourceLoader.GSResources;
 import ResourceLoader.resourcesService;
+import base.AccountService;
 import mechanics.GameMechanics;
-import frontend.AccountService.AccountService;
+import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -14,15 +15,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author v.chibrikov
- */
 public class FrontendServlet extends HttpServlet {
 
     private GameMechanics gameMechanics;
-    private AccountService authService;
+    private AccountServiceImpl authService;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountService authService) {
+    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService) {
         this.gameMechanics = gameMechanics;
         this.authService = authService;
     }
@@ -47,7 +45,8 @@ public class FrontendServlet extends HttpServlet {
         }
 
         Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("name", AccountService.getUsernameBySession(request.getSession().getId()));
+
+        pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
         pageVariables.put("port", portString);
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));

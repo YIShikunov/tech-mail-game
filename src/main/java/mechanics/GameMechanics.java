@@ -1,7 +1,6 @@
 package mechanics;
 
 import frontend.websockets.WebSocketService;
-import mechanics.GameProfile;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +51,7 @@ public class GameMechanics {
                 } else if (resultOfComplicatedGameMechanics < 0.9) {
                     newFieldState = "Ouch, a lethal was missed...";
                 } else {
-                    newFieldState = "That was a winning move! Hooray!";
+                    //newFieldState = "That was a winning move! Hooray!";
                     finishGame(thisUser.getName());
                     return;
                 }
@@ -84,6 +83,6 @@ public class GameMechanics {
     public void finishGame(String winner) {
         webSocketService.notifyWin(nameToGame.get(winner).getSelf(winner));
         webSocketService.notifyLoss(nameToGame.get(winner).getEnemy(winner));
-        // TODO: remove session
+        allSessions.remove(nameToGame.get(winner));
     }
 }
