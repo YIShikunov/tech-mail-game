@@ -26,16 +26,11 @@ public class Main {
         {
             System.out.println(serverSettings.getSetting("__status__"));
         }
-        /*if (args.length != 1) {
-            System.out.append("Use port as the first argument");
-            System.exit(1);
-        }
-        String portString = args[0];*/
+
         int port = Integer.valueOf(portString);
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        //AuthServiceImpl authService = new AuthServiceImpl();
         AccountServiceImpl accountServiceImpl = new AccountServiceImpl();
 
         WebSocketService webSocketService = new WebSocketService();
@@ -49,10 +44,6 @@ public class Main {
         context.addServlet(new ServletHolder(new SignUpServlet(accountServiceImpl)), "/api/v1/auth/signup");
         context.addServlet(new ServletHolder(new SignOutServlet(accountServiceImpl)), "/api/v1/auth/signout");
         context.addServlet(new ServletHolder(new AdminPageServlet(accountServiceImpl)), AdminPageServlet.adminPageURL);
-
-        /// DEBUG ////
-
-        /// DEBUG ////
 
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);

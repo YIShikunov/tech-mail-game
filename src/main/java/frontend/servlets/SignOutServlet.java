@@ -21,16 +21,7 @@ public class SignOutServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        response.setStatus(HttpServletResponse.SC_OK);
-        Map<String, Object> pageVariables = new HashMap<>();
-
-        if (accountServiceImpl.isAuthorised(session.getId())) {
-            accountServiceImpl.delSessions(session.getId());
-        }
-
-        response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));
+        doPost(request, response);
     }
 
     public void doPost(HttpServletRequest request,

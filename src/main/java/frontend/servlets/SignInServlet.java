@@ -22,26 +22,8 @@ public class SignInServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
-        String login = "none";
-        String email = "none";
-        HttpSession session = request.getSession();
-
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        Map<String, Object> pageVariables = new HashMap<>();
-
-        pageVariables.put("loginStatus", "WHO ARE YOU???");
-        pageVariables.put("online", 0);
-        pageVariables.put("email", email);
-        pageVariables.put("login", login);
-
-        if (accountServiceImpl.isAuthorised(session.getId())) {
-            pageVariables.put("loginStatus", "Hello, "+ accountServiceImpl.getSessions(session.getId()).getLogin());
-            pageVariables.put("online", 1);
-        }
-
-        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+                       HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 
     public void doPost(HttpServletRequest request,
@@ -69,7 +51,6 @@ public class SignInServlet extends HttpServlet {
             pageVariables.put("loginStatus", "Wrong login/password");
             pageVariables.put("online", 0);
         }
-
 
 
         pageVariables.put("email", email);
