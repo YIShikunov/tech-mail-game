@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 public class SignInServlet extends HttpServlet {
     private AccountServiceImpl accountServiceImpl;
@@ -32,30 +30,33 @@ public class SignInServlet extends HttpServlet {
         String password = request.getParameter("password");
         String email = "none";
         HttpSession session = request.getSession();
+        String sessionID = session.getId();
+
+        HashMap<String, Object> pageVariables = signInUser(login, password, email, sessionID);
 
         response.setStatus(HttpServletResponse.SC_OK);
 
+        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+    }
+
+    protected HashMap<String, Object> signInUser(String login, String password, String email, String sessionID)
+    {
+
         UserProfile profile = accountServiceImpl.getUser(login);
 
-        Map<String, Object> pageVariables = new HashMap<>();
+        HashMap<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
             pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+"<br>"+profile.getEmail());
             pageVariables.put("online", 1);
-
-            final Random random = new Random();
-            session.setAttribute("ID" + Integer.toString(random.nextInt()), profile);
-
-            accountServiceImpl.addSessions(session.getId(), profile);
+            accountServiceImpl.addSessions(sessionID, profile);
         } else {
             pageVariables.put("loginStatus", "Wrong login/password");
             pageVariables.put("online", 0);
         }
-
-
         pageVariables.put("email", email);
         pageVariables.put("login", login == null ? "none" : login);
 
-        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+        return pageVariables;
     }
 }
