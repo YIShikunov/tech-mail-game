@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignOutServlet extends HttpServlet {
     private AccountServiceImpl accountServiceImpl;
@@ -29,12 +28,16 @@ public class SignOutServlet extends HttpServlet {
         HttpSession session = request.getSession();
         response.setStatus(HttpServletResponse.SC_OK);
 
-        Map<String, Object> pageVariables = new HashMap<>();
+        HashMap<String, Object> pageVariables = new HashMap<>();
 
-        if (accountServiceImpl.isAuthorised(session.getId())) {
-            accountServiceImpl.delSessions(session.getId());
-        }
+        signOut(session.getId());
 
         response.getWriter().println(PageGenerator.getPage("bystatus.html", pageVariables));
+    }
+
+    protected void signOut(String sessionID) {
+        if (accountServiceImpl.isAuthorised(sessionID)) {
+            accountServiceImpl.delSessions(sessionID);
+        }
     }
 }
