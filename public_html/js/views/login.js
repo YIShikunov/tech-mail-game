@@ -7,12 +7,11 @@ define([
 ){
 
     var LoginView = Backbone.View.extend({
-        tagName: "div",
-        className: "loginView",
         template: tmpl,
 
         initialize: function () {
-            this.$el.appendTo('#page');
+            this.$el.addClass("gameView__loginView");
+            this.$el.appendTo('.gameView');
             this.render();
         },
 

@@ -1,29 +1,27 @@
 define([
-    //'jquery',
     'backbone',
     'tmpl/scoreboard',
     'collections/scores',
 ], function(
     Backbone,
     tmpl,
-    scoreCollection,
-    ScoreModel
+    ScoreCollection
 ){
-    //ScoreCollection.add({name: "LOL"});
     
     var ScoreView = Backbone.View.extend({
-        tagName: "div",
-        className: "scoreView",
-        collection: scoreCollection,
+        collection: new ScoreCollection(),
         template: tmpl,
 
         initialize: function () {
-            this.$el.appendTo('#page');
-            scoreCollection.add({name: "Boris", score: 20});
-            scoreCollection.add({name: "Alex", score: 45});
-            scoreCollection.add({name: "Loure", score: 15});
-            scoreCollection.add({name: "Berih", score: 65});
-            scoreCollection.add({name: "Tolet", score: 51});
+            this.$el.addClass("gameView__scoreView");
+            this.$el.appendTo('.gameView');
+            this.collection.set([
+                {name: "Boris", score: 20},
+                {name: "Alex",  score: 45},
+                {name: "Loure", score: 15},
+                {name: "Berih", score: 65},
+                {name: "Tolet", score: 51}
+                ]);
             this.render();
         },
 
