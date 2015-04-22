@@ -1,11 +1,12 @@
 package frontend.AccountService;
 
+import org.eclipse.jetty.server.Authentication;
 import org.junit.*;
 
-public class AccountServiceImplTest
+public class AccountServiceImpl2Test
 {
     private AccountServiceImpl accountService;
-
+/*
     @Before
     public void setUp()
     {
@@ -31,6 +32,26 @@ public class AccountServiceImplTest
         Assert.assertEquals(user.getEmail(), "em@i.l");
         Assert.assertEquals(user.getLogin(), "username");
         Assert.assertEquals(user.getPassword(), "password");
+    }*/
+
+    @Before
+    public void setUp()
+    {
+        accountService = AccountServiceImpl.getInstance();
+    }
+
+    @After
+    public void tearDown()
+    {
+        accountService = null;
+    }
+
+    @Test
+    public void testAddUser()
+    {
+        accountService.addUser("username", "email", "password");
+        UserDataSet user = accountService.getUser(1);
+        Assert.assertNotNull(user);
     }
 
 }

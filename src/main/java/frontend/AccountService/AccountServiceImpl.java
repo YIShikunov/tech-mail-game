@@ -1,12 +1,39 @@
 package frontend.AccountService;
 
-import base.AccountService;
+import org.hibernate.SessionFactory;
+import utils.SessionHelper;
 
-import java.util.HashMap;
-import java.util.Map;
+public class AccountServiceImpl /*implements AccountService*/ {
 
-public class AccountServiceImpl implements AccountService {
-    private static Map<String, UserProfile> users = new HashMap<>();
+    //// SINGLETON
+    private static AccountServiceImpl instance;
+    public static AccountServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new AccountServiceImpl();
+        }
+        return instance;
+    }
+    //// SINGLETON
+
+    SessionFactory sessionFactory;
+    UserDataSetDAO userDataSetDAO;
+
+    private AccountServiceImpl() {
+        sessionFactory = SessionHelper.createSessionFactory();
+        userDataSetDAO = new UserDataSetDAO(sessionFactory);
+    }
+
+    public void addUser(String username, String email, String password) {
+        UserDataSet user = new UserDataSet(username, email, password);
+        userDataSetDAO.addUser(user);
+    }
+
+    public UserDataSet getUser(long id){
+        return userDataSetDAO.getUser(id);
+    }
+
+
+    /*private static Map<String, UserProfile> users = new HashMap<>();
     private static Map<String, UserProfile> sessions = new HashMap<>();
 
     public boolean addUser(String userName, UserProfile gameProfile) {
@@ -52,5 +79,5 @@ public class AccountServiceImpl implements AccountService {
     public String getUsernameBySession(String sessionID) {
         UserProfile user = getSessions(sessionID);
         return user.getLogin();
-    }
+    }*/
 }
