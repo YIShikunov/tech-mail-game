@@ -31,7 +31,7 @@ public class Main {
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountServiceImpl accountServiceImpl = new AccountServiceImpl();
+        AccountServiceImpl accountServiceImpl = AccountServiceImpl.getInstance();
 
         WebSocketService webSocketService = new WebSocketService();
         GameMechanics gameMechanics = new GameMechanics(webSocketService);

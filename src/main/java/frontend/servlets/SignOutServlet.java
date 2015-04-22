@@ -37,7 +37,7 @@ public class SignOutServlet extends HttpServlet {
 
     protected void signOut(String sessionID) {
         if (accountServiceImpl.isAuthorised(sessionID)) {
-            accountServiceImpl.delSessions(sessionID);
+            accountServiceImpl.deleteSession(sessionID);
         }
     }
 }

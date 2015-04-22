@@ -1,9 +1,12 @@
 package frontend.AccountService;
 
+import base.AccountService;
 import org.hibernate.SessionFactory;
 import utils.SessionHelper;
 
-public class AccountServiceImpl /*implements AccountService*/ {
+import java.util.HashMap;
+
+public class AccountServiceImpl implements AccountService {
 
     //// SINGLETON
     private static AccountServiceImpl instance;
@@ -17,67 +20,54 @@ public class AccountServiceImpl /*implements AccountService*/ {
 
     SessionFactory sessionFactory;
     UserDataSetDAO userDataSetDAO;
+    static HashMap<String, Long> activeSessions;
 
     private AccountServiceImpl() {
         sessionFactory = SessionHelper.createSessionFactory();
         userDataSetDAO = new UserDataSetDAO(sessionFactory);
+        activeSessions = new HashMap<String, Long>();
     }
 
-    public void addUser(String username, String email, String password) {
+    public boolean addUser(String username, String email, String password) {
         UserDataSet user = new UserDataSet(username, email, password);
         userDataSetDAO.addUser(user);
+        return true; // TODO: make it actually cathc errors
     }
 
     public UserDataSet getUser(long id){
         return userDataSetDAO.getUser(id);
     }
 
-
-    /*private static Map<String, UserProfile> users = new HashMap<>();
-    private static Map<String, UserProfile> sessions = new HashMap<>();
-
-    public boolean addUser(String userName, UserProfile gameProfile) {
-        if (users.containsKey(userName))
-            return false;
-        users.put(userName, gameProfile);
-        return true;
+    public void addSession(String sessionID, Long userID) {
+        activeSessions.put(sessionID, userID);
     }
 
-    public AccountServiceImpl()
-    {
-        //Debug
-        addUser("123", new UserProfile("123", "123", "123@123"));
-        addUser("234", new UserProfile("234", "234", "123@123"));
-        //Debug
+    public void deleteSession(String sessionID) {
+        activeSessions.remove(sessionID);
     }
 
-    public void addSessions(String sessionId, UserProfile gameProfile) {
-        sessions.put(sessionId, gameProfile);
-    }
-    public void delSessions(String sessionId) {
-        sessions.remove(sessionId);
+    public UserDataSet getUserByName(String username) {
+        return userDataSetDAO.getUser(username);
     }
 
-    public UserProfile getUser(String userName) {
-        return users.get(userName);
-    }
-
-    public UserProfile getSessions(String sessionId) {
-        return sessions.get(sessionId);
+    public UserDataSet getUserBySession(String sessionID) {
+        Long userID = activeSessions.get(sessionID);
+        return userDataSetDAO.getUser(userID);
     }
 
     public Integer getCountUsers() {
-        return users.size();
+        return userDataSetDAO.countUsers();
     }
 
-    public Integer getCountLogUsers() {
-        return sessions.size();
+    public Integer getCountLoggedInUsers() {
+        return activeSessions.size();
     }
 
-    public boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); }
+    public boolean isAuthorised(String sessionID) {
+        return activeSessions.containsKey(sessionID);
+    }
 
     public String getUsernameBySession(String sessionID) {
-        UserProfile user = getSessions(sessionID);
-        return user.getLogin();
-    }*/
+        return getUserBySession(sessionID).getUsername();
+    }
 }

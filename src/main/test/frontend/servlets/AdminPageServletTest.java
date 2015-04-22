@@ -1,7 +1,6 @@
 package frontend.servlets;
 
 import frontend.AccountService.AccountServiceImpl;
-import frontend.AccountService.UserProfile;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +16,7 @@ public class AdminPageServletTest {
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = AccountServiceImpl.getInstance();
         signInServlet = new SignInServlet(accountService);
         adminPageServlet = new AdminPageServlet(accountService);
 
@@ -33,11 +32,11 @@ public class AdminPageServletTest {
 
     @Test
     public void testAdminInfo() {
-        accountService.addUser("username", new UserProfile("username", "password", "em@i.l"));
-        accountService.addUser("another", new UserProfile("another", "dude", "p@ch.ta"));
-        signInServlet.signInUser("username", "password", "em@i.l", "ayedee");
+        accountService.addUser("username", "em@i.l", "password");
+        accountService.addUser("another", "p@ch.ta", "dude");
+        signInServlet.signInUser("username", "em@i.l", "password", "ayedee");
         HashMap<String, Object> resultSet = adminPageServlet.getAdminInfo();
-        Assert.assertEquals(resultSet.get("users"), 2+2); // +2 are the debug users - see AccountServiceImpl constructor
+        Assert.assertEquals(resultSet.get("users"), 2);
         Assert.assertEquals(resultSet.get("logusers"), 1);
         Assert.assertEquals(resultSet.get("status"), "run");
     }

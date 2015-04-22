@@ -1,7 +1,6 @@
 package frontend.servlets;
 
 import frontend.AccountService.AccountServiceImpl;
-import frontend.AccountService.UserProfile;
 import org.junit.*;
 
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class SignInServletTest
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = AccountServiceImpl.getInstance();
         servlet = new SignInServlet(accountService);
     }
 
@@ -28,14 +27,14 @@ public class SignInServletTest
     @Test
     public void testAddUser()
     {
-        accountService.addUser("username", new UserProfile("username", "password", "em@i.l"));
-        HashMap<String, Object> response = servlet.signInUser("username", "password", "em@i.l", "ayedee");
+        accountService.addUser("username", "em@i.l", "password");
+        HashMap<String, Object> response = servlet.signInUser("username", "em@i.l", "password", "ayedee");
         Assert.assertEquals(response.get("email"), "em@i.l");
         Assert.assertEquals(response.get("login"), "username");
         Assert.assertEquals(response.get("online"), 1);
         Assert.assertEquals(response.get("email"), "em@i.l");
 
-        response = servlet.signInUser("username", "wrongPassword", "em@i.l", "ayedee");
+        response = servlet.signInUser("username", "em@i.l", "wrongPassword", "ayedee");
         Assert.assertEquals(response.get("online"), 0);
     }
 

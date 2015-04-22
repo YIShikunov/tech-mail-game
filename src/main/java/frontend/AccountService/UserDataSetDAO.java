@@ -35,11 +35,21 @@ public class UserDataSetDAO {
         return result;
     }
 
-    // get user by username/password
+    public UserDataSet getAuthorisedUser(String username, String password) {
+        Session session = sessionFactory.openSession();
+        UserDataSet result = (UserDataSet) session.createCriteria(UserDataSet.class).add(
+                Restrictions.eq("username", username) ).add(
+                Restrictions.eq("password", password)).uniqueResult();
+        session.close();
+        return result;
+    }
 
     // read all
 
     // delete user
 
-    // count users
+    public Integer countUsers() {
+        return 0;
+        //TODO: implement
+    }
 }
