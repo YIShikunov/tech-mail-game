@@ -1,9 +1,9 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
-    <div class="title">WuXing</div>
-    <div class="main">
-    	<div class="main__title">Главное меню</div>
-	    <a class="main__btn" href="#game">Играть</a>
-	    <a class="main__btn" href="#login">Авторизация</a>
-	    <a class="main__btn" href="#scoreboard">Рейтинг</a>
-	</div>
+    <div class="title_main">WuXing</div>
+    <div class="title_sub">Главное меню</div>
+    <div>
+	    <a class="btn btn_red" href="#game">Играть</a>
+	    <a class="btn btn_green" href="#login">Авторизация</a>
+	    <a class="btn btn_yellow" href="#scoreboard">Рейтинг</a>
+	 </div>
 </fest:template>

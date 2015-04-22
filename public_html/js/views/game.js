@@ -7,11 +7,10 @@ define([
 ){
 
     var GameView = Backbone.View.extend({
-        tag: 'div',
         template: tmpl,
         initialize: function () {
-            this.$el.addClass("gameView");
-            this.$el.appendTo('#page');
+            this.$el.addClass("gameView__playView");
+            this.$el.appendTo('.gameView');
         },
         render: function () {
             this.$el.html(this.template());

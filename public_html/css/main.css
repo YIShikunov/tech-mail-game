@@ -4,74 +4,97 @@ html, body {
 	background: url(../images/graphics.jpg);
 	margin: 0;
 	padding: 0;
+    font-family: Verdana;
 }
 
-#page {
+.gameView {
 	overflow: hidden;
-	width: 100%;
-	height: 100%;
+    text-align: center;
 }
-.title {
-	text-align: center;
+
+.title_main {
     font-size: 70px;
     margin:80px auto 20px;
     color: #00AA7F;
     font-weight: bold;
-    text-shadow: 2px 0px 0px #000000, -2px 0px 0px #000000, 0px 2px 0px #000000, 0px -2px 0px #000000, 1px 1px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000;
+    text-shadow: 10px 5px 0px #000000;
 }
 
-.main, .score, .auth, .game {
-	text-align: center;
-}
-
-.main__title, .score__title, .auth__title   {
+.title_sub {
     font-size: 20px;
-    margin: 50px auto 20px;
+    margin: 30px auto 30px;
     color: #FFFFFF;
-    font-weight: bold;
 }
 
-.main__btn, .score__btn, .auth__btn, .game__btn {
+.btn {
     display: block;
     width: 300px;
     margin: 10px auto 0px;
-    background: none repeat scroll 0% 0% #CF000F;
-    border: 1px solid #00667F;
-    font-family: "robotol",Helvetica,Arial;
-    border-radius: 20px;
-    padding: 10px 0px;
     color: #FFFFFF;
+    border: 10px solid #000000;
+    border-radius: 10px;
+    padding: 10px 0px;
     text-decoration: none;
     font-size: 21px;
     cursor: pointer;
-    outline: medium none;
-    text-align: center;
+    text-shadow: 1px 1px 0px #000;
 }
 
+.btn_red {
+    background: #CF000F;
+}
+
+.btn_green {
+    background: #00CC00;
+    color: #000000;
+    text-shadow: 0px 0px;
+}
+
+.btn_yellow {
+    background: #993300;
+}
+
+.btn_auth {
+    width: 250px;
+    border: 3px solid #000000;
+    text-shadow: 0px 0px;
+
+}
+    
 .score__table {
-    margin: 50px auto 0px;
-    width: 200px;
+    margin: 20px auto 20px;
+    padding: 20px;
+    width: 400px;
+    border: 5px solid #00AA7F;
     border-radius: 20px;
+    background: #004488; 
+    font-family: Verdana;
+    font-size: 21px;
+    outline: medium none;
 }
 
-.score__tr {
-    width: 100%;
+.score__table__tr {
     background: #FFFFFF;
 }
 
-.score__tr:first-child {
-    width: 100%;
+.score__table__tr:first-child {
+    color: #FFFFFF;
     background: #22BB7F;
-    border-radius: 20px;
 }
-.score__td_name {
+
+.score__table__td {
+    border-radius: 5px;
+}
+
+.score__table__td_name {
     width: 70%;
 }
-.score__td_score {
+
+.score__table__td_score {
     width: 30%;
 }
 
-.auth__form {
+.form {
     width: 400px;
     padding: 20px;
     margin: 50px auto 0px;
@@ -80,40 +103,29 @@ html, body {
     background: #0066AA; 
 }
 
-.auth__form__input {
-    width: 200px;
+.form__line {
+    overflow: auto;
+}
+
+.form__line__input {
+    width: 280px;
     height: 30px;
     border: 1px solid #00AA00;
     border-radius: 3px;
     margin-bottom: 10px;
     font-size: 18px;
-    outline: medium none;
     padding: 0px 5px;
     font-family: "robotol",Helvetica,Arial;
 }
 
-.auth__form__line {
-    display: block;
+.form__line__label {
+    float: left;
     color: #FFFFFF;
-}
-
-.auth__form__btn {
-    display: block;
-    width: 200px;
-    margin: 10px auto 0px;
-    background: none repeat scroll 0% 0% #00CC00;
-    border: 1px solid #00667F;
-    font-family: "robotol",Helvetica,Arial;
-    border-radius: 20px;
-    padding: 10px 0px;
-    color: #000000;
-    text-decoration: none;
-    font-size: 21px;
-    cursor: pointer;
-    outline: medium none;
-    text-align: center;
+    display: inline-block;
+    width: 60px;
+    margin-left: 60px;
 }
 
 .game__field {
-    height: 650px;
+    height: 550px;
 }
