@@ -3,7 +3,7 @@ package frontend.AccountService;
 import org.eclipse.jetty.server.Authentication;
 import org.junit.*;
 
-public class AccountServiceImpl2Test
+public class AccountServiceImplTest
 {
     private AccountServiceImpl accountService;
 /*
