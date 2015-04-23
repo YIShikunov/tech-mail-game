@@ -1,7 +1,8 @@
 package main;
 
 import ResourceLoader.GSResources;
-import ResourceLoader.resourcesService;
+import ResourceLoader.ResourceStatus;
+import ResourceLoader.ResourcesService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.WebSocketService;
@@ -13,18 +14,26 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.util.ArrayList;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        GSResources serverSettings = resourcesService.getInstance().getResources("settings");
+        ArrayList<GSResources> serverSettings = ResourcesService.getInstance().getResources("settings.xml").getContentByName("server");
         String portString = "8080";
-        if (serverSettings.getSetting("__status__").equals("OK"))
+        if (serverSettings.size() < 1)
         {
-            portString = serverSettings.getSetting("port");
+            System.out.println("Server Settings not found");
+            System.exit(1);
+        }
+        GSResources serverSetting = serverSettings.get(0);
+        if (serverSetting.getStatus() == ResourceStatus.OK)
+        {
+            portString = serverSetting.getSetting("port");
         }
         else
         {
-            System.out.println(serverSettings.getSetting("__status__"));
+            System.out.println(serverSetting.getStatusText());
         }
 
         int port = Integer.valueOf(portString);

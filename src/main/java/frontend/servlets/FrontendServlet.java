@@ -1,7 +1,7 @@
 package frontend.servlets;
 
 import ResourceLoader.GSResources;
-import ResourceLoader.resourcesService;
+import ResourceLoader.ResourcesService;
 import base.AccountService;
 import mechanics.GameMechanics;
 import frontend.AccountService.AccountServiceImpl;
@@ -33,7 +33,8 @@ public class FrontendServlet extends HttpServlet {
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
 
-        GSResources serverSettings = resourcesService.getInstance().getResources("settings");
+        //TODO: Pass port in a constructor
+        /*GSResources serverSettings = ResourcesService.getInstance().getResources("settings");
         String portString = "8080";
         if (serverSettings.getSetting("__status__").equals("OK"))
         {
@@ -42,8 +43,8 @@ public class FrontendServlet extends HttpServlet {
         else
         {
             System.out.println(serverSettings.getSetting("__status__"));
-        }
-
+        }*/
+        String portString = "8080";
         Map<String, Object> pageVariables = new HashMap<>();
 
         pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
