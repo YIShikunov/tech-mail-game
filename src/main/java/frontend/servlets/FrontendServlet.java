@@ -1,8 +1,5 @@
 package frontend.servlets;
 
-import ResourceLoader.GSResources;
-import ResourceLoader.ResourcesService;
-import base.AccountService;
 import mechanics.GameMechanics;
 import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
@@ -19,10 +16,12 @@ public class FrontendServlet extends HttpServlet {
 
     private GameMechanics gameMechanics;
     private AccountServiceImpl authService;
+    private String port;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService) {
+    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService, String port) {
         this.gameMechanics = gameMechanics;
         this.authService = authService;
+        this.port = port;
     }
 
     public void doGet(HttpServletRequest request,
@@ -32,23 +31,10 @@ public class FrontendServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
-
-        //TODO: Pass port in a constructor
-        /*GSResources serverSettings = ResourcesService.getInstance().getResources("settings");
-        String portString = "8080";
-        if (serverSettings.getSetting("__status__").equals("OK"))
-        {
-            portString = serverSettings.getSetting("port");
-        }
-        else
-        {
-            System.out.println(serverSettings.getSetting("__status__"));
-        }*/
-        String portString = "8080";
         Map<String, Object> pageVariables = new HashMap<>();
 
         pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
-        pageVariables.put("port", portString);
+        pageVariables.put("port", this.port);
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
 

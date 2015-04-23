@@ -48,7 +48,7 @@ public class Main {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
         context.addServlet(new ServletHolder(new WebSocketGameServlet(accountServiceImpl, gameMechanics, webSocketService)), "/gameplay");
-        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountServiceImpl)), "/game");
+        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountServiceImpl, portString)), "/game");
         context.addServlet(new ServletHolder(new SignInServlet(accountServiceImpl)), "/api/v1/auth/signin");
         context.addServlet(new ServletHolder(new SignUpServlet(accountServiceImpl)), "/api/v1/auth/signup");
         context.addServlet(new ServletHolder(new SignOutServlet(accountServiceImpl)), "/api/v1/auth/signout");

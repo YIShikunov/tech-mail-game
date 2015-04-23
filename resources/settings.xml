@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
     <server port="7777">
-        <stuff a="BOO">
-
-        </stuff>
     </server>
 </settings>
