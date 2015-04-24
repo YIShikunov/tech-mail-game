@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <board>
+    <field_count count="44">
+    </field_count>
     <edge a="1" b="3">
     </edge>
     <edge a="1" b="4">
