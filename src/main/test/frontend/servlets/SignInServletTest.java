@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import org.junit.*;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 
 public class SignInServletTest
 {
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
     SignInServlet servlet;
 
     @Before

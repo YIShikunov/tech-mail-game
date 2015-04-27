@@ -1,10 +1,12 @@
-package frontend.AccountService;
+package base;
 
+import frontend.AccountService.AccountServiceImpl;
+import frontend.AccountService.UserProfile;
 import org.junit.*;
 
-public class AccountServiceImplTest
+public class AccountServiceTest
 {
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
 
     @Before
     public void setUp()

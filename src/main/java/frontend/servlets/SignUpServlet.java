@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import utils.PageGenerator;
@@ -12,10 +13,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class SignUpServlet extends HttpServlet {
-    private AccountServiceImpl accountServiceImpl;
+    private AccountService accountService;
 
-    public SignUpServlet(AccountServiceImpl accountServiceImpl) {
-        this.accountServiceImpl = accountServiceImpl;
+    public SignUpServlet(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void doPost(HttpServletRequest request,
@@ -41,7 +42,7 @@ public class SignUpServlet extends HttpServlet {
         pageVariables.put("login", password == null ? "" : login);
 
 
-        if (accountServiceImpl.addUser(login, new UserProfile(login, password, email))) {
+        if (accountService.addUser(login, new UserProfile(login, password, email))) {
             pageVariables.put("signUpStatus", "New user created");
             status = "Congratulations!!!";
         } else {

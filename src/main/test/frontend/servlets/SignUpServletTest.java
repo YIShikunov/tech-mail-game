@@ -1,11 +1,12 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import org.junit.*;
 
 public class SignUpServletTest
 {
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
     SignUpServlet servlet;
 
     @Before

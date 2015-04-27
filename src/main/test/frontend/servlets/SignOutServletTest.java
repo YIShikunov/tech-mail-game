@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import org.junit.After;
@@ -9,7 +10,7 @@ import org.junit.Test;
 
 public class SignOutServletTest
 {
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
     SignInServlet signInServlet;
     SignOutServlet signOutServlet;
 

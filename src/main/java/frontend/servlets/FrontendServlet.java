@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import mechanics.GameMechanics;
 import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
@@ -15,10 +16,10 @@ import java.util.Map;
 public class FrontendServlet extends HttpServlet {
 
     private GameMechanics gameMechanics;
-    private AccountServiceImpl authService;
+    private AccountService authService;
     private String port;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService, String port) {
+    public FrontendServlet(GameMechanics gameMechanics, AccountService authService, String port) {
         this.gameMechanics = gameMechanics;
         this.authService = authService;
         this.port = port;

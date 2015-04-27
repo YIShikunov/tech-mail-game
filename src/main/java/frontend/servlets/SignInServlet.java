@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
 import utils.PageGenerator;
@@ -13,10 +14,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class SignInServlet extends HttpServlet {
-    private AccountServiceImpl accountServiceImpl;
+    private AccountService accountService;
 
-    public SignInServlet(AccountServiceImpl accountServiceImpl) {
-        this.accountServiceImpl = accountServiceImpl;
+    public SignInServlet(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void doGet(HttpServletRequest request,
@@ -42,14 +43,14 @@ public class SignInServlet extends HttpServlet {
     protected HashMap<String, Object> signInUser(String login, String password, String email, String sessionID)
     {
 
-        UserProfile profile = accountServiceImpl.getUser(login);
+        UserProfile profile = accountService.getUser(login);
 
         HashMap<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
             pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+"<br>"+profile.getEmail());
             pageVariables.put("online", 1);
-            accountServiceImpl.addSessions(sessionID, profile);
+            accountService.addSessions(sessionID, profile);
         } else {
             pageVariables.put("loginStatus", "Wrong login/password");
             pageVariables.put("online", 0);
