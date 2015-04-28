@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
+import org.json.simple.JSONObject;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -26,7 +27,6 @@ public class SignInServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("AJAX 'GET' from /signin ");
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -36,9 +36,11 @@ public class SignInServlet extends HttpServlet {
 
         HashMap<String, Object> pageVariables = signInUser(login, password, email, sessionID);
 
-        response.setStatus(HttpServletResponse.SC_OK);
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("code", 0);
+        jsonResponse.put("response", pageVariables.get("loginStatus"));
 
-        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+        response.getWriter().println(jsonResponse);
     }
 
     protected HashMap<String, Object> signInUser(String login, String password, String email, String sessionID)
@@ -49,7 +51,7 @@ public class SignInServlet extends HttpServlet {
         HashMap<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
-            pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+"<br>"+profile.getEmail());
+            pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+", email: "+profile.getEmail());
             pageVariables.put("online", 1);
             accountServiceImpl.addSessions(sessionID, profile);
         } else {

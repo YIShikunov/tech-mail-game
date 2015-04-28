@@ -24,17 +24,15 @@ public class ScoreboardServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("AJAX 'GET' from /scoreboard ");
         doPost(request, response);
     }
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json;charset=utf-8");
+
         JSONObject jsonResponse = new JSONObject();
-
         jsonResponse.put("code", 0);
-
         jsonResponse.put("scores", accountServiceImpl.getScoreBoard());
 
         response.getWriter().println(jsonResponse);

@@ -1,7 +1,6 @@
 define([
-    'jquery',
     'backbone'
-], function ($, Backbone) {
+], function (Backbone) {
 
     return function(method, model, options) {
 
@@ -11,33 +10,29 @@ define([
                 url: '/signup',
                 success: function (resp) {
                     if (resp.code == 0) {
-                    }
-                    else if (resp.status == 500) {
+                        alert(resp.response)
                     }
                 },
-                error: function () {
-
-                }
+                error: function () {}
             },
             'read': {
                 method: 'GET',
                 url: '/signin',
                 success: function (resp) {
                     if (resp.code == 0) {
-                        model.reset(resp.response);
+                        alert(resp.response);
                     }
                 },
                 error: function () {}
-            },
-            'update': {}
+            }
         };
+
         var type = methodMap[method].method,
             url = methodMap[method].url,
             success = methodMap[method].success,
             error = methodMap[method].error || function () {};
             data = {};
             for (var num in model.attributes) {
-                debugger;
                 data[model.attributes[num].name] = model.attributes[num].value;
             }
 

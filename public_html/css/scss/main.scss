@@ -1,3 +1,8 @@
+@import "playView";
+@import "mainView";
+@import "scoreView";
+@import "loginView";
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -5,26 +10,6 @@ html, body {
 	margin: 0;
 	padding: 0;
     font-family: Verdana;
-}
-
-.gameView {
-	overflow: hidden;
-    text-align: center;
-}
-
-.title{
-    &_main {
-        font-size: 70px;
-        margin:80px auto 20px;
-        color: #00AA7F;
-        font-weight: bold;
-        text-shadow: 10px 5px 0px #000000;
-    }
-    &_sub {
-        font-size: 20px;
-        margin: 30px auto 30px;
-        color: #FFFFFF;
-    }
 }
 
 
@@ -59,70 +44,5 @@ html, body {
         width: 250px;
         border: 3px solid #000000;
         text-shadow: 0px 0px;
-    }
-}
-    
-.score {
-    &__table {
-        margin: 20px auto 20px;
-        padding: 20px;
-        width: 400px;
-        border: 5px solid #00AA7F;
-        border-radius: 20px;
-        background: #004488; 
-        font-family: Verdana;
-        font-size: 21px;
-        outline: medium none;
-        &__tr {
-            background: #FFFFFF;
-            &:first-child {
-                color: #FFFFFF;
-                background: #22BB7F;
-            }
-        }
-        &__td {
-            border-radius: 5px;
-            &_name {
-                width: 70%;
-            }
-            &_score {
-                width: 30%;
-            }            
-        }
-    }
-}
-
-.form {
-    width: 400px;
-    padding: 10px;
-    margin: 0 auto;
-    border: 5px solid #00AA7F;
-    border-radius: 20px;
-    background: #0066AA; 
-    &__line {
-        overflow: auto;
-        &__input {
-            width: 280px;
-            height: 30px;
-            border: 1px solid #00AA00;
-            border-radius: 3px;
-            margin-bottom: 10px;
-            font-size: 18px;
-            padding: 0px 5px;
-            font-family: "robotol",Helvetica,Arial;
-        }
-        &__label {
-            float: left;
-            color: #FFFFFF;
-            display: inline-block;
-            width: 60px;
-            margin-left: 60px;
-        }
-    }
-}
-
-.game{
-    &__field {
-        height: 550px;
     }
 }

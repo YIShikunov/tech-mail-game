@@ -20,7 +20,6 @@ public class AccountServiceImpl implements AccountService {
     public AccountServiceImpl()
     {
         //Debug
-        addUser("nano", new UserProfile("nano", "cano", "nano@mail.ru"));
         addUser("cat", new UserProfile("cat", "cat", "cat@yandex.ru"));
         addUser("qwerty", new UserProfile("qwerty", "qwerty", "qwerty@google.com"));
         addUser("mail", new UserProfile("mail", "mail", "mail@my.com"));

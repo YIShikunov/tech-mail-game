@@ -11,16 +11,14 @@ define([
         initialize: function () {
         },
 
-        logout: function () {
-            this.save();
-        },
-
         login: function (data) {
+            this.clear();
             this.set(data);
-            this.save();
+            this.fetch();
         },
 
         signup: function (data) {
+            this.clear();
             this.set(data);
             this.save();
         }

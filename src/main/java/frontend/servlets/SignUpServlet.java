@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserProfile;
+import org.json.simple.JSONObject;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,6 @@ public class SignUpServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("AJAX 'GET' from /signup ");
 
         String login = request.getParameter("login");
         String email = request.getParameter("email");
@@ -30,7 +30,11 @@ public class SignUpServlet extends HttpServlet {
 
         HashMap<String, Object> pageVariables = addUser(email, password, login);
 
-        response.getWriter().println(PageGenerator.getPage("authresponse.txt", pageVariables));
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("code", 0);
+        jsonResponse.put("response", pageVariables.get("status"));
+
+        response.getWriter().println(jsonResponse);
     }
 
     protected HashMap<String, Object> addUser(String email, String password, String login)

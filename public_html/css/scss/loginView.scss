@@ -1,0 +1,50 @@
+.form {
+    width: 900px;
+    margin: 0px auto;
+    text-align: center;
+    &_signup {
+        width: 400px;
+        padding: 10px;
+        margin: 0 auto;
+        border: 5px solid #00AA7F;
+        border-radius: 20px;
+        background: #00AA66;  
+        float: left;
+        display: block;
+        overflow: hidden;
+        height: 250px;
+    }
+    &_signin {
+        display: block;
+        overflow: hidden;
+        width: 400px;
+        padding: 10px;
+        margin: 0 auto;
+        border: 5px solid #00AA7F;
+        background: #0066AA;    
+        border-radius: 20px;
+        height: 250px;
+        float: none;
+    }
+}
+
+.line {
+    overflow: auto;
+    &_input {
+        width: 280px;
+        height: 30px;
+        border: 1px solid #00AA00;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        padding: 0px 5px;
+        font-family: "robotol",Helvetica,Arial;
+    }
+    &_label {
+        float: left;
+        color: #FFFFFF;
+        display: inline-block;
+        width: 60px;
+        margin-left: 60px;
+    }
+}
