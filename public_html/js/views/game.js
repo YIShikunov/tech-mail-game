@@ -82,16 +82,18 @@ define([
                      [[286.08, 300.0], [286.08, 420.0], [182.16, 360.0]]]
 
             for (i=0; i<field.length; i++) {
-                console.info(field[i]);
                 this.draw_base(ctx,field[i]);
             }
 
         },  
         draw_base: function(context,point) {
+            cX = -235;
+            cY = 10;
+            sX = sY = 1.3;
             context.beginPath();
-            context.moveTo( point[0][0], point[0][1]);
+            context.moveTo( cY+sY*point[0][1], cX+sX*point[0][0]);
             for (k=1; k<point.length; k++) {
-                 context.lineTo( point[k][0], point[k][1]);
+                 context.lineTo( cY+sY*point[k][1], cX+sX*point[k][0]);
             }
             context.fill();
             context.stroke();

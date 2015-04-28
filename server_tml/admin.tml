@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+	<link rel="stylesheet" href="/css/main.css">
+    <title>Authorization</title>
+</head>
+<body>
+<p class="title">Server administration page</p>
+<p class="auth__title">Server status: <span style="color:green;">${status}</span></p>
+<p class="auth__title">Logon users: <span style="color:yellow;">${logusers}/${users}</span></p>
+
+<a href="?shutdown=1000" style="color:red;">shutdown server after 1 sec</a>	  
+
+    <a class="main__btn" href="/">BACK</a>  
+</body>
+</html>

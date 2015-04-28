@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Wu Xing</title>
+
+
+    <script type="text/javascript">
+        var ws;
+        var started = false;
+        var finished = false;
+
+        var myName = "${name}";
+        var enemyName = "";
+
+        init = function () {
+            ws = new WebSocket("ws://localhost:${port}/gameplay");
+
+            ws.onopen = function (event) {
+                document.getElementById("prepare").style.display = "none";
+                document.getElementById("wait").style.display = "block";
+            }
+
+            ws.onmessage = function (event) {
+                var data = JSON.parse(event.data);
+                if(data.status == "start"){
+                    document.getElementById("wait").style.display = "none";
+                    document.getElementById("gameplay").style.display = "block";
+                    document.getElementById("enemyName").innerHTML = data.enemyName;
+                    document.getElementById("state").innerHTML = "The pieces are in their starting positions.";
+                    if (data.amIFirst) {
+                        document.getElementById("turn").innerHTML = "Your turn.";
+                    } else {
+                        document.getElementById("turn").innerHTML = "Enemy turn.";
+                    }
+                }
+
+                if(data.status == "finish"){
+                    document.getElementById("gameOver").style.display = "block";
+                    document.getElementById("gameplay").style.display = "none";
+                    document.getElementById("state").innerHTML = "A king is captured!";
+
+                    if(data.win)
+                        document.getElementById("win").innerHTML = "winner!";
+                    else
+                        document.getElementById("win").innerHTML = "loser!";
+                }
+
+                if(data.status == "turn"){
+                    document.getElementById("state").innerHTML = data.state;
+                    document.getElementById("message").innerHTML = "A turn is made!";
+                    if (data.isMyTurn)  {
+                       document.getElementById("turn").innerHTML = "Your turn.";
+                    } else {
+                       document.getElementById("turn").innerHTML = "Enemy turn.";
+                    }
+                }
+                if(data.status == "rejected"){
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            }
+
+            ws.onclose = function (event) {
+
+            }
+
+        };
+
+        sendMessage = function (action) {
+            ws.send(action);
+        }
+    </script>
+
+
+</head>
+<body>
+<div id="body">
+    <div id="hello">
+        <p>Hello, ${name}!</p>
+    </div>
+
+    <div id="prepare">
+        <form name="lookForOpponent" action="">
+            <input type="button" name="submit" value="Look for opponent." onclick="init();"/>
+        </form>
+    </div>
+
+    <div id="wait" style="display: none">
+        <p>Waiting for an enemy to start the game.</p>
+    </div>
+
+    <div id="gameplay" style="display: none">
+        <div id="player">
+            <p>${name} VS <span id="enemyName"></span></p>
+        </div>
+
+        <div id="gamestate">
+            <span id="state"></span>
+        </div>
+
+        <div>
+            <span id="turn"></span>
+        </div>
+
+        <div>
+            <span id="message"></span>
+        </div>
+
+        <form name="chooseAction" action="">
+            <input type="button" name="submit" value="Make a legal turn!" onclick="sendMessage('legal');"/>
+            <input type="button" name="submit" value="Try to cheat!" onclick="sendMessage('illegal');"/>
+        </form>
+    </div>
+
+    <div id="gameOver" style="display: none">
+        <p>Game over! You are <span id="win"></span></p>
+    </div>
+
+</div>
+</body>
+</html>

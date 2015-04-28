@@ -1,131 +1,99 @@
 html, body {
-	width: 100%;
-	height: 100%;
-	background: url(../images/graphics.jpg);
-	margin: 0;
-	padding: 0;
-    font-family: Verdana;
-}
+  width: 100%;
+  height: 100%;
+  background: url(../images/graphics.jpg);
+  margin: 0;
+  padding: 0;
+  font-family: Verdana; }
 
 .gameView {
-	overflow: hidden;
-    text-align: center;
-}
+  overflow: hidden;
+  text-align: center; }
 
 .title_main {
-    font-size: 70px;
-    margin:80px auto 20px;
-    color: #00AA7F;
-    font-weight: bold;
-    text-shadow: 10px 5px 0px #000000;
-}
-
+  font-size: 70px;
+  margin: 80px auto 20px;
+  color: #00AA7F;
+  font-weight: bold;
+  text-shadow: 10px 5px 0px #000000; }
 .title_sub {
-    font-size: 20px;
-    margin: 30px auto 30px;
-    color: #FFFFFF;
-}
+  font-size: 20px;
+  margin: 30px auto 30px;
+  color: #FFFFFF; }
 
 .btn {
-    display: block;
-    width: 300px;
-    margin: 10px auto 0px;
-    color: #FFFFFF;
-    border: 10px solid #000000;
-    border-radius: 10px;
-    padding: 10px 0px;
-    text-decoration: none;
-    font-size: 21px;
-    cursor: pointer;
-    text-shadow: 1px 1px 0px #000;
-}
-
-.btn_red {
-    background: #CF000F;
-}
-
-.btn_green {
+  display: block;
+  width: 300px;
+  margin: 10px auto 0px;
+  color: #FFFFFF;
+  border: 10px solid #000000;
+  border-radius: 10px;
+  padding: 10px 0px;
+  text-decoration: none;
+  font-size: 21px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #000; }
+  .btn_red {
+    background: #CF000F; }
+  .btn_green {
     background: #00CC00;
     color: #000000;
-    text-shadow: 0px 0px;
-}
-
-.btn_yellow {
-    background: #993300;
-}
-
-.btn_auth {
+    text-shadow: 0px 0px; }
+  .btn_yellow {
+    background: #993300; }
+  .btn_auth {
     width: 250px;
     border: 3px solid #000000;
-    text-shadow: 0px 0px;
+    text-shadow: 0px 0px; }
 
-}
-    
 .score__table {
-    margin: 20px auto 20px;
-    padding: 20px;
-    width: 400px;
-    border: 5px solid #00AA7F;
-    border-radius: 20px;
-    background: #004488; 
-    font-family: Verdana;
-    font-size: 21px;
-    outline: medium none;
-}
-
-.score__table__tr {
-    background: #FFFFFF;
-}
-
-.score__table__tr:first-child {
-    color: #FFFFFF;
-    background: #22BB7F;
-}
-
-.score__table__td {
-    border-radius: 5px;
-}
-
-.score__table__td_name {
-    width: 70%;
-}
-
-.score__table__td_score {
-    width: 30%;
-}
+  margin: 20px auto 20px;
+  padding: 20px;
+  width: 400px;
+  border: 5px solid #00AA7F;
+  border-radius: 20px;
+  background: #004488;
+  font-family: Verdana;
+  font-size: 21px;
+  outline: medium none; }
+  .score__table__tr {
+    background: #FFFFFF; }
+    .score__table__tr:first-child {
+      color: #FFFFFF;
+      background: #22BB7F; }
+  .score__table__td {
+    border-radius: 5px; }
+    .score__table__td_name {
+      width: 70%; }
+    .score__table__td_score {
+      width: 30%; }
 
 .form {
-    width: 400px;
-    padding: 20px;
-    margin: 50px auto 0px;
-    border: 5px solid #00AA7F;
-    border-radius: 20px;
-    background: #0066AA; 
-}
-
-.form__line {
-    overflow: auto;
-}
-
-.form__line__input {
-    width: 280px;
-    height: 30px;
-    border: 1px solid #00AA00;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    padding: 0px 5px;
-    font-family: "robotol",Helvetica,Arial;
-}
-
-.form__line__label {
-    float: left;
-    color: #FFFFFF;
-    display: inline-block;
-    width: 60px;
-    margin-left: 60px;
-}
+  width: 400px;
+  padding: 10px;
+  margin: 0 auto;
+  border: 5px solid #00AA7F;
+  border-radius: 20px;
+  background: #0066AA; }
+  .form__line {
+    overflow: auto; }
+    .form__line__input {
+      width: 280px;
+      height: 30px;
+      border: 1px solid #00AA00;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      padding: 0px 5px;
+      font-family: "robotol",Helvetica,Arial; }
+    .form__line__label {
+      float: left;
+      color: #FFFFFF;
+      display: inline-block;
+      width: 60px;
+      margin-left: 60px; }
 
 .game__field {
-    height: 550px;
-}
+  height: 550px; }
+
+/*# sourceMappingURL=main.css.map */

@@ -1,7 +1,9 @@
 {
 status: 200,
 body: {
+login: "${login}",
 email: "${email}",
-password: "${password}"
+password: "${password}",
+status: "${status}"
 }
 }
