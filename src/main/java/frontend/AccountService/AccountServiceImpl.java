@@ -1,9 +1,10 @@
 package frontend.AccountService;
 
 import base.AccountService;
+import org.json.simple.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.text.html.HTMLDocument;
+import java.util.*;
 
 public class AccountServiceImpl implements AccountService {
     private static Map<String, UserProfile> users = new HashMap<>();
@@ -19,8 +20,12 @@ public class AccountServiceImpl implements AccountService {
     public AccountServiceImpl()
     {
         //Debug
-        addUser("123", new UserProfile("123", "123", "123@123"));
-        addUser("234", new UserProfile("234", "234", "123@123"));
+        addUser("nano", new UserProfile("nano", "cano", "nano@mail.ru"));
+        addUser("cat", new UserProfile("cat", "cat", "cat@yandex.ru"));
+        addUser("qwerty", new UserProfile("qwerty", "qwerty", "qwerty@google.com"));
+        addUser("mail", new UserProfile("mail", "mail", "mail@my.com"));
+        addUser("dobby", new UserProfile("dobby", "dobby", "dobby@my.com"));
+        addUser("clob", new UserProfile("clob", "clob", "clob@google.com"));
         //Debug
     }
 
@@ -53,4 +58,18 @@ public class AccountServiceImpl implements AccountService {
         UserProfile user = getSessions(sessionID);
         return user.getLogin();
     }
+
+    public List<JSONObject> getScoreBoard() {
+        List<JSONObject> scores = new ArrayList<>();
+        int k = 0;
+        for (Object key : users.keySet()) {
+            if ( k<5 ) k++; else break;
+            JSONObject score = new JSONObject();
+            score.put("name", key.toString());
+            score.put("score", users.get(key).getScores());
+            scores.add(score);
+        }
+        return scores;
+    }
+
 }
