@@ -15,10 +15,10 @@ define([
         initialize: function () {
             this.$el.addClass("gameView__scoreView");
             this.$el.appendTo('.gameView');
+            this.$el.hide();
         },
 
         render: function () {
-            debugger;
             this.collection.fetch();
             this.$el.html(this.template(this.collection.toJSON()));
         },

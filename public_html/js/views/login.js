@@ -29,6 +29,7 @@ define([
             $(".form_signin input[name=login]").val(localStorage['login_in']);
             $(".form_signin input[name=email]").val(localStorage['email_in']);
             $(".form_signin input[name=password]").val(localStorage['password_in']);
+            this.$el.hide();
         },
 
         formSubmit: function(e){

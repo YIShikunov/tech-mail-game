@@ -13,6 +13,7 @@ define([
             this.$el.addClass("gameView__mainView");
             this.$el.appendTo('.gameView');
             this.render(); 
+            this.$el.hide();
         },
 
         render: function () {

@@ -27,10 +27,8 @@ define([
             }
         };
 
-        var type = methodMap[method].method,
-            url = methodMap[method].url,
-            success = methodMap[method].success,
-            error = methodMap[method].error || function () {};
+        var success = methodMap[method].success,
+            error = methodMap[method].error;
             data = {};
             for (var num in model.attributes) {
                 data[model.attributes[num].name] = model.attributes[num].value;
