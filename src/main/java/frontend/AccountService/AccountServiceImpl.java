@@ -47,6 +47,10 @@ public class AccountServiceImpl implements AccountService {
         return userDataSetDAO.getUser(id);
     }
 
+    public void updateUser(UserDataSet user) throws SQLException {
+        userDataSetDAO.updateUser(user);
+    }
+
     public void addSession(String sessionID, Long userID) {
         activeSessions.put(sessionID, userID);
     }

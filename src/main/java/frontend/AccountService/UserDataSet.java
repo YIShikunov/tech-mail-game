@@ -11,12 +11,10 @@ import javax.persistence.*;
 public class UserDataSet implements Serializable {
 
     private long id;
-
     private String username;
-
     private String email;
-
     private String password;
+    private int score;
 
     public UserDataSet() {}
 
@@ -25,12 +23,14 @@ public class UserDataSet implements Serializable {
         this.setUsername(username);
         this.setEmail(email);
         this.setPassword(password);
+        this.setScore(0);
     }
 
     public UserDataSet(String username, String email, String password) {
         this.setUsername(username);
         this.setEmail(email);
         this.setPassword(password);
+        this.setScore(0);
     }
 
     public void setId(long id) {
@@ -71,5 +71,12 @@ public class UserDataSet implements Serializable {
     public String getEmail() {
         return this.email;
     }
+
+    @Column(name="score")
+    public int getScore() {return this.score;}
+
+    public void setScore(int score) { this.score = score; }
+
+    public void setRandomScore() { this.score = Double.valueOf(Math.random()*100).intValue(); }
 
 }

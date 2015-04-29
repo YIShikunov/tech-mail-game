@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import frontend.AccountService.UserDataSet;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class SignUpServlet extends HttpServlet {
@@ -44,12 +46,23 @@ public class SignUpServlet extends HttpServlet {
         if (accountService.addUser(username, email, password)) {
             pageVariables.put("signUpStatus", "New user created");
             status = "Congratulations!!!";
+            GiveRandomScore(username);
         } else {
             pageVariables.put("signUpStatus", "User with name: " + username + " already exists");
             status = "This login is busy";
         }
         pageVariables.put("status", password == null ? "" : status);
         return pageVariables;
+    }
+
+    protected void GiveRandomScore(String username) {
+        try {
+            UserDataSet user = accountService.getUserByName(username);
+            user.setRandomScore();
+            accountService.updateUser(user);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
     }
 
 }

@@ -28,10 +28,13 @@ public class AccountServiceTest
     {
         try {
             boolean success = accountService.addUser("username", "em@i.l", "password");
+            UserDataSet user = accountService.getUserByName("username");
             Assert.assertTrue(success);
+            user.setPassword("1234");
+            accountService.updateUser(user);
             boolean failure = accountService.addUser("username", "duplicate@i.l", "pwd");
             Assert.assertFalse(failure);
-            UserDataSet user = accountService.getUserByName("sneak");
+            user = accountService.getUserByName("sneak");
             Assert.assertNull(user);
             user = accountService.getUserByName("username");
             Assert.assertEquals(user.getEmail(), "em@i.l");
