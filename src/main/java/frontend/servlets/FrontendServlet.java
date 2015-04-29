@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +47,11 @@ public class FrontendServlet extends HttpServlet {
 
         Map<String, Object> pageVariables = new HashMap<>();
 
-        pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
+        try {
+            pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
+        } catch (SQLException e) {
+            throw new RuntimeException(); // TODO: if user is not logged in, show a different page.
+        }
         pageVariables.put("port", portString);
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));

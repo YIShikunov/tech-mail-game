@@ -2,8 +2,10 @@ package frontend.AccountService;
 
 import base.AccountService;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class AccountServiceImpl implements AccountService {
@@ -25,16 +27,23 @@ public class AccountServiceImpl implements AccountService {
     private AccountServiceImpl() {
         sessionFactory = SessionHelper.createSessionFactory();
         userDataSetDAO = new UserDataSetDAO(sessionFactory);
-        activeSessions = new HashMap<String, Long>();
+        activeSessions = new HashMap<>();
     }
 
     public boolean addUser(String username, String email, String password) {
         UserDataSet user = new UserDataSet(username, email, password);
-        userDataSetDAO.addUser(user);
-        return true; // TODO: make it actually cathc errors
+        try {
+            userDataSetDAO.addUser(user);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        } catch (ConstraintViolationException e) {
+            return false;
+        }
     }
 
-    public UserDataSet getUser(long id){
+    // can return null
+    public UserDataSet getUser(long id) throws SQLException {
         return userDataSetDAO.getUser(id);
     }
 
@@ -46,11 +55,13 @@ public class AccountServiceImpl implements AccountService {
         activeSessions.remove(sessionID);
     }
 
-    public UserDataSet getUserByName(String username) {
+    // can return null
+    public UserDataSet getUserByName(String username) throws SQLException  {
         return userDataSetDAO.getUser(username);
     }
 
-    public UserDataSet getUserBySession(String sessionID) {
+    // can return null
+    public UserDataSet getUserBySession(String sessionID) throws SQLException {
         Long userID = activeSessions.get(sessionID);
         return userDataSetDAO.getUser(userID);
     }
@@ -67,7 +78,8 @@ public class AccountServiceImpl implements AccountService {
         return activeSessions.containsKey(sessionID);
     }
 
-    public String getUsernameBySession(String sessionID) {
-        return getUserBySession(sessionID).getUsername();
+    public String getUsernameBySession(String sessionID) throws SQLException {
+        UserDataSet user = getUserBySession(sessionID);
+        return user == null ? null : user.getUsername();
     }
 }

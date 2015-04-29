@@ -34,7 +34,7 @@ public class AdminPageServletTest {
     public void testAdminInfo() {
         accountService.addUser("username", "em@i.l", "password");
         accountService.addUser("another", "p@ch.ta", "dude");
-        signInServlet.signInUser("username", "em@i.l", "password", "ayedee");
+        signInServlet.signInUser("username", "password", "ayedee");
         HashMap<String, Object> resultSet = adminPageServlet.getAdminInfo();
         Assert.assertEquals(resultSet.get("users"), 2);
         Assert.assertEquals(resultSet.get("logusers"), 1);

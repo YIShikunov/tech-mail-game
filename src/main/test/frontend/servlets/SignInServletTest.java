@@ -28,13 +28,13 @@ public class SignInServletTest
     public void testAddUser()
     {
         accountService.addUser("username", "em@i.l", "password");
-        HashMap<String, Object> response = servlet.signInUser("username", "em@i.l", "password", "ayedee");
+        HashMap<String, Object> response = servlet.signInUser("username", "password", "ayedee");
         Assert.assertEquals(response.get("email"), "em@i.l");
         Assert.assertEquals(response.get("login"), "username");
         Assert.assertEquals(response.get("online"), 1);
         Assert.assertEquals(response.get("email"), "em@i.l");
 
-        response = servlet.signInUser("username", "em@i.l", "wrongPassword", "ayedee");
+        response = servlet.signInUser("username", "wrongPassword", "ayedee");
         Assert.assertEquals(response.get("online"), 0);
     }
 

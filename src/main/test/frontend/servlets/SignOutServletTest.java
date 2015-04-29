@@ -32,7 +32,7 @@ public class SignOutServletTest
     public void testAddUser()
     {
         accountService.addUser("username", "em@i.l", "password");
-        signInServlet.signInUser("username", "em@i.l", "password","ayedee");
+        signInServlet.signInUser("username", "password","ayedee");
         signOutServlet.signOut("ayedee");
         Assert.assertEquals(accountService.getCountLoggedInUsers(), Integer.valueOf(0));
     }
