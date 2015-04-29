@@ -33,7 +33,7 @@ public class AdminPageServlet extends HttpServlet {
 
     protected HashMap<String, Object> getAdminInfo() {
         Integer users = accountService.getCountUsers();
-        Integer logusers = accountService.getCountLogUsers();
+        Integer logusers = accountService.getCountLoggedInUsers();
         HashMap<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("users", users == null ? 0 :users );
         pageVariables.put("logusers", logusers == null ? 0 :logusers );

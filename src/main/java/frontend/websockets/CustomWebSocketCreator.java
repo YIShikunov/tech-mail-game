@@ -6,6 +6,8 @@ import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 
+import java.sql.SQLException;
+
 public class CustomWebSocketCreator implements WebSocketCreator {
     private AccountService accountService;
     private GameMechanics gameMechanics;
@@ -22,7 +24,12 @@ public class CustomWebSocketCreator implements WebSocketCreator {
     @Override
     public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
         String sessionId = req.getHttpServletRequest().getSession().getId();
-        String name = accountService.getUsernameBySession(sessionId);
+        String name;
+        try {
+            name = accountService.getUsernameBySession(sessionId);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
         return new GameWebSocket(name, gameMechanics, webSocketService);
     }
 }

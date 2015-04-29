@@ -1,19 +1,19 @@
 package base;
 
-import frontend.AccountService.UserProfile;
+import frontend.AccountService.UserDataSet;
+
+import java.sql.SQLException;
 
 public interface AccountService
 {
-    boolean addUser(String name, UserProfile user);
-    void addSessions(String sessionId, UserProfile gameProfile);
-    void delSessions(String sessionId);
-    UserProfile getUser(String username);
-    UserProfile getSessions(String session);
-    Integer getCountUsers();
-    Integer getCountLogUsers();
-    boolean isAuthorised(String sessionId);
-    String getUsernameBySession(String sessionID);
-
-
-
+    public boolean addUser(String username, String email, String password);
+    public UserDataSet getUser(long id) throws SQLException;
+    public void addSession(String sessionID, Long userID);
+    public void deleteSession(String sessionID);
+    public UserDataSet getUserByName(String username) throws SQLException;
+    public UserDataSet getUserBySession(String sessionID) throws SQLException;
+    public Integer getCountUsers();
+    public Integer getCountLoggedInUsers();
+    public boolean isAuthorised(String sessionID);
+    public String getUsernameBySession(String sessionID) throws SQLException;
 }

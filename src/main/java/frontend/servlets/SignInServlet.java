@@ -2,7 +2,7 @@ package frontend.servlets;
 
 import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
-import frontend.AccountService.UserProfile;
+import frontend.AccountService.UserDataSet;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class SignInServlet extends HttpServlet {
@@ -27,36 +28,39 @@ public class SignInServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
+        String username = request.getParameter("login");
         String password = request.getParameter("password");
-        String email = "none";
         HttpSession session = request.getSession();
         String sessionID = session.getId();
 
-        HashMap<String, Object> pageVariables = signInUser(login, password, email, sessionID);
+        HashMap<String, Object> pageVariables = signInUser(username, password, sessionID);
 
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
     }
 
-    protected HashMap<String, Object> signInUser(String login, String password, String email, String sessionID)
+    protected HashMap<String, Object> signInUser(String username, String password, String sessionID)
     {
-
-        UserProfile profile = accountService.getUser(login);
+        UserDataSet profile;
+        try {
+            profile = accountService.getUserByName(username);
+        } catch (SQLException e) {
+            profile = null; // Return an server error page?
+        }
 
         HashMap<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
-            pageVariables.put("loginStatus", "Hello, "+profile.getLogin()+"<br>"+profile.getEmail());
+            pageVariables.put("loginStatus", "Hello, "+profile.getUsername()+"<br>"+profile.getEmail());
             pageVariables.put("online", 1);
-            accountService.addSessions(sessionID, profile);
+            accountService.addSession(sessionID, profile.getId());
         } else {
             pageVariables.put("loginStatus", "Wrong login/password");
             pageVariables.put("online", 0);
         }
-        pageVariables.put("email", email);
-        pageVariables.put("login", login == null ? "none" : login);
+        pageVariables.put("email", profile == null ? "none" : profile.getEmail());
+        pageVariables.put("login", profile == null ? "none" : profile.getUsername());
 
         return pageVariables;
     }
