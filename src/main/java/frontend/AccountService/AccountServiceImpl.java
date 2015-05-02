@@ -1,56 +1,89 @@
 package frontend.AccountService;
 
 import base.AccountService;
+import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
+import utils.SessionHelper;
 
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class AccountServiceImpl implements AccountService {
-    private static Map<String, UserProfile> users = new HashMap<>();
-    private static Map<String, UserProfile> sessions = new HashMap<>();
 
-    public boolean addUser(String userName, UserProfile gameProfile) {
-        if (users.containsKey(userName))
+    //// SINGLETON
+    private static AccountServiceImpl instance;
+    public static AccountServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new AccountServiceImpl();
+        }
+        return instance;
+    }
+    //// SINGLETON
+
+    SessionFactory sessionFactory;
+    UserDataSetDAO userDataSetDAO;
+    static HashMap<String, Long> activeSessions;
+
+    private AccountServiceImpl() {
+        sessionFactory = SessionHelper.createSessionFactory();
+        userDataSetDAO = new UserDataSetDAO(sessionFactory);
+        activeSessions = new HashMap<>();
+    }
+
+    public boolean addUser(String username, String email, String password) {
+        UserDataSet user = new UserDataSet(username, email, password);
+        try {
+            userDataSetDAO.addUser(user);
+            return true;
+        } catch (SQLException e) {
             return false;
-        users.put(userName, gameProfile);
-        return true;
+        } catch (ConstraintViolationException e) {
+            return false;
+        }
     }
 
-    public AccountServiceImpl()
-    {
-        //Debug
-        addUser("123", new UserProfile("123", "123", "123@123"));
-        addUser("234", new UserProfile("234", "234", "123@123"));
-        //Debug
+    // can return null
+    public UserDataSet getUser(long id) throws SQLException {
+        return userDataSetDAO.getUser(id);
     }
 
-    public void addSessions(String sessionId, UserProfile gameProfile) {
-        sessions.put(sessionId, gameProfile);
-    }
-    public void delSessions(String sessionId) {
-        sessions.remove(sessionId);
+    public void updateUser(UserDataSet user) throws SQLException {
+        userDataSetDAO.updateUser(user);
     }
 
-    public UserProfile getUser(String userName) {
-        return users.get(userName);
+    public void addSession(String sessionID, Long userID) {
+        activeSessions.put(sessionID, userID);
     }
 
-    public UserProfile getSessions(String sessionId) {
-        return sessions.get(sessionId);
+    public void deleteSession(String sessionID) {
+        activeSessions.remove(sessionID);
+    }
+
+    // can return null
+    public UserDataSet getUserByName(String username) throws SQLException  {
+        return userDataSetDAO.getUser(username);
+    }
+
+    // can return null
+    public UserDataSet getUserBySession(String sessionID) throws SQLException {
+        Long userID = activeSessions.get(sessionID);
+        return userDataSetDAO.getUser(userID);
     }
 
     public Integer getCountUsers() {
-        return users.size();
+        return userDataSetDAO.countUsers();
     }
 
-    public Integer getCountLogUsers() {
-        return sessions.size();
+    public Integer getCountLoggedInUsers() {
+        return activeSessions.size();
     }
 
-    public boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); }
+    public boolean isAuthorised(String sessionID) {
+        return activeSessions.containsKey(sessionID);
+    }
 
-    public String getUsernameBySession(String sessionID) {
-        UserProfile user = getSessions(sessionID);
-        return user.getLogin();
+    public String getUsernameBySession(String sessionID) throws SQLException {
+        UserDataSet user = getUserBySession(sessionID);
+        return user == null ? null : user.getUsername();
     }
 }

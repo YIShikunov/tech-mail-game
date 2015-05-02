@@ -3,6 +3,7 @@ package main;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourceStatus;
 import ResourceLoader.ResourcesService;
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.WebSocketService;
@@ -40,19 +41,19 @@ public class Main {
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountServiceImpl accountServiceImpl = new AccountServiceImpl();
+        AccountService accountService = AccountServiceImpl.getInstance();
 
         WebSocketService webSocketService = new WebSocketService();
         GameMechanics gameMechanics = new GameMechanics(webSocketService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountServiceImpl, gameMechanics, webSocketService)), "/gameplay");
-        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountServiceImpl, portString)), "/game");
-        context.addServlet(new ServletHolder(new SignInServlet(accountServiceImpl)), "/api/v1/auth/signin");
-        context.addServlet(new ServletHolder(new SignUpServlet(accountServiceImpl)), "/api/v1/auth/signup");
-        context.addServlet(new ServletHolder(new SignOutServlet(accountServiceImpl)), "/api/v1/auth/signout");
-        context.addServlet(new ServletHolder(new AdminPageServlet(accountServiceImpl)), AdminPageServlet.adminPageURL);
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService, gameMechanics, webSocketService)), "/gameplay");
+        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountService, portString)), "/game");
+        context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
+        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
+        context.addServlet(new ServletHolder(new SignOutServlet(accountService)), "/api/v1/auth/signout");
+        context.addServlet(new ServletHolder(new AdminPageServlet(accountService)), AdminPageServlet.adminPageURL);
 
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);
