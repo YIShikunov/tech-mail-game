@@ -45,7 +45,7 @@ public class GameState {
 
     public GameState() {
         board = new Board();
-        pieces = board.putPieces();
+        pieces = board.arrangePieces();
         state = State.PLACEMENT;
     }
 

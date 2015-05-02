@@ -1,12 +1,16 @@
 package mechanics.GameState;
-
+/*
+    This class in JUST A STUPID CONTAINER.
+    It doesn't try to manage pieces, maintain consistency of the board or something otherwise smart.
+    GameState.Board does that.
+*/
 import java.util.ArrayList;
 
 public class Field {
     final int id;
     final ArrayList<Integer> adjacent;
     final FieldType type;
-    Piece piece;
+    private Piece piece;
 
     public Field(int id, FieldType type, ArrayList<Integer> adjacent) {
         this.id = id;
@@ -41,5 +45,7 @@ public class Field {
     public boolean isAdjacent(int id) {
         return adjacent.contains(id);
     }
+
+    public FieldType getType() { return type; }
 
 }

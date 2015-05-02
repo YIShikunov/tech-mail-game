@@ -4,15 +4,14 @@ import java.util.ArrayList;
 
 public class Piece {
     final boolean firstPlayerOwner;
-    Field position;
+    private Field position;
     final boolean king;
-    // if not king
 
+    // if not king
     Element element;
     boolean visible;
 
     // if king
-
     ArrayList<Element> elements;
 
     public Piece(Field position, Element element, boolean firstPlayerOwner) {
