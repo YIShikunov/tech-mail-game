@@ -6,15 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BoardTest {
 
     Board board;
     Board fakeBoard;
-
-    private Piece testPiece() {
-        return new Piece(null, Element.BLANK, true);
-    }
 
     @Before
     public void setUp()
@@ -128,8 +125,8 @@ public class BoardTest {
 
     @Test
     public void testMovement() {
-        Piece piece1 = testPiece();
-        Piece piece2 = testPiece();
+        Piece piece1 = new Piece(Element.BLANK, true);
+        Piece piece2 = new Piece(Element.BLANK, true);
 
         fakeBoard.putPiece(piece1, 1);
         fakeBoard.putPiece(piece2, 4);
@@ -150,5 +147,100 @@ public class BoardTest {
         Assert.assertNull(fakeBoard.fields.get(2).getPiece());
         Assert.assertEquals(piece2, fakeBoard.fields.get(3).getPiece());
         Assert.assertEquals(piece1, fakeBoard.fields.get(4).getPiece());
+    }
+
+    @Test
+    public void testElements() {
+        board.arrangePieces();
+
+        HashMap<Integer, Element> placement = new HashMap<>();
+        placement.put(3, Element.FIRE);
+        placement.put(5, Element.EARTH);
+
+        board.placeElements(placement);
+
+        Assert.assertEquals(board.fields.get(3).getPiece().getElement(), Element.FIRE);
+        Assert.assertEquals(board.fields.get(5).getPiece().getElement(), Element.EARTH);
+        Assert.assertEquals(board.fields.get(7).getPiece().getElement(), Element.BLANK);
+    }
+
+    @Test
+    public void testBasicCombat() {
+        Piece piece1 = new Piece(Element.FIRE, true);
+        Piece piece2 = new Piece(Element.WATER, false);
+        Piece piece3 = new Piece(Element.WATER, true);
+
+        fakeBoard.putPiece(piece1, 1);
+        fakeBoard.putPiece(piece2, 2);
+        fakeBoard.putPiece(piece3, 3);
+
+        Assert.assertEquals(fakeBoard.attackPiece(piece2, piece3), Outcome.ERROR);
+        Assert.assertEquals(fakeBoard.attackPiece(piece2, piece1), Outcome.WIN);
+        Assert.assertEquals(fakeBoard.attackPiece(piece2, piece3), Outcome.DESTRUCTION);
+        Assert.assertNull(piece1.getPosition());
+        Assert.assertNull(piece2.getPosition());
+        Assert.assertNull(piece3.getPosition());
+
+        piece1 = new Piece(Element.WOOD, true);
+        piece2 = new Piece(Element.EARTH, true);
+        piece3 = new Piece(Element.METAL, false);
+        Piece piece4 = new Piece(Element.WATER, false);
+
+        fakeBoard.putPiece(piece1, 1);
+        fakeBoard.putPiece(piece2, 2);
+        fakeBoard.putPiece(piece3, 3);
+        fakeBoard.putPiece(piece4, 4);
+
+
+        Assert.assertEquals(fakeBoard.attackPiece(piece1, piece2), Outcome.ERROR);
+        Assert.assertEquals(fakeBoard.attackPiece(piece1, piece3), Outcome.LOSS);
+        fakeBoard.movePiece(piece2, 1);
+        Assert.assertEquals(fakeBoard.attackPiece(piece2, piece3), Outcome.DRAW);
+
+        Assert.assertNull(piece1.getPosition());
+        Assert.assertEquals(piece2.getPosition().getID(), 1);
+        Assert.assertEquals(piece3.getPosition().getID(), 3);
+        Assert.assertEquals(piece4.getPosition().getID(), 4);
+
+        Assert.assertTrue(piece1.visible);
+        Assert.assertTrue(piece2.visible);
+        Assert.assertTrue(piece3.visible);
+        Assert.assertFalse(piece4.visible);
+
+    }
+
+    @Test
+    public void testRoyalCombat() {
+        Piece king1 = new Piece(true);
+        Piece king2 = new Piece(false);
+        Piece piece1 = new Piece(Element.FIRE, false);
+        Piece piece2 = new Piece(Element.WATER, false);
+
+        fakeBoard.putPiece(king1, 1);
+        fakeBoard.putPiece(piece1, 2);
+        fakeBoard.putPiece(piece2, 3);
+        fakeBoard.putPiece(king2, 4);
+
+        king1.setElement(Element.WATER);
+        king2.setElement(Element.WOOD);
+
+        Assert.assertEquals(fakeBoard.attackPiece(piece1, king1), Outcome.LOSS);
+        Assert.assertEquals(fakeBoard.attackPiece(piece2, king1), Outcome.DESTRUCTION);
+
+        Assert.assertNull(piece1.getPosition());
+        Assert.assertNull(piece2.getPosition());
+        Assert.assertNotNull(king1.getPosition());
+
+        Assert.assertTrue(king1.hasElement(Element.FIRE));
+        Assert.assertTrue(king1.hasElement(Element.WOOD));
+        Assert.assertFalse(king1.hasElement(Element.WATER));
+
+        fakeBoard.movePiece(king2, 2);
+        Assert.assertEquals(fakeBoard.attackPiece(king2, king1), Outcome.WIN);
+        Assert.assertTrue(king1.hasElement(Element.WOOD));
+        Assert.assertFalse(king1.hasElement(Element.WATER));
+        Assert.assertTrue(king2.hasElement(Element.WOOD));
+
+
     }
 }

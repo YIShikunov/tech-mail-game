@@ -7,30 +7,30 @@ public class Piece {
     private Field position;
     final boolean king;
 
-    // if not king
-    Element element;
+    private Element element;
     boolean visible;
 
     // if king
-    ArrayList<Element> elements;
+    private ArrayList<Element> elements;
 
-    public Piece(Field position, Element element, boolean firstPlayerOwner) {
+    public Piece(/*Field position, */Element element, boolean firstPlayerOwner) {
         this.king = false;
-        this.position = position;
+        this.position = null;//position;
         this.element = element;
         this.visible = false;
         this.firstPlayerOwner = firstPlayerOwner;
     }
 
-    public Piece(Field position, boolean firstPlayerOwner) {
+    public Piece(/*Field position, */boolean firstPlayerOwner) {
         this.king = true;
-        this.position = position;
+        this.position = null;//position;
         this.elements = new ArrayList<>();
         this.elements.add(Element.FIRE);
         this.elements.add(Element.METAL);
         this.elements.add(Element.WOOD);
         this.elements.add(Element.EARTH);
         this.elements.add(Element.WATER);
+        this.element = Element.BLANK;
         this.visible = true;
         this.firstPlayerOwner = firstPlayerOwner;
     }
@@ -43,9 +43,9 @@ public class Piece {
         return this.position;
     }
 
-    public void destroy() {
+    /*public void destroy() {
         this.position = null;
-    }
+    }*/
 
     public void destroy(Element element) {
         this.elements.remove(element);
@@ -59,7 +59,11 @@ public class Piece {
         this.visible = false;
     }
 
+    public Element getElement() { return this.element; }
+
     public void setElement(Element element) {
         this.element = element;
     }
+
+    public Boolean hasElement(Element element) { return elements.contains(element); }
 }

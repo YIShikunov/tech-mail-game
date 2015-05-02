@@ -9,7 +9,7 @@ public enum Element {
         this.id = id;
     }
 
-    public Outcome battle(Element attacker, Element defender) {
+    public static Outcome battle(Element attacker, Element defender) {
         int outcome = defender.id - attacker.id;
         if (outcome < 0) outcome = 5 + outcome;
         switch (outcome) {

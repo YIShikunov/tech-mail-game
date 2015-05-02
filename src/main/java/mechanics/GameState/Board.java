@@ -66,13 +66,13 @@ public class Board {
         for (Field field : this.fields.values()) {
             if (field.type == FieldType.THRONE) {
                 Boolean ownership = ownedByFirst.contains(field.getID());
-                Piece piece = new Piece(field, ownership);
+                Piece piece = new Piece(ownership);
                 field.putPiece(piece);
                 piece.setPosition(field);
                 result.add(piece);
             } else if (field.type == FieldType.BASE) {
                 Boolean ownership = ownedByFirst.contains(field.getID());
-                Piece piece = new Piece(field, Element.BLANK, ownership);
+                Piece piece = new Piece(Element.BLANK, ownership);
                 field.putPiece(piece);
                 piece.setPosition(field);
                 result.add(piece);
@@ -121,6 +121,87 @@ public class Board {
     protected Piece takePiece(Field field) {
         return takePiece(field.getPiece());
     }
+
+    public boolean placeElements(HashMap<Integer, Element> placement) {
+        for (Integer fieldID : placement.keySet()) {
+            Field field = fields.get(fieldID);
+            if (field.getPiece() == null || field.getPiece().getElement() != Element.BLANK) {
+                return false;
+            }
+            field.getPiece().setElement(placement.get(fieldID));
+        }
+        return true;
+    }
+
+    public Outcome attackPiece(Piece attacker, Piece defender) {
+        if (attacker.getPosition() == null || defender.getPosition() == null) {
+            return Outcome.ERROR;
+        }
+        if (!attacker.getPosition().isAdjacent(defender.getPosition())) {
+            return Outcome.ERROR;
+        }
+        if (attacker.firstPlayerOwner == defender.firstPlayerOwner) {
+            return Outcome.ERROR;
+        }
+
+        attacker.reveal();
+        defender.reveal();
+
+        Outcome outcome = Element.battle(attacker.getElement(), defender.getElement());
+        if (outcome == Outcome.WIN) {
+            Field position = defender.getPosition();
+            destroy(defender);
+            if (defender.getPosition() == null)
+                movePiece(attacker, position);
+        } else if (outcome == Outcome.LOSS) {
+            destroy(attacker);
+        } else if (outcome == Outcome.DRAW) {
+            //do nothing
+        } else if (outcome == Outcome.DESTRUCTION) {
+            destroy(attacker);
+            destroy(defender);
+        }
+
+        return outcome;
+    }
+
+    private void destroy(Piece piece) {
+        if (piece.king) {
+            piece.destroy(piece.getElement());
+        } else {
+            takePiece(piece);
+        }
+    }
+
+    private void changeElement(Piece piece, Element element) {
+        piece.setElement(element);
+        piece.conceal();
+    }
+
+    /*public boolean makeCompleteMove(int from, int to) {
+        if (movePiece(from, to)) {
+            if (fields.get(to).getType() == FieldType.THRONE) {
+                changeElement(fields.get(to).getPiece(), promptUserForElement());
+            }
+        } else {
+            Piece attacker = fields.get(from).getPiece();
+            Piece defender = fields.get(to).getPiece();
+            if (attacker == null || defender == null) {
+                return false;
+            }
+            Outcome outcome = attackPiece(attacker, defender);
+            if (outcome == Outcome.ERROR) {
+                return false;
+            }
+            if (outcome == Outcome.WIN) {
+                if (fields.get(to).getType() == FieldType.THRONE) {
+                    changeElement(attacker, promptUserForElement(attacker.firstPlayerOwner));
+                }
+            }
+        }
+        return true;
+    }*/
+
 
     @SuppressWarnings("unchecked")
     protected Board(Boolean testing) {
