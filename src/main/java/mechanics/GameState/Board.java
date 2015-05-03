@@ -51,7 +51,7 @@ public class Board {
         }
     }
 
-    public ArrayList<Piece> arrangePieces() {
+    public ArrayList<Piece> arrangePieces() { // TODO: this is a mess, clean it up
         ArrayList<Piece> result = new ArrayList<>();
 
         ArrayList<Integer> ownedByFirst = new ArrayList<>();
@@ -165,6 +165,15 @@ public class Board {
         return outcome;
     }
 
+    public Outcome attackPiece(int attackerFieldID, int defenderFieldID) {
+        Piece attacker = fields.get(attackerFieldID).getPiece();
+        Piece defender = fields.get(defenderFieldID).getPiece();
+        if (attacker == null || defender == null) {
+            return Outcome.ERROR;
+        }
+        return attackPiece(attacker, defender);
+    }
+
     private void destroy(Piece piece) {
         if (piece.king) {
             piece.destroy(piece.getElement());
@@ -173,34 +182,54 @@ public class Board {
         }
     }
 
-    private void changeElement(Piece piece, Element element) {
+    public boolean changeElement(Piece piece, Element element) {
         piece.setElement(element);
         piece.conceal();
+        return true;
     }
 
-    /*public boolean makeCompleteMove(int from, int to) {
-        if (movePiece(from, to)) {
-            if (fields.get(to).getType() == FieldType.THRONE) {
-                changeElement(fields.get(to).getPiece(), promptUserForElement());
-            }
-        } else {
-            Piece attacker = fields.get(from).getPiece();
-            Piece defender = fields.get(to).getPiece();
-            if (attacker == null || defender == null) {
+    public boolean changeElement(int fieldID, Element element) {
+        if (fields.get(fieldID).getPiece() == null)
+            return false;
+        return changeElement(fields.get(fieldID).getPiece(), element);
+    }
+
+    public boolean doesOwn(boolean isFirstPlayer, int fieldID) {
+        Field field = fields.get(fieldID);
+        if (field == null) {
+            return false;
+        } else if (field.getPiece() == null) {
+            return false;
+        } else if (field.getPiece().firstPlayerOwner != isFirstPlayer) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean allSet() {
+        for (int fieldID : fields.keySet()) {
+            Field field = fields.get(fieldID);
+            if (field.getPiece() != null && !field.getPiece().king && field.getPiece().getElement() == Element.BLANK) {
                 return false;
-            }
-            Outcome outcome = attackPiece(attacker, defender);
-            if (outcome == Outcome.ERROR) {
-                return false;
-            }
-            if (outcome == Outcome.WIN) {
-                if (fields.get(to).getType() == FieldType.THRONE) {
-                    changeElement(attacker, promptUserForElement(attacker.firstPlayerOwner));
-                }
             }
         }
         return true;
-    }*/
+    }
+
+    public boolean changeKingElement(boolean isFirstPlayer, Element element) {
+        for (Field field : fields.values()) {
+            Piece piece = field.getPiece();
+            if (piece != null && piece.king && piece.firstPlayerOwner==isFirstPlayer && piece.hasElement(element)) {
+                piece.setElement(element);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public FieldType fieldType(int id) {
+        return fields.get(id).getType();
+    }
 
 
     @SuppressWarnings("unchecked")

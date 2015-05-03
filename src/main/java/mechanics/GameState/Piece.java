@@ -3,12 +3,12 @@ package mechanics.GameState;
 import java.util.ArrayList;
 
 public class Piece {
-    final boolean firstPlayerOwner;
+    public final boolean firstPlayerOwner;
     private Field position;
     final boolean king;
 
     private Element element;
-    boolean visible;
+    public boolean visible;
 
     // if king
     private ArrayList<Element> elements;
@@ -49,6 +49,8 @@ public class Piece {
 
     public void destroy(Element element) {
         this.elements.remove(element);
+        if (!this.elements.isEmpty())
+            this.setElement(this.elements.get(0)); // TODO: this is a stub
     }
 
     public void reveal() {
