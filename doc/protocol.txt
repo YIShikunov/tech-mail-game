@@ -87,6 +87,16 @@ Ping/pong packets
 }
 //Такой-же пакет уйдет другой стороне в момент передачи хода
 
+Пакет перекраски фигуры на базе: (Один из вариантов хода)
+{
+	typeID = 4,
+	turn = (int),
+	statusOK = true,
+	baseRecolor = colorID,
+	moveFrom = fieldID,
+	moveTo = fieldID,
+}
+
 Пакет перекраски короля:
 {
 	typeID = 5,
