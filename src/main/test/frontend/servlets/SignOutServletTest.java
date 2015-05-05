@@ -19,23 +19,25 @@ public class SignOutServletTest
         accountService = AccountServiceImpl.getInstance();
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);
+        accountService.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");
     }
 
     @After
     public void tearDown()
     {
+        accountService.deleteUser("__TEST_USERNAME");
         signInServlet = null;
         accountService = null;
         signOutServlet = null;
     }
 
     @Test
-    public void testAddUser()
+    public void test()
     {
-        accountService.addUser("username", "em@i.l", "password");
-        signInServlet.signInUser("username", "password","ayedee");
-        signOutServlet.signOut("ayedee");
-        Assert.assertEquals(accountService.getCountLoggedInUsers(), Integer.valueOf(0));
+        Integer logUsers = accountService.getCountLoggedInUsers();
+        signInServlet.signInUser("__TEST_USERNAME", "password","ayedeee");
+        signOutServlet.signOut("ayedeee");
+        Assert.assertEquals(accountService.getCountLoggedInUsers(), logUsers);
     }
 
 }

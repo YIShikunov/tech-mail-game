@@ -24,7 +24,7 @@ public class AccountServiceTest
     }
 
     @Test
-    public void testAddUser()
+    public void test()
     {
         try {
             boolean success = accountService.addUser("username", "em@i.l", "password");
@@ -39,9 +39,11 @@ public class AccountServiceTest
             user = accountService.getUserByName("username");
             Assert.assertEquals(user.getEmail(), "em@i.l");
             Assert.assertEquals(user.getUsername(), "username");
-            Assert.assertEquals(user.getPassword(), "password");
+            Assert.assertEquals(user.getPassword(), "1234");
         } catch (SQLException e) {
             Assert.fail();
+        } finally {
+            accountService.deleteUser("username");
         }
     }
 }

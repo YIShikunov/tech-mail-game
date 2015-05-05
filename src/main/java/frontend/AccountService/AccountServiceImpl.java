@@ -86,4 +86,17 @@ public class AccountServiceImpl implements AccountService {
         UserDataSet user = getUserBySession(sessionID);
         return user == null ? null : user.getUsername();
     }
+
+    public boolean deleteUser(String username) {
+        try {
+            UserDataSet user = getUserByName(username);
+            if (user == null) {
+                return false;
+            }
+            userDataSetDAO.deleteUser(user);
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 }

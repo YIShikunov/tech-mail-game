@@ -26,15 +26,17 @@ public class SignUpServletTest
     }
 
     @Test
-    public void testAddUser()
+    public void test()
     {
         try {
-            servlet.addUser("login", "email@email.email", "password");
-            Assert.assertEquals(accountService.getUserByName("login").getEmail(), "email@email.email");
-            Assert.assertEquals(accountService.getUserByName("login").getPassword(), "password");
-            Assert.assertEquals(accountService.getUserByName("login").getUsername(), "login");
+            servlet.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getEmail(), "__TEST@EMAIL.EMAIL");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getPassword(), "password");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getUsername(), "__TEST_USERNAME");
         } catch (SQLException e) {
             Assert.fail();
+        } finally {
+            accountService.deleteUser("__TEST_USERNAME");
         }
     }
 
