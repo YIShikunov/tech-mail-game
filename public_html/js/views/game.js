@@ -1,13 +1,22 @@
 define([
     'backbone',
+    'models/field',
     'tmpl/game'
 ], function(
     Backbone,
+    FieldModel,
     tmpl
 ){
 
     var GameView = Backbone.View.extend({
         template: tmpl,
+        field: new FieldModel(),
+        context: null,
+
+        events: {
+            'click canvas' : 'gameClick',
+            'resize' : 'draw'
+        },
 
         initialize: function () {
             this.$el.addClass("gameView__playView");
@@ -31,74 +40,57 @@ define([
         },
         
         draw: function() {
-            var canvas = document.getElementsByClassName("game__field");
-            var ctx = canvas[0].getContext('2d');
+            var canvas = this.$el.find("canvas")[0];
+            canvas.width = window.innerWidth;
+            var ctx = canvas.getContext('2d');
+            this.context = ctx;
+            ctx.strokeStyle = "#09034A";
+            ctx.lineWidth = 4;
+            
+            obj = this;
+            coords = this.field.get('coords');
 
-            ctx.fillStyle = "green";
-            ctx.strokeStyle = "white";
+            var subField = document.createElement('img');
+            subField.src = 'images/water.png';
+            subField.onload = function() {
+                var ptrn = ctx.createPattern(subField,"repeat");
+                ctx.fillStyle=ptrn;
+                //ctx.transport(0,-150);
 
-            field = [[[390.0, 420.0], [437.56, 454.55], [419.39, 510.45], [360.61, 510.45], [342.44, 454.55]],
-                     [[390.0, 180.0], [437.56, 145.45], [419.39, 89.55], [360.61, 89.55], [342.44, 145.45]],
-                     [[390.0, 561.35], [360.61, 510.45], [419.39, 510.45]],
-                     [[303.12, 498.23], [342.45, 454.55], [360.61, 510.45]],
-                     [[336.3, 396.09], [390.0, 420.0], [342.45, 454.55]],
-                     [[443.7, 396.09], [437.55, 454.55], [390.0, 420.0]],
-                     [[476.88, 498.23], [419.39, 510.45], [437.55, 454.55]],
-                     [[327.74, 559.18], [360.61, 510.45], [386.38, 563.28]],
-                     [[302.41, 502.27], [360.61, 510.45], [324.42, 556.77]],
-                     [[285.95, 438.35], [342.45, 454.55], [300.17, 495.38]],
-                     [[332.24, 396.66], [342.45, 454.55], [287.22, 434.45]],
-                     [[387.95, 361.26], [390.0, 420.0], [338.1, 392.41]],
-                     [[441.9, 392.41], [390.0, 420.0], [392.05, 361.26]],
-                     [[492.79, 434.45], [437.55, 454.55], [447.76, 396.66]],
-                     [[479.83, 495.38], [437.55, 454.55], [494.05, 438.35]],
-                     [[455.58, 556.77], [419.39, 510.45], [477.59, 502.27]],
-                     [[393.62, 563.28], [419.39, 510.45], [452.26, 559.18]],
-                     [[390.0, 38.65], [360.61, 89.55], [419.39, 89.55]],
-                     [[476.88, 101.77], [419.39, 89.55], [437.55, 145.45]],
-                     [[443.7, 203.91], [437.55, 145.45], [390.0, 180.0]],
-                     [[336.3, 203.91], [390.0, 180.0], [342.45, 145.45]],
-                     [[303.12, 101.77], [342.45, 145.45], [360.61, 89.55]],
-                     [[452.26, 40.82], [393.62, 36.72], [419.39, 89.55]],
-                     [[477.59, 97.73], [455.58, 43.23], [419.39, 89.55]],
-                     [[494.05, 161.65], [479.83, 104.62], [437.55, 145.45]],
-                     [[447.76, 203.34], [492.78, 165.55], [437.55, 145.45]],
-                     [[392.05, 238.74], [441.9, 207.59], [390.0, 180.0]],
-                     [[338.1, 207.59], [387.95, 238.74], [390.0, 180.0]],
-                     [[287.21, 165.55], [332.24, 203.34], [342.45, 145.45]],
-                     [[300.17, 104.62], [285.95, 161.65], [342.45, 145.45]],
-                     [[324.42, 43.23], [302.41, 97.73], [360.61, 89.55]],
-                     [[386.38, 36.72], [327.74, 40.82], [360.61, 89.55]],
-                     [[493.92, 300.0], [597.84, 360.0], [597.84, 240.0]],
-                     [[286.08, 300.0], [182.16, 360.0], [182.16, 240.0]],
-                     [[493.92, 300.0], [493.92, 420.0], [597.84, 360.0]],
-                     [[286.08, 300.0], [182.16, 240.0], [286.08, 180.0]],
-                     [[493.92, 300.0], [390.0, 360.0], [493.92, 420.0]],
-                     [[286.08, 300.0], [286.08, 180.0], [390.0, 240.0]],
-                     [[493.92, 300.0], [390.0, 240.0], [390.0, 360.0]],
-                     [[286.08, 300.0], [390.0, 240.0], [390.0, 360.0]],
-                     [[493.92, 300.0], [493.92, 180.0], [390.0, 240.0]],
-                     [[286.08, 300.0], [390.0, 360.0], [286.08, 420.0]],
-                     [[493.92, 300.0], [597.84, 240.0], [493.92, 180.0]],
-                     [[286.08, 300.0], [286.08, 420.0], [182.16, 360.0]]]
+                for (i=0; i<coords.length; i++) {
+                    obj.drawField(ctx,coords[i]);
+                }
+            };
 
-            for (i=0; i<field.length; i++) {
-                this.draw_base(ctx,field[i]);
-            }
+            var img = document.createElement('img');
+            img.src = 'images/ptrn.jpg';
+            img.onload = function() {
+                var ptrn = ctx.createPattern(img,"repeat");
+                ctx.fillStyle=ptrn;
+            };
+        },
 
-        },  
-        draw_base: function(context,point) {
-            cX = -235;
-            cY = 10;
-            sX = sY = 1.3;
+        drawField: function(context,points) {
+            cX = this.$el.find("canvas")[0].width/2;
+            cY = this.$el.find("canvas")[0].height/2;
+            scale = 1;
             context.beginPath();
-            context.moveTo( cY+sY*point[0][1], cX+sX*point[0][0]);
-            for (k=1; k<point.length; k++) {
-                 context.lineTo( cY+sY*point[k][1], cX+sX*point[k][0]);
+            context.moveTo(scale*points[0][0]+cX, scale*points[0][1]+cY);
+            for (k=1; k<points.length; k++) {
+                context.lineTo(scale*points[k][0]+cX, scale*points[k][1]+cY);
             }
+            context.closePath();
             context.fill();
             context.stroke();
-            context.closePath();
+        },
+
+        gameClick: function(event) {
+            coords = this.$el.find("canvas").offset()
+            x = event.pageX - coords.left-this.$el.find("canvas")[0].width/2;
+            y = event.pageY - coords.top-this.$el.find("canvas")[0].height/2;
+            index = this.field.checkField(x,y);
+            if (index >= 0) 
+                this.drawField(this.context,coords[i]);
         }
 
     });

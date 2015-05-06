@@ -5,11 +5,11 @@ define([
 ){
 
     var ScoreModel = Backbone.Model.extend({
-    	
+        
         defaults: {
-    		name : "",
-    		score: 0
-    	}
+            name : "",
+            score: 0
+        }
         
     });
 
