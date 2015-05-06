@@ -28,4 +28,16 @@ public enum Element {
             }
         return Outcome.ERROR;
     }
+
+    public static Element value(int value) {
+        switch (value) {
+            case -2: return BLANK;
+            case 0: return FIRE;
+            case 1: return METAL;
+            case 2: return WOOD;
+            case 3: return EARTH;
+            case 4: return WATER;
+        }
+        return ERROR;
+    }
 }
