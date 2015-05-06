@@ -60,14 +60,16 @@ define([
         checkField: function(x,y) {
             coords = this.get("coords");
             for (i=0; i<coords.length; i++) {
-                check1 = true;
+                check = true;
                 for (k=0; k<coords[i].length-1; k++) {
-                    if ( (coords[i][k+1][0]-coords[i][k][0])*(y-coords[i][k][1]) - (coords[i][k+1][1]-coords[i][k][1])*(x-coords[i][k][0]) <= 0 )
-                        check1 = false;
+                    if ((coords[i][k+1][0]-coords[i][k][0])*(y-coords[i][k][1]) - 
+                        (coords[i][k+1][1]-coords[i][k][1])*(x-coords[i][k][0]) <= 0 )
+                        check = false;
                 }
-                if ( (coords[i][0][0]-coords[i][k][0])*(y-coords[i][k][1]) - (coords[i][0][1]-coords[i][k][1])*(x-coords[i][k][0]) <= 0 )
-                        check1 = false;
-                if (check1) { 
+                if ((coords[i][0][0]-coords[i][k][0])*(y-coords[i][k][1]) - 
+                    (coords[i][0][1]-coords[i][k][1])*(x-coords[i][k][0]) <= 0 )
+                        check = false;
+                if (check) { 
                     console.info('filed: '+i);
                     return i;
                 }

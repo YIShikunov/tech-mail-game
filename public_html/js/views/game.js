@@ -12,6 +12,13 @@ define([
         template: tmpl,
         field: new FieldModel(),
         context: null,
+        panel: {x: 100, y: 50, width: 150, height: 460},
+        elements:[  {name: "fire", y: 60, count: 3},
+                    {name: "water", y: 150, count: 3},
+                    {name: "metal", y: 240, count: 3},
+                    {name: "wood", y: 330, count: 3},
+                    {name: "earth", y: 420, count: 3}],
+        index: 0,
 
         events: {
             'click canvas' : 'gameClick',
@@ -42,10 +49,10 @@ define([
         draw: function() {
             var canvas = this.$el.find("canvas")[0];
             canvas.width = window.innerWidth;
-            var ctx = canvas.getContext('2d');
-            this.context = ctx;
-            ctx.strokeStyle = "#09034A";
-            ctx.lineWidth = 4;
+            var context = canvas.getContext('2d');
+            this.context = context;
+            context.strokeStyle = "#09034A";
+            context.lineWidth = 4;
             
             obj = this;
             coords = this.field.get('coords');
@@ -53,21 +60,44 @@ define([
             var subField = document.createElement('img');
             subField.src = 'images/water.png';
             subField.onload = function() {
-                var ptrn = ctx.createPattern(subField,"repeat");
-                ctx.fillStyle=ptrn;
-                //ctx.transport(0,-150);
+                var ptrn = context.createPattern(subField,"repeat");
+                context.fillStyle=ptrn;
 
                 for (i=0; i<coords.length; i++) {
-                    obj.drawField(ctx,coords[i]);
+                    obj.drawField(context,coords[i]);
                 }
             };
 
             var img = document.createElement('img');
             img.src = 'images/ptrn.jpg';
             img.onload = function() {
-                var ptrn = ctx.createPattern(img,"repeat");
-                ctx.fillStyle=ptrn;
+                var ptrn = context.createPattern(img,"repeat");
+                context.fillStyle=ptrn;
+                panel = obj.panel;
+                context.beginPath();
+                context.rect( panel.x, panel.y, panel.width, panel.height);
+                context.closePath();
+                context.fill();
+                context.stroke();
+                context.textAlign = 'center';
+                context.font = "bold 16pt Calibri";
+                context.fillText("Элементы", panel.x+panel.width/2, panel.y-10);
             };
+
+            for (i=0; i<this.elements.length; i++) {
+                elem = document.createElement('img');
+                elem.src = 'images/piece/'+this.elements[i].name+'.png';
+                elem.index = i;
+                this.elements[i].img = elem;
+                elem.onload = function() {
+                    panel = obj.panel;
+                    context.drawImage(this,panel.x+panel.width/2-this.width/2, obj.elements[this.index].y);
+                    obj.drawCount(context, panel.x+panel.width/2, 
+                        obj.elements[this.index].y+75, obj.elements[this.index].count);
+                };
+            }
+
+
         },
 
         drawField: function(context,points) {
@@ -86,14 +116,55 @@ define([
 
         gameClick: function(event) {
             coords = this.$el.find("canvas").offset()
-            x = event.pageX - coords.left-this.$el.find("canvas")[0].width/2;
-            y = event.pageY - coords.top-this.$el.find("canvas")[0].height/2;
-            index = this.field.checkField(x,y);
-            if (index >= 0) 
-                this.drawField(this.context,coords[i]);
-        }
+            x = event.pageX - coords.left;
+            y = event.pageY - coords.top;
+            panel = panel;
+            if (x > panel.x && x < panel.x+panel.width && 
+                y > panel.y && y < panel.y+panel.height) {
+                for (i=0; i<this.elements.length; i++)
+                    if (y < this.elements[i].y+80) {
+                        panel = panel;
+                        this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                            panel.width-20,  90);
+                        this.context.drawImage(this.elements[this.index].img,
+                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                        this.drawCount(this.context, panel.x+panel.width/2, 
+                            obj.elements[this.index].y+75, obj.elements[this.index].count);
+                        obj.elements[this.index].count -= 1;
+                        this.drawSelect(this.context, 
+                            panel.x+panel.width/2, this.elements[i].y)
+                        this.index = i;
+                        break;
+                    }
+                
+            } else {
+                x -= this.$el.find("canvas")[0].width/2;
+                y -= this.$el.find("canvas")[0].height/2;
+                index = this.field.checkField(x,y);
+                if (index >= 0) 
+                    this.drawField(this.context,coords[i]);
+            }
+        },
+
+        drawCount: function(context,x,y,count) {
+            context.font = "bold 16pt Calibri";
+            ptrn = context.fillStyle;
+            context.fillStyle = "#000";
+            context.fillText(count, x, y);
+            context.fillStyle = ptrn;
+        },
+
+        drawSelect: function(context,x,y) {
+            ptrn = context.fillStyle;
+            context.beginPath();
+            context.fillStyle = ptrn;
+            context.arc(x,y+38  ,42,0,2*Math.PI);
+            context.stroke();
+        },
 
     });
+
+
 
     return new GameView();
 });
