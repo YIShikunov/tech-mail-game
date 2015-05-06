@@ -1,11 +1,13 @@
 package mechanics;
 
+import ResourceLoader.GSResources;
+import ResourceLoader.ResourcesService;
 import base.mechanics.GameController;
-import mechanics.GameState.Board;
-import mechanics.GameState.Element;
-import mechanics.GameState.FieldType;
-import mechanics.GameState.Outcome;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.util.Pair;
+import mechanics.GameState.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameControllerImpl implements GameController {
@@ -25,18 +27,40 @@ public class GameControllerImpl implements GameController {
 
     protected int promptTarget;
 
+    protected String errorMessage;
+
+    protected ArrayList<Pair<Integer, Integer>> piecesMoved;
+    protected ArrayList<Pair<Integer, Element>> piecesRevealed;
+    protected ArrayList<Integer> piecesDestroyed;
+
+    private HashMap<String, String> messages;
+
     public void init() {
         state = WaitingFor.PLACEMENT;
         board = new Board();
         board.arrangePieces();
+        messages = loadMessages();
+    }
+
+    private HashMap<String, String> loadMessages() {
+        GSResources settings = ResourcesService.getInstance().getResources("messages.xml");
+        HashMap<String, String> messages = new HashMap<>();
+        for (GSResources raw : settings.getContentByName("message")) {
+            messages.put(raw.getSetting("id"), raw.getSetting("value"));
+        }
+        return messages;
     }
 
     public boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
-        if (state != WaitingFor.PLACEMENT)
+        if (state != WaitingFor.PLACEMENT) {
+            setErrorMessage("NOT_PLACEMENT");
             return false;
+        }
         for (int fieldID : placement.keySet())
-            if (!board.doesOwn(isFirstPlayer, fieldID))
+            if (!board.doesOwn(isFirstPlayer, fieldID)) {
+                setErrorMessage("DO_NOT_OWN");
                 return false;
+            }
 
         HashMap<Element, Integer> counts = new HashMap<>();
         counts.put(Element.FIRE, 0);
@@ -47,8 +71,10 @@ public class GameControllerImpl implements GameController {
         for (Element element : placement.values())
             counts.put(element, counts.get(element)+1);
         for (int count : counts.values())
-            if (count != 3)
+            if (count != 3) {
+                setErrorMessage("WRONG_PLACEMENT");
                 return false;
+            }
 
 
         board.placeElements(placement);
@@ -58,12 +84,20 @@ public class GameControllerImpl implements GameController {
         return true;
     }
 
-    public boolean makeTurn(boolean isFirstPlayer, int fromID, int toID) { // TODO: a bit messy
-        if (isFirstPlayer && state != WaitingFor.FIRST_TURN)
+    public boolean makeTurn(boolean isFirstPlayer, int fromID, int toID) {
+        if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
+            setErrorMessage("NOT_YOUR_TURN");
             return false;
-        if (!isFirstPlayer && state != WaitingFor.SECOND_TURN)
+        }
+
+        /*Piece king = board.getKing(isFirstPlayer);
+        if (king.getElement() == Element.BLANK || !king.hasBackupElement()){
+            setErrorMessage("KING_NOT_SET");
             return false;
-        if (!board.doesOwn(isFirstPlayer, fromID)) {
+        }*/ // TODO: resolve king question
+
+        if (!board.doesOwn(isFirstPlayer, fromID))  {
+            setErrorMessage("DO_NOT_OWN");
             return false;
         }
 
@@ -99,22 +133,32 @@ public class GameControllerImpl implements GameController {
                 state = WaitingFor.FIRST_TURN;
             return true;
         }
+
+        setErrorMessage("INVALID_TURN");
         return false;
     }
 
     public boolean answerPrompt(boolean isFirstPlayer, Element element) {
-        if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE)
+        if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE ||
+                !isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE) {
+            setErrorMessage("NOT_YOUR_TURN");
             return false;
-        if (!isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE)
+        }
+
+        if (!board.doesOwn(isFirstPlayer, promptTarget)){
+            setErrorMessage("DO_NOT_OWN");
             return false;
-        if (!board.doesOwn(isFirstPlayer, promptTarget))
-            return false;
+        }
 
         if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
             state = WaitingFor.SECOND_TURN;
         } else if (state == WaitingFor.SECOND_ELEMENT_CHOICE)
             state = WaitingFor.FIRST_TURN;
-        return board.changeElement(promptTarget, element);
+
+        Boolean success = board.changeElement(promptTarget, element);
+        if (!success)
+            setErrorMessage("WRONG_ELEMENT");
+        return success;
     }
 
 
@@ -134,10 +178,24 @@ public class GameControllerImpl implements GameController {
     } // TODO pack all game data as seen by a player into a JSON
 
     public boolean changeKingElement(boolean isFirstPlayer, Element element) {
-        if (isFirstPlayer && state != WaitingFor.FIRST_TURN)
+        if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
+            setErrorMessage("NOT_YOUR_TURN");
             return false;
-        if (!isFirstPlayer && state != WaitingFor.SECOND_TURN)
-            return false;
-        return board.changeKingElement(isFirstPlayer, element);
+        }
+
+        Boolean success = board.changeKingElement(isFirstPlayer, element);
+        if (!success)
+            setErrorMessage("WRONG_ELEMENT");
+        return success;
+    }
+
+    private void setErrorMessage(String id) {
+        errorMessage = messages.get(id);
+    }
+
+    public String popErrorMessage() {
+        String result = this.errorMessage;
+        this.errorMessage = null;
+        return result;
     }
 }

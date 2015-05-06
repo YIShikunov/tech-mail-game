@@ -216,8 +216,18 @@ public class Board {
         return true;
     }
 
-    public boolean changeKingElement(boolean isFirstPlayer, Element element) {
+    public Piece getKing(boolean isFirstPlayer) {
         for (Field field : fields.values()) {
+            Piece piece = field.getPiece();
+            if (piece != null && piece.king && piece.firstPlayerOwner==isFirstPlayer) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public boolean changeKingElement(boolean isFirstPlayer, Element element) {
+        for (Field field : fields.values()) { // TODO: with getKing
             Piece piece = field.getPiece();
             if (piece != null && piece.king && piece.firstPlayerOwner==isFirstPlayer && piece.hasElement(element)) {
                 piece.setElement(element);

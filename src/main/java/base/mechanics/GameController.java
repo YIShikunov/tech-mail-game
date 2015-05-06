@@ -15,4 +15,6 @@ public interface GameController {
     public boolean isWaitingForPrompt(boolean isFirstPlayer);
     // public Object allGameData(); - not sure if we need this.
     public Object subjectiveGameData(boolean isFirstPlayer); // TODO pack all game data as seen by a player into a JSON
+
+    public String popErrorMessage();
 }

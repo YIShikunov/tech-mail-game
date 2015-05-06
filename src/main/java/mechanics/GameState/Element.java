@@ -10,6 +10,13 @@ public enum Element {
     }
 
     public static Outcome battle(Element attacker, Element defender) {
+        if (defender == BLANK && attacker == BLANK)
+            return Outcome.DRAW;
+        else if (attacker == BLANK)
+            return Outcome.LOSS;
+        else if (defender == BLANK)
+            return Outcome.WIN;
+
         int outcome = defender.id - attacker.id;
         if (outcome < 0) outcome = 5 + outcome;
         switch (outcome) {
