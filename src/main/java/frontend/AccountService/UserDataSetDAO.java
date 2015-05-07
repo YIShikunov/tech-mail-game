@@ -13,12 +13,8 @@ import java.util.List;
 public class UserDataSetDAO {
     private SessionFactory sessionFactory;
 
-    private int userCount; // I don't know how to actually count users in Hibernate
-                            // TODO: find out how to do it properly
-
     public UserDataSetDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.userCount = 0;
     }
 
     public void addUser(UserDataSet user) throws SQLException, ConstraintViolationException {
@@ -28,7 +24,6 @@ public class UserDataSetDAO {
             Transaction transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-            this.userCount += 1;
         } finally {
             if (session != null && session.isOpen())
                 session.close();
@@ -116,7 +111,6 @@ public class UserDataSetDAO {
             Transaction transaction = session.beginTransaction();
             session.delete(user);
             transaction.commit();
-            this.userCount -= 1;
         } finally {
             if (session != null && session.isOpen())
                 session.close();
@@ -124,7 +118,12 @@ public class UserDataSetDAO {
     }
 
     public int countUsers() {
-        // (!) Does not work as it should yet.
-        return this.userCount;
+        // TODO: improve this stub
+        try
+        {
+            return getAllUsers().size();
+        } catch (SQLException e) {
+            return 0;
+        }
     }
 }
