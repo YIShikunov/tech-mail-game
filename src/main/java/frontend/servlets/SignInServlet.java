@@ -22,11 +22,6 @@ public class SignInServlet extends HttpServlet {
         this.accountService = accountService;
     }
 
-    public void doGet(HttpServletRequest request,
-                       HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
-    }
-
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("login");

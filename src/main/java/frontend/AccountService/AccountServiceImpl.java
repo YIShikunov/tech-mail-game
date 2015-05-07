@@ -129,7 +129,8 @@ public class AccountServiceImpl implements AccountService {
         {
             ArrayList<UserDataSet> users = new ArrayList<>(userDataSetDAO.getAllUsers()) ;
             users.sort(new UsersScoreComparator());
-            for (int i = users.size(); i > users.size() - 5; i++ ) {
+            int t =  users.size() - 1;
+            for (int i = t  ; i > -1 && i > t -5 ; i-- ) {
                 JSONObject score = new JSONObject();
                 score.put("name", users.get(i).getUsername());
                 score.put("score", users.get(i).getScore());
