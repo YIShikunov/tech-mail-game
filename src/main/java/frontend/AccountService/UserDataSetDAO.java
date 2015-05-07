@@ -7,6 +7,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDataSetDAO {
     private SessionFactory sessionFactory;
@@ -92,7 +94,19 @@ public class UserDataSetDAO {
         return result;
     }
 
-    // TODO: read all users
+    public List<UserDataSet> getAllUsers() throws SQLException
+    {
+        Session session = null;
+        List<UserDataSet> result = null;
+        try {
+            session = sessionFactory.openSession();
+            result = session.createCriteria(UserDataSet.class).list();
+        } finally {
+            if (session != null && session.isOpen())
+                session.close();
+        }
+        return result;
+    }
 
     // (!) unused, untested, untrusted
     public void deleteUser(UserDataSet user) throws SQLException {

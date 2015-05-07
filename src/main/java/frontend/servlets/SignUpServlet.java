@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import org.json.simple.JSONObject;
 import frontend.AccountService.UserDataSet;
 import utils.PageGenerator;
 
@@ -30,7 +31,11 @@ public class SignUpServlet extends HttpServlet {
 
         HashMap<String, Object> pageVariables = addUser(username, email, password);
 
-        response.getWriter().println(PageGenerator.getPage("authresponse.txt", pageVariables));
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("code", 0);
+        jsonResponse.put("response", pageVariables.get("status"));
+
+        response.getWriter().println(jsonResponse);
     }
 
     protected HashMap<String, Object> addUser(String username, String email, String password)

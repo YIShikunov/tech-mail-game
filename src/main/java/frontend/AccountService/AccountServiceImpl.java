@@ -4,11 +4,18 @@ import base.AccountService;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
+import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
+    //private static Map<String, UserProfile> users = new HashMap<>();
+    //private static Map<String, UserProfile> sessions = new HashMap<>();
 
     //// SINGLETON
     private static AccountServiceImpl instance;
@@ -82,21 +89,58 @@ public class AccountServiceImpl implements AccountService {
         return activeSessions.containsKey(sessionID);
     }
 
-    public String getUsernameBySession(String sessionID) throws SQLException {
+    public String getUsernameBySession(String sessionID) throws SQLException{
         UserDataSet user = getUserBySession(sessionID);
         return user == null ? null : user.getUsername();
     }
-
-    public boolean deleteUser(String username) {
-        try {
+    public boolean deleteUser(String username)
+    {
+        try
+        {
             UserDataSet user = getUserByName(username);
-            if (user == null) {
+            if (user == null)
+            {
                 return false;
             }
             userDataSetDAO.deleteUser(user);
             return true;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new RuntimeException();
         }
+    }
+
+    class UsersScoreComparator implements Comparator<UserDataSet>
+    {
+
+        public int compare(UserDataSet o1, UserDataSet o2)
+        {
+            if (o1.getScore() < o2.getScore())
+                return -1;
+            else if (o1.getScore() > o2.getScore())
+                return  1;
+            else return 0;
+        }
+    }
+
+    public ArrayList<JSONObject> getScoreBoard(){
+        ArrayList<JSONObject> scores = new ArrayList<>();
+        try
+        {
+            ArrayList<UserDataSet> users = new ArrayList<>(userDataSetDAO.getAllUsers()) ;
+            users.sort(new UsersScoreComparator());
+            for (int i = users.size(); i > users.size() - 5; i++ ) {
+                JSONObject score = new JSONObject();
+                score.put("name", users.get(i).getUsername());
+                score.put("score", users.get(i).getScore());
+                scores.add(score);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.toString());
+            return scores;
+        }
+        return scores;
     }
 }

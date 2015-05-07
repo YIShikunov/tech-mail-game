@@ -53,6 +53,7 @@ public class Main {
         context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
         context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
         context.addServlet(new ServletHolder(new SignOutServlet(accountService)), "/api/v1/auth/signout");
+        context.addServlet(new ServletHolder(new ScoreboardServlet(accountService)), "/scoreboard");
         context.addServlet(new ServletHolder(new AdminPageServlet(accountService)), AdminPageServlet.adminPageURL);
 
         ResourceHandler resource_handler = new ResourceHandler();

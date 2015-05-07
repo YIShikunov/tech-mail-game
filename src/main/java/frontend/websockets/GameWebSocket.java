@@ -10,9 +10,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.simple.JSONObject;
 
-/**
- * Created by Artem on 3/29/2015.
- */
 
 @WebSocket
 public class GameWebSocket {

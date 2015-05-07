@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import org.json.simple.JSONObject;
 import frontend.AccountService.UserDataSet;
 import utils.PageGenerator;
 
@@ -35,9 +36,11 @@ public class SignInServlet extends HttpServlet {
 
         HashMap<String, Object> pageVariables = signInUser(username, password, sessionID);
 
-        response.setStatus(HttpServletResponse.SC_OK);
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("code", 0);
+        jsonResponse.put("response", pageVariables.get("loginStatus"));
 
-        response.getWriter().println(PageGenerator.getPage("authstatus.html", pageVariables));
+        response.getWriter().println(jsonResponse);
     }
 
     protected HashMap<String, Object> signInUser(String username, String password, String sessionID)
@@ -52,7 +55,7 @@ public class SignInServlet extends HttpServlet {
         HashMap<String, Object> pageVariables = new HashMap<>();
 
         if (profile != null && profile.getPassword().equals(password)) {
-            pageVariables.put("loginStatus", "Hello, "+profile.getUsername()+"<br>"+profile.getEmail());
+            pageVariables.put("loginStatus", "Hello, "+profile.getUsername()+", email: "+profile.getEmail());
             pageVariables.put("online", 1);
             accountService.addSession(sessionID, profile.getId());
         } else {

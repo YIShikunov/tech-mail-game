@@ -1,5 +1,6 @@
 package ResourceLoader;
 
+import base.Resources;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -7,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,19 +57,25 @@ public class ResourcesService
             {
                 try {
                     Document settingsDoc = builder.parse(filePath.toFile());
+                    //Class<?> resType = Class.forName("Resources.GSResources").getClass();
                     Element docRoot = settingsDoc.getDocumentElement();
+                    if (docRoot.hasAttribute("class"))
+                    {
+
+                    }
                     if (docRoot.hasChildNodes()) {
                         ArrayList<GSResources> nodes = new ArrayList<>();
                         NodeList childNodes = docRoot.getChildNodes();
                         for (int i = 0; i < childNodes.getLength(); i++) {
                             nodes.add(parseLevel(childNodes.item(i)));
                         }
+                        //resType.getConstructor(HashMap<String, String>, ArrayList<Resources>, String.class, ResourceStatus.class, String.class)
                         GSResources newDirectory = new GSResources(null, nodes, directory, ResourceStatus.OK,  "OK");
                         directories.put(directory, newDirectory);
                         return newDirectory;
                     }
                 }
-                catch (SAXException | IOException e)
+                catch (SAXException | IOException e)//| ClassNotFoundException e)
                 {
                     e.printStackTrace();
                     return new GSResources(null, null, directory, ResourceStatus.ParseError, "XML Parsing failed");

@@ -1,8 +1,10 @@
 package base;
 
 import frontend.AccountService.UserDataSet;
+import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface AccountService
 {
@@ -18,4 +20,5 @@ public interface AccountService
     public String getUsernameBySession(String sessionID) throws SQLException;
     public void updateUser(UserDataSet user) throws SQLException;
     public boolean deleteUser(String username);
+    public ArrayList<JSONObject> getScoreBoard();
 }
