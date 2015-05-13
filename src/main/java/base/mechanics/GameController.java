@@ -11,6 +11,7 @@ public interface GameController {
     public boolean makeTurn(boolean isFirstPlayer, int fromID, int toID);
     public boolean answerPrompt(boolean isFirstPlayer, Element element);
     public boolean concede(boolean isFirstPlayer);
+    public boolean changeKingElement(boolean isFirstPlayer, Element element);
 
     public boolean isWaitingForPrompt(boolean isFirstPlayer);
     // public Object allGameData(); - not sure if we need this.

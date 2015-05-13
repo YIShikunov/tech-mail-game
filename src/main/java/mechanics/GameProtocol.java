@@ -4,7 +4,7 @@ import base.WebSocketService;
 import base.mechanics.GameController;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
-import org.json.JSONException;
+//import org.json.simple.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,17 +34,17 @@ public class GameProtocol {
         return true;
     }
 
-    public boolean receive(boolean isFirstPlayer, JSONObject packet) {
-        // False means the packet is bad-formed, not that the turn is invalid!
+    public boolean process(boolean isFirstPlayer, JSONObject packet) {
         if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
+            notifyError(isFirstPlayer);
             return false;
         }
         Integer type = (Integer) packet.get("typeID");
         switch (type){
-            case 1: return receivePlacement(isFirstPlayer, packet);
-            case 3: return receiveTurn(isFirstPlayer, packet);
-            case 5: return receiveElementPropmt(isFirstPlayer, packet);
-            case 7: return receiveSwapKing(isFirstPlayer, packet);
+            case 1: return notifyResponse(isFirstPlayer, 2, receivePlacement(isFirstPlayer, packet));
+            case 3: return notifyResponse(isFirstPlayer, 4, receiveTurn(isFirstPlayer, packet));
+            case 5: return notifyResponse(isFirstPlayer, 6, receiveElementPrompt(isFirstPlayer, packet));
+            case 7: return notifyResponse(isFirstPlayer, 8, receiveSwapKing(isFirstPlayer, packet));
             default: return false;
         }
     }
@@ -70,25 +70,55 @@ public class GameProtocol {
             return gameController.placePieces(isFirstPlayer, placement);
         } catch (ClassCastException e) {
             return false;
-        }catch (JSONException e) {
-            return false;
+        /*} catch (JSONException e) {
+            return false; */// For some reason, I seem unable to import JSONException
         }
     }
 
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
         try {
-            Integer from = packet.get();
+            Integer from = (Integer) packet.get("moveFrom");
+            Integer to = (Integer) packet.get("moveTo");
+            return gameController.makeTurn(isFirstPlayer, from, to);
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
+
+    protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
+        try {
+            Integer elementID = (Integer) packet.get("recolor");
+            return gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
+
+    protected boolean receiveSwapKing(boolean isFirstPlayer, JSONObject packet) {
+        try {
+            Integer elementID = (Integer) packet.get("recolor");
+            return gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
         }
     }
 
 
+
     protected void notifyError(boolean isFirstPlayer) {
         // TODO
-        // This represents an error as in "incorrectly-firmed packet", not "it is not a valid turn"
+        // This represents an error as in "incorrectly-formed packet", not "it is not a valid turn"
     }
 
+    protected boolean notifyResponse(boolean isFirstPlayer, int code, boolean success) {
+        JSONObject packet = new JSONObject();
+        packet.put("statusOK", success);
+        packet.put("typeID", code);
+        packet.put("errorMessage", gameController.popErrorMessage());
+
+        webSocketService.send(isFirstPlayer, packet);
+        return true;
+    }
 
     protected void notifyStartGame(boolean isFirstPlayer, String enemyName) {
         JSONObject packet = new JSONObject();
