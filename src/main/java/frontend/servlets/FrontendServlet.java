@@ -38,12 +38,15 @@ public class FrontendServlet extends HttpServlet {
         try {
             pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
         } catch (SQLException e) {
-            throw new RuntimeException(); // TODO: if user is not logged in, show a different page.
+            response.getWriter().println("Please log in.");
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
+
         pageVariables.put("port", this.port);
 
         response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
-
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
     }
