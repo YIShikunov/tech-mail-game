@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Piece {
     public final boolean firstPlayerOwner;
     private Field position;
-    final boolean king;
+    final public boolean king;
 
     private Element element;
     public boolean visible;

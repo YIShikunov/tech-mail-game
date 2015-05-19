@@ -4,7 +4,6 @@ import base.WebSocketService;
 import base.mechanics.GameController;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
-//import org.json.simple.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,10 +67,9 @@ public class GameProtocol {
                 placement.put(fieldID, Element.value(4)); // TODO: collapse it
             }
             return gameController.placePieces(isFirstPlayer, placement);
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e)
+        {
             return false;
-        /*} catch (JSONException e) {
-            return false; */// For some reason, I seem unable to import JSONException
         }
     }
 
@@ -79,7 +77,7 @@ public class GameProtocol {
         try {
             Integer from = (Integer) packet.get("moveFrom");
             Integer to = (Integer) packet.get("moveTo");
-            return gameController.makeTurn(isFirstPlayer, from, to);
+            return gameController.makeTurn(isFirstPlayer, from, to).status;
         } catch (ClassCastException e) {
             return false;
         }

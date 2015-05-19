@@ -3,11 +3,9 @@ package mechanics;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourcesService;
 import base.mechanics.GameController;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.util.Pair;
 import mechanics.GameState.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameControllerImpl implements GameController {
@@ -29,10 +27,6 @@ public class GameControllerImpl implements GameController {
 
     protected String errorMessage;
 
-    protected ArrayList<Pair<Integer, Integer>> piecesMoved;
-    protected ArrayList<Pair<Integer, Element>> piecesRevealed;
-    protected ArrayList<Integer> piecesDestroyed;
-
     private HashMap<String, String> messages;
 
     public void init() {
@@ -51,14 +45,22 @@ public class GameControllerImpl implements GameController {
         return messages;
     }
 
+    private void flipTurn()
+    {
+        if (state == WaitingFor.FIRST_TURN)
+            state = WaitingFor.SECOND_TURN;
+        else if (state == WaitingFor.SECOND_TURN)
+            state = WaitingFor.FIRST_TURN;
+    }
+
     public boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
         if (state != WaitingFor.PLACEMENT) {
-            setErrorMessage("NOT_PLACEMENT");
+            getErrorMessage("NOT_PLACEMENT");
             return false;
         }
         for (int fieldID : placement.keySet())
             if (!board.doesOwn(isFirstPlayer, fieldID)) {
-                setErrorMessage("DO_NOT_OWN");
+                getErrorMessage("DO_NOT_OWN");
                 return false;
             }
 
@@ -72,7 +74,7 @@ public class GameControllerImpl implements GameController {
             counts.put(element, counts.get(element)+1);
         for (int count : counts.values())
             if (count != 3) {
-                setErrorMessage("WRONG_PLACEMENT");
+                getErrorMessage("WRONG_PLACEMENT");
                 return false;
             }
 
@@ -84,37 +86,15 @@ public class GameControllerImpl implements GameController {
         return true;
     }
 
-    public boolean makeTurn(boolean isFirstPlayer, int fromID, int toID) {
-        if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
-            setErrorMessage("NOT_YOUR_TURN");
-            return false;
-        }
 
-        /*Piece king = board.getKing(isFirstPlayer);
-        if (king.getElement() == Element.BLANK || !king.hasBackupElement()){
-            setErrorMessage("KING_NOT_SET");
-            return false;
-        }*/ // TODO: resolve king question
+    private TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
+    {
+        TurnResult res = new TurnResult();
+        Piece from = board.fields.get(fromID).getPiece();
+        Piece to = board.fields.get(toID).getPiece();
 
-        if (!board.doesOwn(isFirstPlayer, fromID))  {
-            setErrorMessage("DO_NOT_OWN");
-            return false;
-        }
-
-        if (board.movePiece(fromID, toID)) {
-            if (board.fieldType(toID) == FieldType.THRONE) {
-                if (isFirstPlayer)
-                    state = WaitingFor.FIRST_ELEMENT_CHOICE;
-                else
-                    state = WaitingFor.SECOND_ELEMENT_CHOICE;
-                promptTarget = toID;
-            }
-            if (state == WaitingFor.FIRST_TURN)
-                state = WaitingFor.SECOND_TURN;
-            else if (state == WaitingFor.SECOND_TURN)
-                state = WaitingFor.FIRST_TURN;
-            return true;
-        }
+        Element fromKingPreviousElement = from.getElement();
+        Element toKingPreviousElement = to.getElement();
 
         Outcome outcome = board.attackPiece(fromID, toID);
         if (outcome != Outcome.ERROR) {
@@ -124,29 +104,166 @@ public class GameControllerImpl implements GameController {
                         state = WaitingFor.FIRST_ELEMENT_CHOICE;
                     else
                         state = WaitingFor.SECOND_ELEMENT_CHOICE;
+                    res.recolor = true;
                     promptTarget = toID;
                 }
+                if (from.king || to.king)
+                {
+                    if (from.king)
+                    {
+                        res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
+                        res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                        switch (outcome)
+                        {
+                            case DESTRUCTION:
+                            {
+                                res.piecesDestroyed.add(toID);
+                                break;
+                            }
+                            case DRAW:
+                            {
+                                break;
+                            }
+                            case LOSS:
+                            {
+                                break;
+                            }
+                            case WIN:
+                            {
+                                res.piecesDestroyed.add(toID);
+                                res.piecesMoved.add(new Pair<>(fromID, toID));
+                                break;
+                            }
+                        }
+                    }
+                    else if(to.king)
+                    {
+                        res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
+                        res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
+                        switch (outcome)
+                        {
+                            case DESTRUCTION:
+                            {
+                                res.piecesDestroyed.add(fromID);
+                                break;
+                            }
+                            case DRAW:
+                            {
+                                break;
+                            }
+                            case LOSS:
+                            {
+                                res.piecesDestroyed.add(fromID);
+                                break;
+                            }
+
+                            case WIN:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
+                    res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                    switch (outcome)
+                    {
+                        case DESTRUCTION:
+                        {
+                            res.piecesDestroyed.add(fromID);
+                            res.piecesDestroyed.add(toID);
+                            break;
+                        }
+                        case DRAW:
+                        {
+                            break;
+                        }
+                        case WIN:
+                        {
+                            res.piecesDestroyed.add(toID);
+                            res.piecesMoved.add(new Pair<>(fromID, toID));
+                            break;
+                        }
+                        case LOSS:
+                        {
+                            res.piecesDestroyed.add(fromID);
+                            break;
+                        }
+                    }
+                }
             }
-            if (state == WaitingFor.FIRST_TURN)
-                state = WaitingFor.SECOND_TURN;
-            else if (state == WaitingFor.SECOND_TURN)
-                state = WaitingFor.FIRST_TURN;
-            return true;
+            flipTurn();
+            res.status = true;
+            res.battleResult = outcome.toString();
+            return res;
         }
 
-        setErrorMessage("INVALID_TURN");
-        return false;
+        res.errorMessage = getErrorMessage("INVALID_TURN");
+        res.status = false;
+        return res;
+    }
+
+    private TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
+    {
+        TurnResult res = new TurnResult();
+        if (board.movePiece(fromID, toID)) {
+            if (board.fieldType(toID) == FieldType.THRONE) {
+                if (isFirstPlayer)
+                    state = WaitingFor.FIRST_ELEMENT_CHOICE;
+                else
+                    state = WaitingFor.SECOND_ELEMENT_CHOICE;
+                promptTarget = toID;
+                res.recolor = true;
+            }
+            res.piecesMoved.add(new Pair<>(fromID, toID));
+            flipTurn();
+            res.status = true;
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public TurnResult makeTurn(boolean isFirstPlayer, int fromID, int toID) {
+        TurnResult res = new TurnResult();
+        if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
+            res.errorMessage = getErrorMessage("NOT_YOUR_TURN");
+            res.status = false;
+            return res;
+        }
+        /*Piece king = board.getKing(isFirstPlayer);
+        if (king.getElement() == Element.BLANK || !king.hasBackupElement()){
+            getErrorMessage("KING_NOT_SET");
+            return false;
+        }*/ // TODO: resolve king question
+
+        if (!board.doesOwn(isFirstPlayer, fromID))  {
+            res.errorMessage = getErrorMessage("DO_NOT_OWN");
+            res.status = false;
+            return res;
+        }
+
+        res = makeMove(isFirstPlayer, fromID, toID);
+
+        if (res == null)
+            return MakeBattle(isFirstPlayer, fromID, toID);
+        else
+            return res;
     }
 
     public boolean answerPrompt(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE ||
                 !isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE) {
-            setErrorMessage("NOT_YOUR_TURN");
+            getErrorMessage("NOT_YOUR_TURN");
             return false;
         }
 
         if (!board.doesOwn(isFirstPlayer, promptTarget)){
-            setErrorMessage("DO_NOT_OWN");
+            getErrorMessage("DO_NOT_OWN");
             return false;
         }
 
@@ -157,7 +274,7 @@ public class GameControllerImpl implements GameController {
 
         Boolean success = board.changeElement(promptTarget, element);
         if (!success)
-            setErrorMessage("WRONG_ELEMENT");
+            getErrorMessage("WRONG_ELEMENT");
         return success;
     }
 
@@ -173,24 +290,20 @@ public class GameControllerImpl implements GameController {
             return state == WaitingFor.SECOND_ELEMENT_CHOICE;
     }
 
-    public Object subjectiveGameData(boolean isFirstPlayer) {
-        return new Object();
-    } // TODO pack all game data as seen by a player into a JSON
-
     public boolean changeKingElement(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
-            setErrorMessage("NOT_YOUR_TURN");
+            getErrorMessage("NOT_YOUR_TURN");
             return false;
         }
 
         Boolean success = board.changeKingElement(isFirstPlayer, element);
         if (!success)
-            setErrorMessage("WRONG_ELEMENT");
+            getErrorMessage("WRONG_ELEMENT");
         return success;
     }
 
-    private void setErrorMessage(String id) {
-        errorMessage = messages.get(id);
+    private String getErrorMessage(String id) {
+        return messages.get(id);
     }
 
     public String popErrorMessage() {

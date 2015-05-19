@@ -10,21 +10,13 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.simple.JSONObject;
 
-/**
- * Created by Artem on 3/29/2015.
- */
-
 @WebSocket
 public class GameWebSocket {
     private String name;
     private Session session;
-    private GameMechanics gameMechanics;
-    private WebSocketService webSocketService;
 
-    public GameWebSocket(String name, GameMechanics gameMechanics, WebSocketService webSocketService) {
+    public GameWebSocket(String name) {
         this.name = name;
-        this.gameMechanics = gameMechanics;
-        this.webSocketService = webSocketService;
     }
 
     public String getName() {
@@ -112,14 +104,12 @@ public class GameWebSocket {
     @OnWebSocketConnect
     public void onOpen(Session session) {
         setSession(session);
-        webSocketService.addUser(this);
-        gameMechanics.addUser(name);
     }
 
     @OnWebSocketMessage
     public void onMessage(String data) {
         //System.out.print(data);
-        gameMechanics.makeTurn(name, data);
+        //gameMechanics.makeTurn(name, data);
     }
 
     @OnWebSocketClose
