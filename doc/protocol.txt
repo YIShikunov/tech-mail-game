@@ -45,6 +45,12 @@ Ping/pong packets
 	status = true,
 	turn = (int) //Номер хода по мнению сервера\клиента. Может быть полезно для отладки
 }
+King-pong packet (показывает новые элементы короля, если они изменились, асинхронно)
+{
+	typeID = 10,
+	isYourKing = true,
+	Elements = [1,2,5]
+}
 Пакет расстановки фигур
 {
 	element0 = [ fieldID0, fieldID1, fieldID2 ],
@@ -91,6 +97,7 @@ Ping/pong packets
 	piecesRevealed = [[FieldID, colorID], ...],
 	piecesDestroyed = [FieldID1, FieldID2, ...],
 	recolorRequired = true; // Если фигура встала на трон, то от игрока ожидается пакет перекраски фигуры
+	battleResult = "win"
 	turn = turn+1
 } // Если перекраска не произошла, то такой же пакет отправляется противнику.
 
