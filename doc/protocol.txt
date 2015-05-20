@@ -48,6 +48,7 @@ Ping/pong packets
 King-pong packet (показывает новые элементы короля, если они изменились, асинхронно)
 {
 	typeID = 10,
+	statusOK = true,
 	isYourKing = true,
 	Elements = [1,2,5]
 }
