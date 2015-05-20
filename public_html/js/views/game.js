@@ -13,11 +13,11 @@ define([
         field: new FieldModel(),
         context: null,
         panel: {x: 100, y: 50, width: 150, height: 460},
-        elements:[  {name: "fire", y: 60, count: 3},
-                    {name: "water", y: 150, count: 3},
-                    {name: "metal", y: 240, count: 3},
-                    {name: "wood", y: 330, count: 3},
-                    {name: "earth", y: 420, count: 3}],
+        elements:[  {name: "fire",  index: 0, count: 3, place: []},
+                    {name: "water", index: 1, count: 3, place: []},
+                    {name: "metal", index: 2, count: 3, place: []},
+                    {name: "wood",  index: 3, count: 3, place: []},
+                    {name: "earth", index: 4, count: 3, place: []}],
         index: 0,
 
         events: {
@@ -55,7 +55,7 @@ define([
             context.lineWidth = 4;
             
             obj = this;
-            coords = this.field.get('coords');
+            coords = this.field.coords;
 
             var subField = document.createElement('img');
             subField.src = 'images/water.png';
@@ -91,11 +91,11 @@ define([
                 this.elements[i].img = elem;
                 elem.onload = function() {
                     panel = obj.panel;
-                    context.drawImage(this,panel.x+panel.width/2-this.width/2, obj.elements[this.index].y);
+                    context.drawImage(this,panel.x+panel.width/2-this.width/2, obj.elements[this.index].index*90+60);
                     obj.drawCount(context, panel.x+panel.width/2, 
-                        obj.elements[this.index].y+75, obj.elements[this.index].count);
-                    if (obj.elements[obj.index].img == this)
-                        obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].y);
+                        obj.elements[this.index].index*90+135, obj.elements[this.index].count);
+                    if (obj.elements[obj.index].index == 0)
+                        obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
                 };
             }
 
@@ -122,30 +122,28 @@ define([
             y = event.pageY - coords.top;
             panel = panel;
             if (x > panel.x && x < panel.x+panel.width && 
-                y > panel.y && y < panel.y+panel.height) {
-                for (i=0; i<this.elements.length; i++)
-                    if (y < this.elements[i].y+80) {
-                        panel = panel;
-                        this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                y > panel.y && y < panel.y+panel.height)
+                for (i=0; i<this.elements.length; i++) {
+                    // debugger;
+                    if (y < this.elements[i].index*90+60+80) {
+                        this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
                             panel.width-20,  90);
                         this.context.drawImage(this.elements[this.index].img,
-                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
                         this.drawCount(this.context, panel.x+panel.width/2, 
-                            obj.elements[this.index].y+75, obj.elements[this.index].count);
+                            obj.elements[this.index].index*90+135, obj.elements[this.index].count);
                         this.drawSelect(this.context, 
-                            panel.x+panel.width/2, this.elements[i].y)
+                            panel.x+panel.width/2, this.elements[i].index*90+60)
                         this.index = i;
                         break;
                     }
-                
             } else {
                 TRx = this.$el.find("canvas")[0].width/2;
                 TRy = this.$el.find("canvas")[0].height/2;
                 index = this.field.checkField(x-TRx,y-TRy);
-                if (index >= 0) {
-                        // for (z=0; z<5; z++);
+                if (index >= 0 && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
                     this.drawField(this.context,coords[index]);
-                    coords = this.field.get('coords');
+                    coords = this.field.coords;
                     p1 = coords[index][0];
                     p2 = coords[index][1];
                     img = this.elements[this.index].img;
@@ -155,30 +153,39 @@ define([
                     y = (p2[1]-p1[1])*xxx*Math.cos(cor) + (p2[0]-p1[0])*xxx*Math.sin(cor) + TRy + p1[1];
 
                     this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
-                    //this.drawSelect(this.context, panel.x+panel.width/2, this.elements[i].y)
                     this.elements[this.index].count--;
-                    // alert(this.elements[this.index].count);
+                    this.elements[this.index].place.push(index);
+                    this.field.map[index] = this.index;
 
                     if (this.elements[this.index].count == 0) {
-                        this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                        this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
                         panel.width-20,  90);
                     this.context.drawImage(this.elements[this.index].img,
-                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
                     this.drawCount(this.context, panel.x+panel.width/2, 
-                        obj.elements[this.index].y+75, obj.elements[this.index].count);
+                        obj.elements[this.index].index*90+135, obj.elements[this.index].count);
 
-                        this.index++;
+                        for (z=0; z<5; z++)
+                            if (this.elements[z].count > 0) {
+                                this.index = z;
+                                break;
+                            }
+                        if (z==5) {
+                            alert("SEND TO SERVER");
+                            for (k=0; k<this.elements.length; k++) 
+                                console.info(this.elements[k].place.sort());
+                        }
+                        
                     }
                     
-                    this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                    this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
                         panel.width-20,  90);
                     this.context.drawImage(this.elements[this.index].img,
-                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
                     this.drawCount(this.context, panel.x+panel.width/2, 
-                        obj.elements[this.index].y+75, obj.elements[this.index].count);
+                        obj.elements[this.index].index*90+135, obj.elements[this.index].count);
                     this.drawSelect(this.context, 
-                        panel.x+panel.width/2, this.elements[this.index].y)
-                    // obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].y);
+                        panel.x+panel.width/2, this.elements[this.index].index*90+60)
                 }
             }
         },
