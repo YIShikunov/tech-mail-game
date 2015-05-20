@@ -10,14 +10,11 @@ import java.sql.SQLException;
 
 public class CustomWebSocketCreator implements WebSocketCreator {
     private AccountService accountService;
-    private GameMechanics gameMechanics;
     private WebSocketService webSocketService;
 
     public CustomWebSocketCreator(AccountService authService,
-                                  GameMechanics gameMechanics,
                                   WebSocketService webSocketService) {
         this.accountService = authService;
-        this.gameMechanics = gameMechanics;
         this.webSocketService = webSocketService;
     }
 
