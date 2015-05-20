@@ -94,6 +94,8 @@ define([
                     context.drawImage(this,panel.x+panel.width/2-this.width/2, obj.elements[this.index].y);
                     obj.drawCount(context, panel.x+panel.width/2, 
                         obj.elements[this.index].y+75, obj.elements[this.index].count);
+                    if (obj.elements[obj.index].img == this)
+                        obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].y);
                 };
             }
 
@@ -130,7 +132,6 @@ define([
                             panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
                         this.drawCount(this.context, panel.x+panel.width/2, 
                             obj.elements[this.index].y+75, obj.elements[this.index].count);
-                        obj.elements[this.index].count -= 1;
                         this.drawSelect(this.context, 
                             panel.x+panel.width/2, this.elements[i].y)
                         this.index = i;
@@ -138,11 +139,47 @@ define([
                     }
                 
             } else {
-                x -= this.$el.find("canvas")[0].width/2;
-                y -= this.$el.find("canvas")[0].height/2;
-                index = this.field.checkField(x,y);
-                if (index >= 0) 
-                    this.drawField(this.context,coords[i]);
+                TRx = this.$el.find("canvas")[0].width/2;
+                TRy = this.$el.find("canvas")[0].height/2;
+                index = this.field.checkField(x-TRx,y-TRy);
+                if (index >= 0) {
+                        // for (z=0; z<5; z++);
+                    this.drawField(this.context,coords[index]);
+                    coords = this.field.get('coords');
+                    p1 = coords[index][0];
+                    p2 = coords[index][1];
+                    img = this.elements[this.index].img;
+                    xxx = Math.sqrt(3)/3;
+                    cor = Math.PI/180*30;
+                    x = (p2[0]-p1[0])*xxx*Math.cos(cor) - (p2[1]-p1[1])*xxx*Math.sin(cor) + TRx + p1[0];
+                    y = (p2[1]-p1[1])*xxx*Math.cos(cor) + (p2[0]-p1[0])*xxx*Math.sin(cor) + TRy + p1[1];
+
+                    this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+                    //this.drawSelect(this.context, panel.x+panel.width/2, this.elements[i].y)
+                    this.elements[this.index].count--;
+                    // alert(this.elements[this.index].count);
+
+                    if (this.elements[this.index].count == 0) {
+                        this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                        panel.width-20,  90);
+                    this.context.drawImage(this.elements[this.index].img,
+                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                    this.drawCount(this.context, panel.x+panel.width/2, 
+                        obj.elements[this.index].y+75, obj.elements[this.index].count);
+
+                        this.index++;
+                    }
+                    
+                    this.context.fillRect(panel.x+10, this.elements[this.index].y-8, 
+                        panel.width-20,  90);
+                    this.context.drawImage(this.elements[this.index].img,
+                        panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].y);
+                    this.drawCount(this.context, panel.x+panel.width/2, 
+                        obj.elements[this.index].y+75, obj.elements[this.index].count);
+                    this.drawSelect(this.context, 
+                        panel.x+panel.width/2, this.elements[this.index].y)
+                    // obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].y);
+                }
             }
         },
 
