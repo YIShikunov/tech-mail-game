@@ -11,16 +11,15 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.simple.JSONObject;
 
-/**
- * Created by Artem on 3/29/2015.
- */
 
 @WebSocket
 public class GameWebSocket {
     final private String name;
-    final private boolean isFirstPlayer;
-    final private Session session;
-    final private GameProtocol protocol;
+    private boolean isFirstPlayer;
+    private Session session;
+    private GameProtocol protocol;
+
+    private boolean gameStarted = false;
 
     public GameWebSocket(String name) {
         this.name = name;
@@ -40,12 +39,25 @@ public class GameWebSocket {
 
     public void setProtocol(GameProtocol protocol) {
         this.protocol = protocol;
-        protocol.setWebSocket(isFirstPlayer, this);
     }
 
     public void setFirstPlayer(boolean isFirstPlayer) {
         this.isFirstPlayer = isFirstPlayer;
     }
+
+    public void startGame() {
+        gameStarted = true;
+    }
+
+    public void send(JSONObject packet) {
+        try {
+            System.out.print(packet.toJSONString());
+            session.getRemote().sendString(packet.toJSONString());
+        } catch (Exception e) {
+            System.out.print(e.toString());
+        }
+    }
+
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
@@ -55,8 +67,11 @@ public class GameWebSocket {
 
     @OnWebSocketMessage
     public void onMessage(String data) {
-        System.out.print(data); // debug purposes
-        protocol.process(isFirstPlayer, data);
+        System.out.print("onMessage");
+        if (gameStarted) {
+            System.out.print(data); // debug purposes
+            protocol.process(isFirstPlayer, data);
+        }
     }
 
     @OnWebSocketClose

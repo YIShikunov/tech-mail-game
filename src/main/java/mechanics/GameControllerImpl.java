@@ -6,6 +6,7 @@ import base.mechanics.GameController;
 import javafx.util.Pair;
 import mechanics.GameState.*;
 
+import java.security.KeyException;
 import java.util.HashMap;
 
 public class GameControllerImpl implements GameController {
@@ -303,7 +304,12 @@ public class GameControllerImpl implements GameController {
     }
 
     private String getErrorMessage(String id) {
-        return messages.get(id);
+        String response = messages.get(id);
+        if (response == null) {
+            // the "totally erroneous and obnoxious output so we would see there is a problem with our resource file"
+            return "I HEARD YOU LIKE ERRORS MESSAGES SO I PUT AN ERROR MESSAGE IN YOUR ERROR MESSAGE";
+        }
+        return response;
     }
 
     public String popErrorMessage() {

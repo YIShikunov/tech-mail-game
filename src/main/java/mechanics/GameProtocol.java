@@ -2,8 +2,11 @@ package mechanics;
 
 import base.WebSocketService;
 import base.mechanics.GameController;
+import frontend.websockets.GameWebSocket;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,17 +14,28 @@ import java.util.HashMap;
 public class GameProtocol {
 
     protected GameController gameController;
+
+    @Deprecated
     protected WebSocketService webSocketService;
+
+    private GameWebSocket firstPlayerSocket;
+    private GameWebSocket secondPlayerSocket;
 
     protected String firstPlayerName;
     protected String secondPlayerName;
 
     protected int turn;
 
+    @Deprecated
     public GameProtocol(WebSocketService webSocketService) {
         this.webSocketService = webSocketService;
     }
 
+    public GameProtocol() {
+
+    }
+
+    @Deprecated
     public boolean init(String firstPlayerName, String secondPlayerName) {
         this.firstPlayerName = firstPlayerName;
         this.secondPlayerName = secondPlayerName;
@@ -33,23 +47,54 @@ public class GameProtocol {
         return true;
     }
 
-    public boolean process(boolean isFirstPlayer, JSONObject packet) {
+    public boolean start(GameWebSocket first, GameWebSocket second) {
+        this.firstPlayerSocket = first;
+        this.secondPlayerSocket = second;
+        this.turn = 0;
+        this.gameController = new GameControllerImpl();
+        this.gameController.init();
+        this.notifyStartGame(true, second.getName());
+        this.notifyStartGame(false, first.getName());
+        return true;
+    }
+
+    public void process(boolean isFirstPlayer, String packetString) {
+        boolean result = execute(isFirstPlayer, packetString);
+        if (!result) {
+            notifyError(isFirstPlayer);
+        }
+    }
+
+    // False means that the packet is bad-formed or something, not that the turn is invalid!
+    public boolean execute(boolean isFirstPlayer, String packetString) {
+        JSONParser jsonParser = new JSONParser();
+        JSONObject packet;
+        try {
+            packet = new JSONObject((JSONObject)(jsonParser.parse(packetString)));
+        } catch (ParseException e) {
+            return false;
+        }
         if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
             notifyError(isFirstPlayer);
             return false;
         }
         Integer type = (Integer) packet.get("typeID");
         switch (type){
-            case 1: return notifyResponse(isFirstPlayer, 2, receivePlacement(isFirstPlayer, packet));
-            case 3: return notifyResponse(isFirstPlayer, 4, receiveTurn(isFirstPlayer, packet));
-            case 5: return notifyResponse(isFirstPlayer, 6, receiveElementPrompt(isFirstPlayer, packet));
-            case 7: return notifyResponse(isFirstPlayer, 8, receiveSwapKing(isFirstPlayer, packet));
+            case 1: return receivePlacement(isFirstPlayer, packet);
+            case 3: return receiveTurn(isFirstPlayer, packet);
+            case 5: return receiveElementPrompt(isFirstPlayer, packet);
+            case 7: return receiveSwapKing(isFirstPlayer, packet);
             default: return false;
         }
     }
 
+
+    protected boolean firstPlayerReady = false;
+    protected boolean secondPlayerReady = false;
+
     protected boolean receivePlacement(boolean isFirstPlayer, JSONObject packet) {
         HashMap<Integer, Element> placement = new HashMap<>();
+        boolean status;
         try {
             for (Integer fieldID : (ArrayList<Integer>) packet.get("element0")) {
                 placement.put(fieldID, Element.value(0));
@@ -66,56 +111,134 @@ public class GameProtocol {
             for (Integer fieldID : (ArrayList<Integer>) packet.get("element4")) {
                 placement.put(fieldID, Element.value(4)); // TODO: collapse it
             }
-            return gameController.placePieces(isFirstPlayer, placement);
-        } catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             return false;
         }
+        status = gameController.placePieces(isFirstPlayer, placement);
+
+        if (status) {
+            if (isFirstPlayer)
+                firstPlayerReady = true;
+            else
+                secondPlayerReady = true;
+            boolean otherReady = isFirstPlayer ? secondPlayerReady : firstPlayerReady;
+
+            JSONObject firstPlayerResponse = new JSONObject();
+            firstPlayerResponse.put("typeID", 2);
+            firstPlayerResponse.put("status", true);
+            firstPlayerResponse.put("opponentReady", otherReady);
+            send(isFirstPlayer, packet);
+
+            if (otherReady) {
+                JSONObject secondPlayerResponse = new JSONObject();
+                secondPlayerResponse.put("typeID", 2);
+                secondPlayerResponse.put("status", true);
+                secondPlayerResponse.put("opponentReady", true);
+                send(!isFirstPlayer, packet);
+            }
+        } else {
+            JSONObject firstPlayerResponse = new JSONObject();
+            firstPlayerResponse.put("typeID", 2);
+            firstPlayerResponse.put("status", false);
+            firstPlayerResponse.put("opponentReady", false);
+            firstPlayerResponse.put("errorMessage",
+                    "This is not a valid placement!"); //TODO should come from GameController
+
+            send(isFirstPlayer, packet);
+        }
+        return true;
     }
 
+    protected JSONObject stashedResult;
+
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
+        TurnResult result;
         try {
             Integer from = (Integer) packet.get("moveFrom");
             Integer to = (Integer) packet.get("moveTo");
-            return gameController.makeTurn(isFirstPlayer, from, to).status;
+            result = gameController.makeTurn(isFirstPlayer, from, to);
         } catch (ClassCastException e) {
             return false;
         }
+
+        if (result.status) {
+            JSONObject response = turnResultToJSON(result);
+            response.put("typeID", 4);
+            response.put("turn", turn);
+            send(isFirstPlayer, response);
+            if (result.recolor) {
+                stashedResult = response;
+            } else {
+                send(!isFirstPlayer, response);
+            }
+        } else {
+            JSONObject response = new JSONObject();
+            response.put("typeID", 4);
+            response.put("statusOK", false);
+            response.put("errorMessage", result.errorMessage);
+            send(isFirstPlayer, response);
+        }
+        return true;
     }
 
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
+        boolean status;
         try {
-            Integer elementID = (Integer) packet.get("recolor");
-            return gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
+            Integer elementID = (Integer) packet.get("baseRecolor");
+            status = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
         }
+
+        if (status) {
+            JSONObject response = new JSONObject();
+            response.put("statusOK", true);
+            response.put("typeID", 6);
+            send(isFirstPlayer, response);
+            send(!isFirstPlayer, stashedResult);
+            stashedResult = null;
+        } else {
+            JSONObject response = new JSONObject();
+            response.put("statusOK", false);
+            response.put("typeID", 6);
+            response.put("errorMessage", "This is not a valid element!");
+            send(isFirstPlayer, response);
+        }
+        return true;
     }
 
     protected boolean receiveSwapKing(boolean isFirstPlayer, JSONObject packet) {
+        boolean status;
         try {
-            Integer elementID = (Integer) packet.get("recolor");
-            return gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
+            Integer elementID = (Integer) packet.get("kingRecolor");
+            status = gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
         }
+
+        if (status) {
+            JSONObject response = new JSONObject();
+            response.put("statusOK", true);
+            response.put("typeID", 8);
+            send(isFirstPlayer, response);
+        } else {
+            JSONObject response = new JSONObject();
+            response.put("statusOK", false);
+            response.put("typeID", 8);
+            response.put("errorMessage", "This is not a valid element!");
+            send(isFirstPlayer, response);
+        }
+        return true;
     }
 
 
 
     protected void notifyError(boolean isFirstPlayer) {
-        // TODO
-        // This represents an error as in "incorrectly-formed packet", not "it is not a valid turn"
-    }
-
-    protected boolean notifyResponse(boolean isFirstPlayer, int code, boolean success) {
-        JSONObject packet = new JSONObject();
-        packet.put("statusOK", success);
-        packet.put("typeID", code);
-        packet.put("errorMessage", gameController.popErrorMessage());
-
-        webSocketService.send(isFirstPlayer, packet);
-        return true;
+        JSONObject response = new JSONObject();
+        response.put("typeID", -42);
+        response.put("errorMessage", "Your data is invalid.");
+        response.put("statusOK", false);
+        send(isFirstPlayer, response);
     }
 
     protected void notifyStartGame(boolean isFirstPlayer, String enemyName) {
@@ -125,13 +248,30 @@ public class GameProtocol {
         packet.put("opponent", enemyName);
         packet.put("youStart", isFirstPlayer);
 
-        webSocketService.send(isFirstPlayer, packet);
+        if (isFirstPlayer)
+            firstPlayerSocket.send(packet);
+        else
+            secondPlayerSocket.send(packet);
     }
 
-    protected void notifyAcceptPlacement(boolean isFirstPlayer) {
-
+    protected void send(boolean isFirstPlayer, JSONObject packet) {
+        if (isFirstPlayer) {
+            firstPlayerSocket.send(packet);
+        } else {
+            secondPlayerSocket.send(packet);
+        }
     }
 
-
-
+    JSONObject turnResultToJSON(TurnResult turnResult) {
+        JSONObject result = new JSONObject();
+        result.put("piecesMoved", turnResult.piecesMoved);
+        result.put("piecesRevealed", turnResult.piecesRevealed);
+        result.put("piecesDestroyed", turnResult.piecesDestroyed);
+        result.put("piecesHidden", turnResult.piecesHidden);
+        result.put("statusOK", turnResult.status);
+        result.put("recolor", turnResult.recolor);
+        result.put("errorMessage", turnResult.errorMessage);
+        result.put("battleResult", turnResult.battleResult);
+        return result;
+    }
 }

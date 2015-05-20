@@ -17,4 +17,5 @@ public interface AccountService
     public boolean isAuthorised(String sessionID);
     public String getUsernameBySession(String sessionID) throws SQLException;
     public void updateUser(UserDataSet user) throws SQLException;
+    public boolean deleteUser(String username);
 }

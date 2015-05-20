@@ -67,6 +67,8 @@ public class AccountServiceImpl implements AccountService {
     // can return null
     public UserDataSet getUserBySession(String sessionID) throws SQLException {
         Long userID = activeSessions.get(sessionID);
+        if (userID == null)
+            return null;
         return userDataSetDAO.getUser(userID);
     }
 
@@ -85,5 +87,18 @@ public class AccountServiceImpl implements AccountService {
     public String getUsernameBySession(String sessionID) throws SQLException {
         UserDataSet user = getUserBySession(sessionID);
         return user == null ? null : user.getUsername();
+    }
+
+    public boolean deleteUser(String username) {
+        try {
+            UserDataSet user = getUserByName(username);
+            if (user == null) {
+                return false;
+            }
+            userDataSetDAO.deleteUser(user);
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
     }
 }

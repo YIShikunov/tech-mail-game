@@ -16,14 +16,11 @@ import javax.servlet.annotation.WebServlet;
 public class  WebSocketGameServlet extends WebSocketServlet {
     private final static int IDLE_TIME = 60 * 1000;
     private AccountService accountService;
-    private GameMechanics gameMechanics;
     private WebSocketService webSocketService;
 
     public WebSocketGameServlet(AccountService accountService,
-                                GameMechanics gameMechanics,
                                 WebSocketService webSocketService) {
         this.accountService = accountService;
-        this.gameMechanics = gameMechanics;
         this.webSocketService = webSocketService;
     }
 

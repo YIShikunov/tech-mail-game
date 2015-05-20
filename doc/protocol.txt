@@ -45,9 +45,16 @@ Ping/pong packets
 	status = true,
 	turn = (int) //Номер хода по мнению сервера\клиента. Может быть полезно для отладки
 }
+King-pong packet (показывает новые элементы короля, если они изменились, асинхронно)
+{
+	typeID = 10,
+	statusOK = true,
+	isYourKing = true,
+	Elements = [1,2,5]
+}
 Пакет расстановки фигур
 {
-    element0 = [ fieldID0, fieldID1, fieldID2 ],
+	element0 = [ fieldID0, fieldID1, fieldID2 ],
     element1 = [...],
     element2 = [...],
     element3 = [...],
@@ -60,57 +67,71 @@ Ping/pong packets
 {
 	typeID = 2,
 	statusOK = false //False если ход был плохим, и мы его не приняли
+	opponentReady = false // Расставил ли оппонент свои фигуры. Как расставит, пакет прилетит еще раз.
+							// Пока игрок не расставил свои фигуры, он не получает информацию о том, расставил ли фигуры противник.
+    errorMessage = "This is not a valid placement!"
 }
+
 Пакет хода:
 {
 	statusOK = true,
 	turn = (int),
 	moveFrom = fieldID,
 	moveTo = fieldID,
-	typeID = 3
+	typeID = 3,
 }
+
 Пакет ответа сервера на ход: 
 {
 	typeID = 4,
 	statusOK = false //Если true, мы передаем ход дальше
-	
+	errorMessage = "It is not your turn!"
 }
+
 Выполнять операции стоит именно в том порядке, в котором массивы описаны в 
 пакете. Вначале переместить, потом раскрасить, потом удалить мертвых(МБ с 
 какой-нибудь анимацией)
 {
 	typeID = 4,
 	statusOK = true,
-	recolor = false, //Если true, то надо запросить перекраску для фигуры(см. пакет ниже)
 	piecesMoved = [[fieldIDFrom, fieldIDFrom], ...],
 	piecesRevealed = [[FieldID, colorID], ...],
-	piecesKilled = [FieldID1, FieldID2, ...],
-	piecesHidden = [FieldID1, FieldID2, ...],
-	turn = turn+1  //Если recolor=true, номер хода не меняется
-}
-//Такой-же пакет уйдет другой стороне в момент передачи хода
+	piecesDestroyed = [FieldID1, FieldID2, ...],
+	recolorRequired = true; // Если фигура встала на трон, то от игрока ожидается пакет перекраски фигуры
+	battleResult = "win"
+	turn = turn+1
+} // Если перекраска не произошла, то такой же пакет отправляется противнику.
 
-Пакет перекраски фигуры на базе:
+Пакет перекраски фигуры на базе: (после хода)
 {
 	typeID = 5,
 	turn = (int),
 	statusOK = true,
-	baseRecolor = colorID,
+	baseRecolor = colorID
 }
+// Принято\Не принято.
+{
+	typeID = 6,
+	statusOK = false //False если ход был плохим, и мы его не приняли
+	errorMessage = "This is not a valid element!"
+}  // После этого противнику отправляется пакет с результатом хода.
 
-Пакет перекраски короля:
+Пакет перекраски короля (асинхронный):
 {
 	typeID = 7,
 	turn = (int),
 	statusOK = true,
 	kingRecolor = colorID,
 }
+
 Пакет ответа сервера на перекраску: 
 // Принято\Не принято.
 {
-	typeID = 6,
+	typeID = 8,
 	statusOK = false //False если ход был плохим, и мы его не приняли
+	errorMessage = "Your king does not have this element!"
 }
+
 Пакет от сервера на окончание игры:
 {
 	typeID = -1,

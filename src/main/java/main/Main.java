@@ -6,6 +6,7 @@ import ResourceLoader.ResourcesService;
 import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
+import frontend.websockets.GameSessionManager;
 import frontend.websockets.WebSocketService;
 import mechanics.GameMechanics;
 import org.eclipse.jetty.server.Handler;
@@ -44,12 +45,11 @@ public class Main {
         AccountService accountService = AccountServiceImpl.getInstance();
 
         WebSocketService webSocketService = new WebSocketService();
-        GameMechanics gameMechanics = new GameMechanics(webSocketService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService, gameMechanics, webSocketService)), "/gameplay");
-        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountService, portString)), "/game");
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService, webSocketService)), "/gameplay");
+        context.addServlet(new ServletHolder(new FrontendServlet(accountService, portString)), "/game");
         context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
         context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
         context.addServlet(new ServletHolder(new SignOutServlet(accountService)), "/api/v1/auth/signout");
@@ -64,6 +64,7 @@ public class Main {
 
         server.setHandler(handlers);
         server.start();
+        (new Thread(GameSessionManager.getInstance())).run();
         server.join();
     }
 }
