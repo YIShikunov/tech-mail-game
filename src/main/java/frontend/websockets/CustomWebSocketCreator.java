@@ -1,7 +1,6 @@
 package frontend.websockets;
 
 import base.AccountService;
-import mechanics.GameMechanics;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -10,12 +9,9 @@ import java.sql.SQLException;
 
 public class CustomWebSocketCreator implements WebSocketCreator {
     private AccountService accountService;
-    private WebSocketService webSocketService;
 
-    public CustomWebSocketCreator(AccountService authService,
-                                  WebSocketService webSocketService) {
+    public CustomWebSocketCreator(AccountService authService) {
         this.accountService = authService;
-        this.webSocketService = webSocketService;
     }
 
     @Override

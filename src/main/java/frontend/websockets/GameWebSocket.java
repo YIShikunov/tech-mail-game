@@ -1,8 +1,5 @@
 package frontend.websockets;
 
-import mechanics.GameMechanics;
-import mechanics.GameProfile;
-import frontend.websockets.WebSocketService;
 import mechanics.GameProtocol;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;

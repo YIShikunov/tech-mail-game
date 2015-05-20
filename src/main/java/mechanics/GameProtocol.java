@@ -1,6 +1,5 @@
 package mechanics;
 
-import base.WebSocketService;
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
 import mechanics.GameState.Element;
@@ -15,36 +14,13 @@ public class GameProtocol {
 
     protected GameController gameController;
 
-    @Deprecated
-    protected WebSocketService webSocketService;
-
     private GameWebSocket firstPlayerSocket;
     private GameWebSocket secondPlayerSocket;
 
-    protected String firstPlayerName;
-    protected String secondPlayerName;
-
     protected int turn;
-
-    @Deprecated
-    public GameProtocol(WebSocketService webSocketService) {
-        this.webSocketService = webSocketService;
-    }
 
     public GameProtocol() {
 
-    }
-
-    @Deprecated
-    public boolean init(String firstPlayerName, String secondPlayerName) {
-        this.firstPlayerName = firstPlayerName;
-        this.secondPlayerName = secondPlayerName;
-        this.turn = 0;
-        this.gameController = new GameControllerImpl();
-        this.gameController.init();
-        this.notifyStartGame(true, secondPlayerName);
-        this.notifyStartGame(false, firstPlayerName);
-        return true;
     }
 
     public boolean start(GameWebSocket first, GameWebSocket second) {
@@ -75,7 +51,6 @@ public class GameProtocol {
             return false;
         }
         if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
-            notifyError(isFirstPlayer);
             return false;
         }
         Integer type = (Integer) packet.get("typeID");
