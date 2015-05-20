@@ -1,8 +1,5 @@
 package mechanics;
 
-/**
- * Created by Artem on 3/29/2015.
- */
 public class GameProfile {
     private final String name;
     private String enemy;
