@@ -30,6 +30,6 @@ public class CustomWebSocketCreator implements WebSocketCreator {
         } catch (SQLException e) {
             throw new RuntimeException();
         }
-        return new GameWebSocket(name, gameMechanics, webSocketService);
+        return new GameWebSocket(name);
     }
 }

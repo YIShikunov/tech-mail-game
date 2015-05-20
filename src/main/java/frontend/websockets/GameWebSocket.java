@@ -3,6 +3,7 @@ package frontend.websockets;
 import mechanics.GameMechanics;
 import mechanics.GameProfile;
 import frontend.websockets.WebSocketService;
+import mechanics.GameProtocol;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -16,15 +17,13 @@ import org.json.simple.JSONObject;
 
 @WebSocket
 public class GameWebSocket {
-    private String name;
-    private Session session;
-    private GameMechanics gameMechanics;
-    private WebSocketService webSocketService;
+    final private String name;
+    final private boolean isFirstPlayer;
+    final private Session session;
+    final private GameProtocol protocol;
 
-    public GameWebSocket(String name, GameMechanics gameMechanics, WebSocketService webSocketService) {
+    public GameWebSocket(String name) {
         this.name = name;
-        this.gameMechanics = gameMechanics;
-        this.webSocketService = webSocketService;
     }
 
     public String getName() {
@@ -39,87 +38,25 @@ public class GameWebSocket {
         return session;
     }
 
-    public void startGame(GameProfile user, Boolean amIFirst) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "start");
-            jsonStart.put("enemyName", user.getEnemy());
-            jsonStart.put("amIFirst", amIFirst);
-            System.out.print(jsonStart.toJSONString());
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
+    public void setProtocol(GameProtocol protocol) {
+        this.protocol = protocol;
+        protocol.setWebSocket(isFirstPlayer, this);
     }
 
-    public void showErrorMessage(String message) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "rejected");
-            jsonStart.put("message", message);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void showMyTurn(String newFieldState) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "turn");
-            jsonStart.put("state", newFieldState);
-            jsonStart.put("isMyTurn", false);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void showEnemyTurn(String newFieldState) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "turn");
-            jsonStart.put("state", newFieldState);
-            jsonStart.put("isMyTurn", true);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void notifyWin() {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "finish");
-            jsonStart.put("win", true);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void notifyLoss() {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "finish");
-            jsonStart.put("win", false);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
+    public void setFirstPlayer(boolean isFirstPlayer) {
+        this.isFirstPlayer = isFirstPlayer;
     }
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
         setSession(session);
-        webSocketService.addUser(this);
-        gameMechanics.addUser(name);
+        GameSessionManager.getInstance().addSocket(this);
     }
 
     @OnWebSocketMessage
     public void onMessage(String data) {
-        //System.out.print(data);
-        gameMechanics.makeTurn(name, data);
+        System.out.print(data); // debug purposes
+        protocol.process(isFirstPlayer, data);
     }
 
     @OnWebSocketClose
