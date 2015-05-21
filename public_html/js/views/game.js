@@ -1,10 +1,12 @@
 define([
     'backbone',
     'models/field',
-    'tmpl/game'
+    'models/socket',
+    'tmpl/game',
 ], function(
     Backbone,
     FieldModel,
+    Socket,
     tmpl
 ){
 
@@ -22,6 +24,7 @@ define([
         state: "place",
         move: -1,
         from: -1,
+        socket: new Socket(),
 
         events: {
             'click canvas' : 'gameClick',
@@ -43,6 +46,7 @@ define([
         show: function () {
             this.$el.show();
             this.trigger('show',this);
+            this.socket.connect();
         },
 
         hide: function () {

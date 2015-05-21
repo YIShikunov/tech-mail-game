@@ -1,6 +1,65 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+    <script type="text/javascript">
+        var started = false;
+        var finished = false;
+
+        var myName = "${name}";
+        var enemyName = "";
+
+        sendMessage = function (action) {
+            ws.send(action);
+        }
+    </script>
+
+<div id="body">
+    <div id="hello">
+        <p>Hello, ${name}!</p>
+    </div>
+
+    <div id="prepare">
+        <form name="lookForOpponent" action="">
+            <!-- <input type="button" name="submit" value="Look for opponent." onclick="init();"/> -->
+        </form>
+    </div>
+
+    <div id="wait" style="display: none">
+        <p>Waiting for an enemy to start the game.</p>
+    </div>
+
+    <div id="gameplay" style="display: none">
+        <div id="player">
+            <p>${name} VS <span id="enemyName"></span></p>
+        </div>
+
+        <div id="gamestate">
+            <span id="state"></span>
+        </div>
+
+        <div>
+            <span id="turn"></span>
+        </div>
+
+        <div>
+            <span id="message"></span>
+        </div>
+
+        <form name="chooseAction" action="">
+            <input type="button" name="submit" value="Make a legal turn!" onclick="sendMessage('legal');"/>
+            <input type="button" name="submit" value="Try to cheat!" onclick="sendMessage('illegal');"/>
+        </form>
+    </div>
+
+    <div id="gameOver" style="display: none">
+        <p>Game over! You are <span id="win"></span></p>
+    </div>
+
+</div>
+
+
     <div class="game">
         <a class="btn btn_red" href="#">НАЗАД</a>
         <canvas width="800" height="550" class="game__field"></canvas>
     </div>  
+
+
 </fest:template>
