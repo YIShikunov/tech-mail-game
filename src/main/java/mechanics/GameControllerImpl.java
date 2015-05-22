@@ -116,13 +116,26 @@ public class GameControllerImpl implements GameController {
 
                     if (from.king && to.king)
                     {
-                        res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
-                        res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(toKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(fromKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
                     }
                     else if (from.king)
                     {
-                        res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
-                        res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(to.getElement().id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(fromKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+
                         switch (outcome)
                         {
                             case DESTRUCTION:
@@ -141,15 +154,24 @@ public class GameControllerImpl implements GameController {
                             case WIN:
                             {
                                 res.piecesDestroyed.add(toID);
-                                res.piecesMoved.add(new Pair<>(fromID, toID));
+                                tmp = new ArrayList<>();
+                                tmp.add(fromID);
+                                tmp.add(toID);
+                                res.piecesMoved.add(tmp);
                                 break;
                             }
                         }
                     }
                     else if (to.king)
                     {
-                        res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
-                        res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(toKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(from.getElement().id);
+                        res.piecesRevealed.add(tmp);
                         switch (outcome)
                         {
                             case DESTRUCTION:
@@ -176,8 +198,14 @@ public class GameControllerImpl implements GameController {
                 }
                 else
                 {
-                    res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
-                    res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                    ArrayList<Integer> tmp = new ArrayList<>();
+                    tmp.add(toID);
+                    tmp.add(to.getElement().id);
+                    res.piecesRevealed.add(tmp);
+                    tmp = new ArrayList<>();
+                    tmp.add(fromID);
+                    tmp.add(from.getElement().id);
+                    res.piecesRevealed.add(tmp);
                     switch (outcome)
                     {
                         case DESTRUCTION:
@@ -193,7 +221,11 @@ public class GameControllerImpl implements GameController {
                         case WIN:
                         {
                             res.piecesDestroyed.add(toID);
-                            res.piecesMoved.add(new Pair<>(fromID, toID));
+
+                            tmp = new ArrayList<>();
+                            tmp.add(fromID);
+                            tmp.add(toID);
+                            res.piecesMoved.add(tmp);
                             break;
                         }
                         case LOSS:
@@ -240,7 +272,10 @@ public class GameControllerImpl implements GameController {
                 promptTarget = toID;
                 res.recolor = true;
             }
-            res.piecesMoved.add(new Pair<>(fromID, toID));
+            ArrayList<Integer> tmp = new ArrayList<>();
+            tmp.add(fromID);
+            tmp.add(toID);
+            res.piecesMoved.add(tmp);
             flipTurn();
             res.status = true;
             return res;
