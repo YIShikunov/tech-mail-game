@@ -47,7 +47,7 @@ public class GameControllerImpl implements GameController {
         return messages;
     }
 
-    private void flipTurn()
+    private synchronized void flipTurn()
     {
         if (state == WaitingFor.FIRST_TURN)
             state = WaitingFor.SECOND_TURN;
@@ -55,7 +55,7 @@ public class GameControllerImpl implements GameController {
             state = WaitingFor.FIRST_TURN;
     }
 
-    public boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
+    public synchronized boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
         if (state != WaitingFor.PLACEMENT) {
             getErrorMessage("NOT_PLACEMENT");
             return false;
@@ -89,7 +89,7 @@ public class GameControllerImpl implements GameController {
     }
 
 
-    private TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
+    private synchronized TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
     {
         TurnResult res = new TurnResult();
         Piece from = board.fields.get(fromID).getPiece();
@@ -215,7 +215,7 @@ public class GameControllerImpl implements GameController {
         return res;
     }
 
-    private ArrayList<Integer> getKingStatus(boolean isFirstPlayer)
+    private synchronized ArrayList<Integer> getKingStatus(boolean isFirstPlayer)
     {
         ArrayList<Integer> ret = new ArrayList<>();
         for (Element i: Element.values())
@@ -228,7 +228,7 @@ public class GameControllerImpl implements GameController {
         return ret;
     }
 
-    private TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
+    private synchronized TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
     {
         TurnResult res = new TurnResult();
         if (board.movePiece(fromID, toID)) {
@@ -251,7 +251,7 @@ public class GameControllerImpl implements GameController {
         }
     }
 
-    public TurnResult makeTurn(boolean isFirstPlayer, int fromID, int toID) {
+    public synchronized TurnResult makeTurn(boolean isFirstPlayer, int fromID, int toID) {
         TurnResult res = new TurnResult();
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
             res.errorMessage = getErrorMessage("NOT_YOUR_TURN");
@@ -278,7 +278,7 @@ public class GameControllerImpl implements GameController {
             return res;
     }
 
-    public boolean answerPrompt(boolean isFirstPlayer, Element element) {
+    public synchronized boolean answerPrompt(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE ||
                 !isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE) {
             getErrorMessage("NOT_YOUR_TURN");
@@ -302,18 +302,18 @@ public class GameControllerImpl implements GameController {
     }
 
 
-    public boolean concede(boolean isFirstPlayer) {
+    public synchronized boolean concede(boolean isFirstPlayer) {
        return false; //TODO: implement
     }
 
-    public boolean isWaitingForPrompt(boolean isFirstPlayer){
+    public synchronized boolean isWaitingForPrompt(boolean isFirstPlayer){
         if (isFirstPlayer)
             return state == WaitingFor.FIRST_ELEMENT_CHOICE;
         else
             return state == WaitingFor.SECOND_ELEMENT_CHOICE;
     }
 
-    public boolean changeKingElement(boolean isFirstPlayer, Element element) {
+    public synchronized boolean changeKingElement(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
             getErrorMessage("NOT_YOUR_TURN");
             return false;
