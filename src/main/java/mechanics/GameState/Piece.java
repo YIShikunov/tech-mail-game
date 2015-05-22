@@ -12,7 +12,6 @@ public class Piece {
 
     // if king
     private ArrayList<Element> elements;
-    private Element backupElement;
 
     public Piece(Element element, boolean firstPlayerOwner) {
         this.king = false;
@@ -32,7 +31,6 @@ public class Piece {
         this.elements.add(Element.EARTH);
         this.elements.add(Element.WATER);
         this.element = Element.BLANK;
-        this.backupElement = Element.BLANK;
         this.visible = true;
         this.firstPlayerOwner = firstPlayerOwner;
     }
@@ -45,15 +43,10 @@ public class Piece {
         return this.position;
     }
 
-    /*public void destroy() {
-        this.position = null;
-    }*/
-
     public void destroy(Element element) {
         this.elements.remove(element);
         if (!this.elements.isEmpty()) {
-            this.setElement(Element.BLANK);
-            this.setElement(this.backupElement);
+            this.setElement(Element.next(this.getElement(), this.elements));
         }
     }
 
@@ -68,13 +61,7 @@ public class Piece {
     public Element getElement() { return this.element; }
 
     public void setElement(Element element) {
-        if (king)
-            backupElement = this.element;
         this.element = element;
-    }
-
-    public boolean hasBackupElement(){
-        return backupElement != Element.BLANK;
     }
 
     public Boolean hasElement(Element element) { return elements.contains(element); }

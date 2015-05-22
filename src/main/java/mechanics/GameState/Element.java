@@ -1,5 +1,7 @@
 package mechanics.GameState;
 
+import java.util.ArrayList;
+
 public enum Element {
     FIRE(0),METAL(1),WOOD(2),EARTH(3),WATER(4),ERROR(-1),BLANK(-2);
 
@@ -39,5 +41,16 @@ public enum Element {
             case 4: return WATER;
         }
         return ERROR;
+    }
+
+    public static Element next(Element current, ArrayList<Element> available) {
+        Element result = Element.values()[current.id+1];
+        while(!available.contains(result)) {
+            int nextID = result.id + 1;
+            if (nextID >= 5)
+                nextID = 0;
+            result = Element.values()[nextID];
+        }
+        return result;
     }
 }
