@@ -48,9 +48,11 @@ public class GameProtocol {
         try {
             packet = new JSONObject((JSONObject)(jsonParser.parse(packetString)));
         } catch (ParseException e) {
+            System.out.print(e.toString());
             return false;
         }
         if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
+            System.out.print("No typeID specified!");
             return false;
         }
         Integer type = (Integer) packet.get("typeID");
@@ -59,7 +61,9 @@ public class GameProtocol {
             case 3: return receiveTurn(isFirstPlayer, packet);
             case 5: return receiveElementPrompt(isFirstPlayer, packet);
             case 7: return receiveSwapKing(isFirstPlayer, packet);
-            default: return false;
+            default:
+                System.out.print("Wrong typeID specified!");
+                return false;
         }
     }
 
@@ -87,6 +91,7 @@ public class GameProtocol {
                 placement.put(fieldID, Element.value(4)); // TODO: collapse it
             }
         } catch (ClassCastException e) {
+            System.out.print("Calss cast excpetion!");
             return false;
         }
         status = gameController.placePieces(isFirstPlayer, placement);
