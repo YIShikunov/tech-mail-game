@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages>
-    <message id="NOT_PLACEMENT_PHASE" value="Pieces are already in place.">
+    <message id="NOT_PLACEMENT" value="Pieces are already in place.">
+    </message>
+    <message id="DO_NOT_OWN" value="This is not your piece.">
+    </message>
+    <message id="WRONG_PLACEMENT" value="This placement is invalid.">
+    </message>
+    <message id="INVALID_TURN" value="This is not a valid turn.">
+    </message>
+    <message id="NOT_YOUR_TURN" value="This is not your turn.">
+    </message>
+    <message id="WRONG_ELEMENT" value="This is not a valid element.">
     </message>
 </messages>
