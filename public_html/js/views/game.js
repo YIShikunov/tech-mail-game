@@ -140,7 +140,6 @@ define([
                 TRx = this.$el.find("canvas")[0].width/2;
                 TRy = this.$el.find("canvas")[0].height/2;
                 index = this.field.checkField(x-TRx,y-TRy);
-                debugger;
                 if (index >= 0) {
                     if (this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1 && this.state =="place" ) {
                         this.drawField(this.context,coords[index]);
@@ -177,6 +176,7 @@ define([
                                 alert("SEND TO SERVER");
                                 for (k=0; k<this.elements.length; k++) 
                                     console.info(this.elements[k].place.sort());
+                                this.socket.sendMessage(0);
                             }
                             
                         }

@@ -23,16 +23,6 @@ define([
         //     this.connection.send(JSON.stringify(data));
         // },
         onConnect: function () {
-            document.getElementById("prepare").style.display = "none";
-            document.getElementById("wait").style.display = "block";
-        //     this.status = 1;
-        //     var sendObj = {
-        //         type: 'gameInfo',
-        //         body: {
-        //             players: "123"
-        //         }
-        //     };
-        //     this.send(sendObj);
         },
         onMessage: function (msg) {
             var data = JSON.parse(msg.data);
@@ -45,6 +35,18 @@ define([
             // if (data.type === 'end') {
             //     this.connection.close();
             // }
+        },
+        sendMessage: function (data) {
+            var sendObj = {
+                typeID : 1, // 1=pieces init
+                element0 : [18, 21, 28],
+                element1 : [17, 24, 31],
+                element2 : [19, 22, 23],
+                element3 : [20, 25, 27],
+                element4 : [26, 29, 30],
+                statusOK : true,
+            };
+            this.connection.send(JSON.stringify(sendObj));
         }
     });
 
