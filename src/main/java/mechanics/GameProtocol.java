@@ -113,14 +113,14 @@ public class GameProtocol {
             firstPlayerResponse.put("typeID", 2);
             firstPlayerResponse.put("status", true);
             firstPlayerResponse.put("opponentReady", otherReady);
-            send(isFirstPlayer, packet);
+            send(isFirstPlayer, firstPlayerResponse);
 
             if (otherReady) {
                 JSONObject secondPlayerResponse = new JSONObject();
                 secondPlayerResponse.put("typeID", 2);
                 secondPlayerResponse.put("status", true);
                 secondPlayerResponse.put("opponentReady", true);
-                send(!isFirstPlayer, packet);
+                send(!isFirstPlayer, secondPlayerResponse);
             }
         } else {
             JSONObject firstPlayerResponse = new JSONObject();
@@ -130,7 +130,7 @@ public class GameProtocol {
             firstPlayerResponse.put("errorMessage",
                     "This is not a valid placement!"); //TODO should come from GameController
 
-            send(isFirstPlayer, packet);
+            send(isFirstPlayer, firstPlayerResponse);
         }
         return true;
     }
