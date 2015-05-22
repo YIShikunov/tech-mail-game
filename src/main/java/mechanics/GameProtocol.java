@@ -140,10 +140,11 @@ public class GameProtocol {
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
         TurnResult result;
         try {
-            Integer from = (Integer) packet.get("moveFrom");
-            Integer to = (Integer) packet.get("moveTo");
+            Integer from = (int) (long) packet.get("moveFrom");
+            Integer to =  (int) (long) packet.get("moveTo");
             result = gameController.makeTurn(isFirstPlayer, from, to);
         } catch (ClassCastException e) {
+            System.out.print("Class cast exception!");
             return false;
         }
 
