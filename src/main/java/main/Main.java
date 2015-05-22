@@ -3,10 +3,10 @@ package main;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourceStatus;
 import ResourceLoader.ResourcesService;
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
-import frontend.websockets.WebSocketService;
-import mechanics.GameMechanics;
+import frontend.websockets.GameSessionManager;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -40,20 +40,17 @@ public class Main {
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountServiceImpl accountServiceImpl = new AccountServiceImpl();
-
-        WebSocketService webSocketService = new WebSocketService();
-        GameMechanics gameMechanics = new GameMechanics(webSocketService);
+        AccountService accountService = AccountServiceImpl.getInstance();
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountServiceImpl, gameMechanics, webSocketService)), "/gameplay");
-        context.addServlet(new ServletHolder(new FrontendServlet(gameMechanics, accountServiceImpl, portString)), "/game");
-        context.addServlet(new ServletHolder(new SignInServlet(accountServiceImpl)), "/signin");
-        context.addServlet(new ServletHolder(new SignUpServlet(accountServiceImpl)), "/signup");
-        context.addServlet(new ServletHolder(new SignOutServlet(accountServiceImpl)), "/signout");
-        context.addServlet(new ServletHolder(new ScoreboardServlet(accountServiceImpl)), "/scoreboard");
-        context.addServlet(new ServletHolder(new AdminPageServlet(accountServiceImpl)), AdminPageServlet.adminPageURL);
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService)), "/gameplay");
+        context.addServlet(new ServletHolder(new FrontendServlet(accountService, portString)), "/game");
+        context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
+        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
+        context.addServlet(new ServletHolder(new SignOutServlet(accountService)), "/api/v1/auth/signout");
+        context.addServlet(new ServletHolder(new ScoreboardServlet(accountService)), "/scoreboard");
+        context.addServlet(new ServletHolder(new AdminPageServlet(accountService)), AdminPageServlet.adminPageURL);
 
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);
@@ -64,6 +61,7 @@ public class Main {
 
         server.setHandler(handlers);
         server.start();
+        (new Thread(GameSessionManager.getInstance())).run();
         server.join();
     }
 }

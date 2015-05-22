@@ -1,0 +1,140 @@
+Протокол:
+1.	Начало игры:
+	a.	Клиенту сообщается:
+		i.	Имя(логин) оппонента[0]
+		ii.	Чей ход будет первым
+		iii.	Идентификатор хода устанавливается в 0
+		iv.	Ping packet
+	b.	От клиента ожидается:
+		i.	Подтверждение загрузки карты
+		ii.	Инициация расстановки
+		iii.	Получение результатов расстановки [1]
+		iv.	Pong packet
+	c.	Возможные проблемы, возвращаемся к b:
+		i.	Неверная расстановка
+	d.	Возможные проблемы, отключаемся:
+		i.	Если нет Ping или Pong пакета больше 5 секунд - разрываем игру
+2.	Игра:
+	a.	Клиенту сообщается
+		i.	Ping packet
+		ii.	Ход оппонента [2]
+		iii.	Результат выполнения хода
+	b.	От клиента ожидается
+		i.	Pong packet
+		ii.	Выполненное действие(Ход?) [2]
+		iii.	Смена стихии на короле
+	c.	Возможно, добавить ограничение на время хода
+3.	Окончание:
+	a.	Клиенту сообщается
+		i.	Winner packet
+4.	???
+5.	PROFIT!!!
+
+Общие идеи: Клиент отправляет ID пакетов нечетные, сервер - четные
+В каждом пакете есть поля: typeID = (int), statusOK = (bool)
+Пакет начала игры [1]
+{
+	statusOK = true //OK?
+	typeID = 0,// 0 = game init
+	opponent = "Name",
+	youStart = false //Начинает ли игру этот клиент
+}
+Ping/pong packets
+{
+	typeID = 100, //Клиент - 101
+	status = true,
+	turn = (int) //Номер хода по мнению сервера\клиента. Может быть полезно для отладки
+}
+King-pong packet (показывает новые элементы короля, если они изменились, асинхронно)
+{
+	typeID = 10,
+	statusOK = true,
+	isYourKing = true,
+	Elements = [1,2,5]
+}
+Пакет расстановки фигур
+{
+	element0 = [ fieldID0, fieldID1, fieldID2 ],
+    element1 = [...],
+    element2 = [...],
+    element3 = [...],
+    element4 = [...],
+    typeID = 1 // 1=pieces init
+    statusOK = true
+}
+
+Пакет ответа сервера на расстановку: 
+{
+	typeID = 2,
+	statusOK = false //False если ход был плохим, и мы его не приняли
+	opponentReady = false // Расставил ли оппонент свои фигуры. Как расставит, пакет прилетит еще раз.
+							// Пока игрок не расставил свои фигуры, он не получает информацию о том, расставил ли фигуры противник.
+    errorMessage = "This is not a valid placement!"
+}
+
+Пакет хода:
+{
+	statusOK = true,
+	turn = (int),
+	moveFrom = fieldID,
+	moveTo = fieldID,
+	typeID = 3,
+}
+
+Пакет ответа сервера на ход: 
+{
+	typeID = 4,
+	statusOK = false //Если true, мы передаем ход дальше
+	errorMessage = "It is not your turn!"
+}
+
+Выполнять операции стоит именно в том порядке, в котором массивы описаны в 
+пакете. Вначале переместить, потом раскрасить, потом удалить мертвых(МБ с 
+какой-нибудь анимацией)
+{
+	typeID = 4,
+	statusOK = true,
+	piecesMoved = [[fieldIDFrom, fieldIDFrom], ...],
+	piecesRevealed = [[FieldID, colorID], ...],
+	piecesDestroyed = [FieldID1, FieldID2, ...],
+	recolorRequired = true; // Если фигура встала на трон, то от игрока ожидается пакет перекраски фигуры
+	battleResult = "win"
+	turn = turn+1
+} // Если перекраска не произошла, то такой же пакет отправляется противнику.
+
+Пакет перекраски фигуры на базе: (после хода)
+{
+	typeID = 5,
+	turn = (int),
+	statusOK = true,
+	baseRecolor = colorID
+}
+// Принято\Не принято.
+{
+	typeID = 6,
+	statusOK = false //False если ход был плохим, и мы его не приняли
+	errorMessage = "This is not a valid element!"
+}  // После этого противнику отправляется пакет с результатом хода.
+
+Пакет перекраски короля (асинхронный):
+{
+	typeID = 7,
+	turn = (int),
+	statusOK = true,
+	kingRecolor = colorID,
+}
+
+Пакет ответа сервера на перекраску: 
+// Принято\Не принято.
+{
+	typeID = 8,
+	statusOK = false //False если ход был плохим, и мы его не приняли
+	errorMessage = "Your king does not have this element!"
+}
+
+Пакет от сервера на окончание игры:
+{
+	typeID = -1,
+	statusOK = true, //False если игра была разорвана по техническим причинам
+	iAmWinner = true
+}

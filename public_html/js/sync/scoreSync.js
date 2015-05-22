@@ -6,7 +6,7 @@ define([
         
         var methodMap = {
             'read': {
-                method: 'GET',
+                method: 'POST',
                 url: '/scoreboard',
                 success: function (resp) {
                     if (resp.code == 0) {

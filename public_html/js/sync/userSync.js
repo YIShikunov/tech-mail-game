@@ -7,7 +7,7 @@ define([
         var methodMap = {
             'create': {
                 method: 'POST',
-                url: '/signup',
+                url: '/api/v1/auth/signup',
                 success: function (resp) {
                     if (resp.code == 0) {
                         alert(resp.response)
@@ -16,8 +16,8 @@ define([
                 error: function () {}
             },
             'read': {
-                method: 'GET',
-                url: '/signin',
+                method: 'POST',
+                url: '/api/v1/auth/signin',
                 success: function (resp) {
                     if (resp.code == 0) {
                         alert(resp.response);

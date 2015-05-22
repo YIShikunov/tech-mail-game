@@ -34,7 +34,6 @@ define([
 
         formSubmit: function(e){
             e.preventDefault();
-            debugger;   
             if (e.target.className=="form_signup") {
                 data = this.$el.find(".form_signup").serializeArray();
                 this.user.signup(data);

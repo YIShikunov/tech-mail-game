@@ -1,4 +1,5 @@
 package frontend.servlets;
+import base.AccountService;
 import utils.TimeHelper;
 import utils.PageGenerator;
 
@@ -12,11 +13,11 @@ import java.util.HashMap;
 
 public class AdminPageServlet extends HttpServlet {
     public static final String adminPageURL = "/admin";
-    private AccountServiceImpl accountServiceImpl;
+    private AccountService accountService;
 
-    public AdminPageServlet(AccountServiceImpl accountService)
+    public AdminPageServlet(AccountService accountService)
     {
-        accountServiceImpl = accountService;
+        this.accountService = accountService;
     }
 
     public void doGet(HttpServletRequest request,
@@ -31,8 +32,8 @@ public class AdminPageServlet extends HttpServlet {
     }
 
     protected HashMap<String, Object> getAdminInfo() {
-        Integer users = accountServiceImpl.getCountUsers();
-        Integer logusers = accountServiceImpl.getCountLogUsers();
+        Integer users = accountService.getCountUsers();
+        Integer logusers = accountService.getCountLoggedInUsers();
         HashMap<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("users", users == null ? 0 :users );
         pageVariables.put("logusers", logusers == null ? 0 :logusers );

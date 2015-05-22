@@ -1,74 +1,147 @@
 package frontend.AccountService;
 
 import base.AccountService;
+import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
+import utils.SessionHelper;
 import org.json.simple.JSONObject;
 
-import javax.swing.text.html.HTMLDocument;
-import java.util.*;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
-    private static Map<String, UserProfile> users = new HashMap<>();
-    private static Map<String, UserProfile> sessions = new HashMap<>();
 
-    public boolean addUser(String userName, UserProfile gameProfile) {
-        if (users.containsKey(userName))
+    //// SINGLETON
+    private static AccountServiceImpl instance;
+    public static AccountServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new AccountServiceImpl();
+        }
+        return instance;
+    }
+    //// SINGLETON
+
+    SessionFactory sessionFactory;
+    UserDataSetDAO userDataSetDAO;
+    static HashMap<String, Long> activeSessions;
+
+    private AccountServiceImpl() {
+        sessionFactory = SessionHelper.createSessionFactory();
+        userDataSetDAO = new UserDataSetDAO(sessionFactory);
+        activeSessions = new HashMap<>();
+    }
+
+    public boolean addUser(String username, String email, String password) {
+        UserDataSet user = new UserDataSet(username, email, password);
+        try {
+            userDataSetDAO.addUser(user);
+            return true;
+        } catch (SQLException e) {
             return false;
-        users.put(userName, gameProfile);
-        return true;
+        } catch (ConstraintViolationException e) {
+            return false;
+        }
     }
 
-    public AccountServiceImpl()
-    {
-        //Debug
-        addUser("cat", new UserProfile("cat", "cat", "cat@yandex.ru"));
-        addUser("qwerty", new UserProfile("qwerty", "qwerty", "qwerty@google.com"));
-        addUser("mail", new UserProfile("mail", "mail", "mail@my.com"));
-        addUser("dobby", new UserProfile("dobby", "dobby", "dobby@my.com"));
-        addUser("clob", new UserProfile("clob", "clob", "clob@google.com"));
-        //Debug
+    // can return null
+    public UserDataSet getUser(long id) throws SQLException {
+        return userDataSetDAO.getUser(id);
     }
 
-    public void addSessions(String sessionId, UserProfile gameProfile) {
-        sessions.put(sessionId, gameProfile);
-    }
-    public void delSessions(String sessionId) {
-        sessions.remove(sessionId);
+    public void updateUser(UserDataSet user) throws SQLException {
+        userDataSetDAO.updateUser(user);
     }
 
-    public UserProfile getUser(String userName) {
-        return users.get(userName);
+    public void addSession(String sessionID, Long userID) {
+        activeSessions.put(sessionID, userID);
     }
 
-    public UserProfile getSessions(String sessionId) {
-        return sessions.get(sessionId);
+    public void deleteSession(String sessionID) {
+        activeSessions.remove(sessionID);
+    }
+
+    // can return null
+    public UserDataSet getUserByName(String username) throws SQLException  {
+        return userDataSetDAO.getUser(username);
+    }
+
+    // can return null
+    public UserDataSet getUserBySession(String sessionID) throws SQLException {
+        Long userID = activeSessions.get(sessionID);
+        if (userID == null)
+            return null;
+        return userDataSetDAO.getUser(userID);
     }
 
     public Integer getCountUsers() {
-        return users.size();
+        return userDataSetDAO.countUsers();
     }
 
-    public Integer getCountLogUsers() {
-        return sessions.size();
+    public Integer getCountLoggedInUsers() {
+        return activeSessions.size();
     }
 
-    public boolean isAuthorised(String sessionId) { return sessions.containsKey(sessionId); }
-
-    public String getUsernameBySession(String sessionID) {
-        UserProfile user = getSessions(sessionID);
-        return user.getLogin();
+    public boolean isAuthorised(String sessionID) {
+        return activeSessions.containsKey(sessionID);
     }
 
-    public List<JSONObject> getScoreBoard() {
-        List<JSONObject> scores = new ArrayList<>();
-        int k = 0;
-        for (Object key : users.keySet()) {
-            if ( k<5 ) k++; else break;
-            JSONObject score = new JSONObject();
-            score.put("name", key.toString());
-            score.put("score", users.get(key).getScores());
-            scores.add(score);
+    public String getUsernameBySession(String sessionID) throws SQLException{
+        UserDataSet user = getUserBySession(sessionID);
+        return user == null ? null : user.getUsername();
+    }
+    public boolean deleteUser(String username)
+    {
+        try
+        {
+            UserDataSet user = getUserByName(username);
+            if (user == null)
+            {
+                return false;
+            }
+            userDataSetDAO.deleteUser(user);
+            return true;
+        } catch (SQLException e)
+        {
+            throw new RuntimeException();
+        }
+    }
+
+    class UsersScoreComparator implements Comparator<UserDataSet>
+    {
+
+        public int compare(UserDataSet o1, UserDataSet o2)
+        {
+            if (o1.getScore() < o2.getScore())
+                return -1;
+            else if (o1.getScore() > o2.getScore())
+                return  1;
+            else return 0;
+        }
+    }
+
+    public ArrayList<JSONObject> getScoreBoard(){
+        ArrayList<JSONObject> scores = new ArrayList<>();
+        try
+        {
+            ArrayList<UserDataSet> users = new ArrayList<>(userDataSetDAO.getAllUsers()) ;
+            users.sort(new UsersScoreComparator());
+            int t =  users.size() - 1;
+            for (int i = t  ; i > -1 && i > t -5 ; i-- ) {
+                JSONObject score = new JSONObject();
+                score.put("name", users.get(i).getUsername());
+                score.put("score", users.get(i).getScore());
+                scores.add(score);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.toString());
+            return scores;
         }
         return scores;
     }
-
 }

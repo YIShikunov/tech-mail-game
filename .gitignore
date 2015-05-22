@@ -3,7 +3,7 @@
 .mtj.tmp/
 
 # Package Files #
-#*.jar
+*.jar
 *.war
 *.ear
 
@@ -16,11 +16,6 @@ node_modules/
 #Compiled Templates
 public_html/js/tmpl
 target/
-
-#grunt-sass
-.sass-cache
-public_html/css/main.css.map
-
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 # Directory-based project format:
@@ -62,4 +57,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
-src/main/java/META-INF/MANIFEST.MFF
+src/main/java/META-INF/MANIFEST.MF

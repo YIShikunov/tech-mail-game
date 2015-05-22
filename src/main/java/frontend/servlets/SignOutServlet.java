@@ -1,5 +1,6 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 
@@ -12,10 +13,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class SignOutServlet extends HttpServlet {
-    private AccountServiceImpl accountServiceImpl;
+    private AccountService accountService;
 
-    public SignOutServlet(AccountServiceImpl accountServiceImpl) {
-        this.accountServiceImpl = accountServiceImpl;
+    public SignOutServlet(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void doGet(HttpServletRequest request,
@@ -36,8 +37,8 @@ public class SignOutServlet extends HttpServlet {
     }
 
     protected void signOut(String sessionID) {
-        if (accountServiceImpl.isAuthorised(sessionID)) {
-            accountServiceImpl.delSessions(sessionID);
+        if (accountService.isAuthorised(sessionID)) {
+            accountService.deleteSession(sessionID);
         }
     }
 }

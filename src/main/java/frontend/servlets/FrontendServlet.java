@@ -1,6 +1,7 @@
 package frontend.servlets;
 
-import mechanics.GameMechanics;
+import base.AccountService;
+import base.mechanics.*;
 import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 
@@ -9,17 +10,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FrontendServlet extends HttpServlet {
 
-    private GameMechanics gameMechanics;
-    private AccountServiceImpl authService;
+    private AccountService authService;
     private String port;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountServiceImpl authService, String port) {
-        this.gameMechanics = gameMechanics;
+    public FrontendServlet(AccountService authService, String port) {
         this.authService = authService;
         this.port = port;
     }
@@ -33,12 +33,25 @@ public class FrontendServlet extends HttpServlet {
                        HttpServletResponse response) throws ServletException, IOException {
         Map<String, Object> pageVariables = new HashMap<>();
 
-        pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
-        pageVariables.put("port", this.port);
+        String name;
+        try {
+            name = authService.getUsernameBySession(request.getSession().getId());
+        } catch (SQLException e) {
+            name = null;
+        }
 
-        response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
+        if (name == null) {
+            response.getWriter().println("Please log in.");
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            pageVariables.put("name", name);
+            pageVariables.put("port", this.port);
 
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
     }
 }

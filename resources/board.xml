@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<board>
+
+    <field_count count="44">
+    </field_count>
+
+    <edges>
+        <edge a="1" b="3">
+        </edge>
+        <edge a="1" b="4">
+        </edge>
+        <edge a="1" b="5">
+        </edge>
+        <edge a="1" b="6">
+        </edge>
+        <edge a="1" b="7">
+        </edge>
+        <edge a="2" b="18">
+        </edge>
+        <edge a="2" b="19">
+        </edge>
+        <edge a="2" b="20">
+        </edge>
+        <edge a="2" b="21">
+        </edge>
+        <edge a="2" b="22">
+        </edge>
+        <edge a="3" b="8">
+        </edge>
+        <edge a="3" b="17">
+        </edge>
+        <edge a="4" b="9">
+        </edge>
+        <edge a="4" b="10">
+        </edge>
+        <edge a="5" b="11">
+        </edge>
+        <edge a="5" b="12">
+        </edge>
+        <edge a="6" b="13">
+        </edge>
+        <edge a="6" b="14">
+        </edge>
+        <edge a="7" b="15">
+        </edge>
+        <edge a="7" b="16">
+        </edge>
+        <edge a="8" b="9">
+        </edge>
+        <edge a="10" b="11">
+        </edge>
+        <edge a="11" b="42">
+        </edge>
+        <edge a="12" b="13">
+        </edge>
+        <edge a="12" b="42">
+        </edge>
+        <edge a="13" b="37">
+        </edge>
+        <edge a="14" b="15">
+        </edge>
+        <edge a="14" b="37">
+        </edge>
+        <edge a="16" b="17">
+        </edge>
+        <edge a="18" b="23">
+        </edge>
+        <edge a="18" b="32">
+        </edge>
+        <edge a="19" b="24">
+        </edge>
+        <edge a="19" b="25">
+        </edge>
+        <edge a="20" b="26">
+        </edge>
+        <edge a="20" b="27">
+        </edge>
+        <edge a="21" b="28">
+        </edge>
+        <edge a="21" b="29">
+        </edge>
+        <edge a="22" b="30">
+        </edge>
+        <edge a="22" b="31">
+        </edge>
+        <edge a="23" b="24">
+        </edge>
+        <edge a="25" b="26">
+        </edge>
+        <edge a="26" b="41">
+        </edge>
+        <edge a="27" b="28">
+        </edge>
+        <edge a="27" b="41">
+        </edge>
+        <edge a="28" b="38">
+        </edge>
+        <edge a="29" b="30">
+        </edge>
+        <edge a="29" b="38">
+        </edge>
+        <edge a="31" b="32">
+        </edge>
+        <edge a="33" b="35">
+        </edge>
+        <edge a="33" b="43">
+        </edge>
+        <edge a="34" b="36">
+        </edge>
+        <edge a="34" b="44">
+        </edge>
+        <edge a="35" b="37">
+        </edge>
+        <edge a="36" b="38">
+        </edge>
+        <edge a="37" b="39">
+        </edge>
+        <edge a="38" b="40">
+        </edge>
+        <edge a="39" b="40">
+        </edge>
+        <edge a="39" b="41">
+        </edge>
+        <edge a="40" b="42">
+        </edge>
+        <edge a="41" b="43">
+        </edge>
+        <edge a="42" b="44">
+        </edge>
+    </edges>
+
+    <types>
+        <type value="throne" from="1" to="2">
+        </type>
+        <type value="base" from="3" to="32">
+        </type>
+        <type value="neutral" from="33" to="44">
+        </type>
+    </types>
+
+    <ownership>
+        <first value="1">
+        </first>
+        <first value="3">
+        </first>
+        <first value="4">
+        </first>
+        <first value="5">
+        </first>
+        <first value="6">
+        </first>
+        <first value="7">
+        </first>
+        <first value="8">
+        </first>
+        <first value="9">
+        </first>
+        <first value="10">
+        </first>
+        <first value="11">
+        </first>
+        <first value="12">
+        </first>
+        <first value="13">
+        </first>
+        <first value="14">
+        </first>
+        <first value="15">
+        </first>
+        <first value="16">
+        </first>
+        <first value="17">
+        </first>
+
+        <second value="18">
+        </second>
+        <second value="19">
+        </second>
+        <second value="20">
+        </second>
+        <second value="21">
+        </second>
+        <second value="22">
+        </second>
+        <second value="23">
+        </second>
+        <second value="24">
+        </second>
+        <second value="25">
+        </second>
+        <second value="26">
+        </second>
+        <second value="27">
+        </second>
+        <second value="28">
+        </second>
+        <second value="29">
+        </second>
+        <second value="30">
+        </second>
+        <second value="31">
+        </second>
+        <second value="32">
+        </second>
+    </ownership>
+
+</board>

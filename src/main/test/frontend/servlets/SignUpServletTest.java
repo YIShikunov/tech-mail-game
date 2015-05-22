@@ -1,17 +1,20 @@
 package frontend.servlets;
 
+import base.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import org.junit.*;
 
+import java.sql.SQLException;
+
 public class SignUpServletTest
 {
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
     SignUpServlet servlet;
 
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = AccountServiceImpl.getInstance();
         servlet = new SignUpServlet(accountService);
     }
 
@@ -23,12 +26,18 @@ public class SignUpServletTest
     }
 
     @Test
-    public void testAddUser()
+    public void test()
     {
-        servlet.addUser("email@email.email", "password", "login");
-        Assert.assertEquals(accountService.getUser("login").getEmail(), "email@email.email");
-        Assert.assertEquals(accountService.getUser("login").getPassword(), "password");
-        Assert.assertEquals(accountService.getUser("login").getLogin(), "login");
+        try {
+            servlet.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getEmail(), "__TEST@EMAIL.EMAIL");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getPassword(), "password");
+            Assert.assertEquals(accountService.getUserByName("__TEST_USERNAME").getUsername(), "__TEST_USERNAME");
+        } catch (SQLException e) {
+            Assert.fail();
+        } finally {
+            accountService.deleteUser("__TEST_USERNAME");
+        }
     }
 
 }

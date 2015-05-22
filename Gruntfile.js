@@ -6,7 +6,7 @@ module.exports = function (grunt) {
                 stderr: true
             },
             server: {
-                command: 'java -cp Tech-Mail.jar main.Main'
+                command: 'java -jar Tech-Mail.jar'
             }
         },
         fest: {
@@ -27,13 +27,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        sass: {
-            dist: {
-                files: {
-                    'public_html/css/main.css': 'public_html/css/scss/main.scss'
-                }
-            }
-        },
         watch: {
             fest: {
                 files: ['templates/*.xml'],
@@ -51,10 +44,6 @@ module.exports = function (grunt) {
                 options: {
                     livereload: true
                 }
-            },
-            css: { /* Подзадача */
-                files: ['public_html/css/scss/*.scss'],
-                tasks: ['sass'],
             }
         },
         concurrent: {
@@ -69,7 +58,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-fest');
-    grunt.loadNpmTasks('grunt-contrib-sass');
 
     grunt.registerTask('default', ['concurrent']);
 
