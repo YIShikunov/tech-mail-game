@@ -50,7 +50,9 @@ public class GameSessionManager implements Runnable {
     private void startGame(GameWebSocket first, GameWebSocket second) {
         GameProtocol protocol = new GameProtocol();
         first.setProtocol(protocol);
+        first.setFirstPlayer(true);
         second.setProtocol(protocol);
+        second.setFirstPlayer(false);
         first.startGame();
         second.startGame();
         protocol.start(first, second);
