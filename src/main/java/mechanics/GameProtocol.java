@@ -53,7 +53,7 @@ public class GameProtocol {
         }
         if (!packet.containsKey("typeID")){
             try {
-                Integer a = (Integer) packet.get("typeID");
+                Integer a = (int) (long) packet.get("typeID");
             } catch (ClassCastException e) {
                 System.out.print("TypeID is not int");
                 return false;
@@ -61,7 +61,7 @@ public class GameProtocol {
             System.out.print("No typeID specified!");
             return false;
         }
-        Integer type = (Integer) packet.get("typeID");
+        Integer type = (int) (long) packet.get("typeID");
         switch (type){
             case 1: return receivePlacement(isFirstPlayer, packet);
             case 3: return receiveTurn(isFirstPlayer, packet);
