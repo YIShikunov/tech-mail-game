@@ -82,22 +82,21 @@ define([
                 for (i=0; i<coords.length; i++) {
                     obj.drawField(context,coords[i]);
                 }
+
+                for (i=0; i<obj.elements.length; i++) {
+                    elem = document.createElement('img');
+                    elem.src = 'images/piece/'+obj.elements[i].name+'.png';
+                    elem.index = i;
+                    obj.elements[i].img = elem;
+                    elem.onload = function() {
+                        panel = obj.panel;
+                        obj.drawElemInPanel(this.index);
+                        if (obj.elements[obj.index].index == 0)
+                            obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
+                    };
+                }
             };
 
-            for (i=0; i<this.elements.length; i++) {
-                elem = document.createElement('img');
-                elem.src = 'images/piece/'+this.elements[i].name+'.png';
-                elem.index = i;
-                this.elements[i].img = elem;
-                elem.onload = function() {
-                    panel = obj.panel;
-                    context.drawImage(this,panel.x+panel.width/2-this.width/2, obj.elements[this.index].index*90+60);
-                    obj.drawCount(context, panel.x+panel.width/2, 
-                        obj.elements[this.index].index*90+135, obj.elements[this.index].count);
-                    if (obj.elements[obj.index].index == 0)
-                        obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
-                };
-            }
 
 
         },
@@ -121,18 +120,11 @@ define([
             x = event.pageX - coords.left;
             y = event.pageY - coords.top;
             panel = panel;
-            if (x > panel.x && x < panel.x+panel.width && 
-                y > panel.y && y < panel.y+panel.height)
+            if (x > panel.x && x < panel.x+panel.width && y > panel.y && y < panel.y+panel.height)
                 for (i=0; i<this.elements.length; i++) {
-                    if (y < this.elements[i].index*90+60+80) {
-                        this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
-                            panel.width-20,  90);
-                        this.context.drawImage(this.elements[this.index].img,
-                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
-                        this.drawCount(this.context, panel.x+panel.width/2, 
-                            obj.elements[this.index].index*90+135, obj.elements[this.index].count);
-                        this.drawSelect(this.context, 
-                            panel.x+panel.width/2, this.elements[i].index*90+60)
+                    if (y < this.elements[i].index*90+140) {
+                        this.drawElemInPanel(this.index);
+                        this.drawSelect(this.context, panel.x+panel.width/2, this.elements[i].index*90+60)
                         this.index = i;
                         break;
                     }
@@ -141,79 +133,69 @@ define([
                 TRy = this.$el.find("canvas")[0].height/2;
                 index = this.field.checkField(x-TRx,y-TRy);
                 if (index >= 0) {
-                    if (this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1 && this.state =="place" ) {
+                    // Place of elements
+                    if ( this.state =="place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
                         this.drawField(this.context,coords[index]);
+                        // draw element
                         coords = this.field.coords;
                         p1 = coords[index][0];
                         p2 = coords[index][1];
                         img = this.elements[this.index].img;
-                        xxx = Math.sqrt(3)/3;
+                        scale = Math.sqrt(3)/3;
                         cor = Math.PI/180*30;
-                        x = (p2[0]-p1[0])*xxx*Math.cos(cor) - (p2[1]-p1[1])*xxx*Math.sin(cor) + TRx + p1[0];
-                        y = (p2[1]-p1[1])*xxx*Math.cos(cor) + (p2[0]-p1[0])*xxx*Math.sin(cor) + TRy + p1[1];
-
+                        x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
+                        y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
                         this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+                        // change count
                         this.elements[this.index].count--;
+                        // save place of element
                         idField = index+1;
                         if (localStorage['youStart'] == "true") idField = this.field.inv[index]+1;
                         this.elements[this.index].place.push(idField);
                         this.field.map[index] = this.index;
-
+                        // change element
                         if (this.elements[this.index].count == 0) {
-                            this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
-                            panel.width-20,  90);
-                        this.context.drawImage(this.elements[this.index].img,
-                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
-                        this.drawCount(this.context, panel.x+panel.width/2, 
-                            obj.elements[this.index].index*90+135, obj.elements[this.index].count);
+                            this.drawElemInPanel(this.index);
 
-                            for (z=0; z<5; z++)
+                            for (z=0; z<this.elements.length; z++)
                                 if (this.elements[z].count > 0) {
                                     this.index = z;
                                     break;
                                 }
                             if (z==5) {
                                 this.state = "game";
-                                for (k=0; k<this.elements.length; k++) 
-                                    console.info(this.elements[k].place.sort());
-                                this.socket.sendMessage(this.elements);
+                                this.socket.sendMessage(this.elements, 1);
                             }
-                            
                         }
-                        
-                        this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
-                            panel.width-20,  90);
-                        this.context.drawImage(this.elements[this.index].img,
-                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
-                        this.drawCount(this.context, panel.x+panel.width/2, 
-                            obj.elements[this.index].index*90+135, obj.elements[this.index].count);
-                        this.drawSelect(this.context, 
-                            panel.x+panel.width/2, this.elements[this.index].index*90+60)
-                    } else if (this.field.map[index] != -1 && this.state == "game" ) {
+                        this.drawElemInPanel(this.index);
+                        this.drawSelect(this.context, panel.x+panel.width/2, this.elements[this.index].index*90+60)
+
+                    } else 
+                    if (this.field.map[index] != -1 && this.state == "game" ) {
                         this.move = this.field.map[index];
                         this.state = "move";
                         this.from = index;
                         this.index = this.field.map[index];
-                        // alert("move");
-                    } else if (this.field.map[index] == -1 && this.state == "move" ) {
+                    } else 
+                    if (this.field.map[index] == -1 && this.state == "move" ) {
                         this.move = this.field.map[index];
                         this.state = "game";
                         this.field.map[this.from] = -1;
                         this.field.map[index] = this.index; 
-                        // alert("place");
+
                         this.drawField(this.context,coords[this.from]);
+
                         coords = this.field.coords;
                         p1 = coords[index][0];
                         p2 = coords[index][1];
                         img = this.elements[this.index].img;
-                        xxx = Math.sqrt(3)/3;
+                        scale = Math.sqrt(3)/3;
                         cor = Math.PI/180*30;
-                        x = (p2[0]-p1[0])*xxx*Math.cos(cor) - (p2[1]-p1[1])*xxx*Math.sin(cor) + TRx + p1[0];
-                        y = (p2[1]-p1[1])*xxx*Math.cos(cor) + (p2[0]-p1[0])*xxx*Math.sin(cor) + TRy + p1[1];
+                        x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
+                        y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
 
                         this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
                         this.elements[this.index].count--;
-                        // for opponent this.field.inv[index]
                         this.elements[this.index].place.push(index);
                         this.field.map[index] = this.index;
 
@@ -225,7 +207,6 @@ define([
                         this.drawCount(this.context, panel.x+panel.width/2, 
                             obj.elements[this.index].index*90+135, obj.elements[this.index].count);
                         }
-
                     } 
                 }
             }
@@ -239,6 +220,18 @@ define([
             context.fillStyle = ptrn;
         },
 
+        drawElemInPanel : function(index) {
+            this.context.fillRect(panel.x+10, this.elements[index].index*90+60-8, panel.width-20,  90);
+            this.context.drawImage(this.elements[index].img,
+                panel.x+panel.width/2-this.elements[index].img.width/2, this.elements[index].index*90+60);
+            this.drawCount(this.context, panel.x+panel.width/2, 
+                this.elements[index].index*90+135, this.elements[index].count);
+        },
+
+        drawElemInField: function() {
+
+        },
+
         drawSelect: function(context,x,y) {
             ptrn = context.fillStyle;
             context.beginPath();
@@ -246,6 +239,7 @@ define([
             context.arc(x,y+38  ,42,0,2*Math.PI);
             context.stroke();
         },
+
 
     });
 

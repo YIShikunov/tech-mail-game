@@ -39,16 +39,30 @@ define([
             //     this.connection.close();
             // }
         },
-        sendMessage: function (data) {
-            var sendObj = {
-                typeID : 1, // 1=pieces init
-                element0 : data[0].place,
-                element1 : data[1].place,
-                element2 : data[2].place,
-                element3 : data[3].place,
-                element4 : data[4].place,
-                statusOK : true,
-            };
+        sendMessage: function (data, id) {
+            var sendObj = null;
+
+            if (id == 1) {
+                var sendObj = {
+                    typeID : 1, // 1=pieces init
+                    element0 : data[0].place,
+                    element1 : data[1].place,
+                    element2 : data[2].place,
+                    element3 : data[3].place,
+                    element4 : data[4].place,
+                    statusOK : true,
+                };
+            }
+
+            if (id == 3) {
+                var sendObj = {
+                    typeID : 3,
+                    turn : 0,
+                    moveFrom : data[0],
+                    moveTo : data[1],
+                    statusOK : true,
+                };
+            }
             this.connection.send(JSON.stringify(sendObj));
         }
     });
