@@ -21,7 +21,7 @@ public class GSResources implements Resources
         if (resources != null)
             settings.putAll(resources);
         noSettings = (resources == null);
-        if (content != null)
+        if (inner != null)
             content.addAll(inner);
         noContents = (inner == null);
         this.name = name;
