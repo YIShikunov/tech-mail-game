@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import base.AccountService;
+import base.AccountService.AccountService;
 import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;

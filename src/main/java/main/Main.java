@@ -3,7 +3,7 @@ package main;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourceStatus;
 import ResourceLoader.ResourcesService;
-import base.AccountService;
+import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.GameSessionManager;

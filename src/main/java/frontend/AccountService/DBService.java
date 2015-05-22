@@ -7,13 +7,12 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class UserDataSetDAO {
-    private SessionFactory sessionFactory;
+public class DBService {
+    private final SessionFactory sessionFactory;
 
-    public UserDataSetDAO(SessionFactory sessionFactory) {
+    public DBService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -30,7 +29,6 @@ public class UserDataSetDAO {
         }
     }
 
-    // untested
     public void updateUser(UserDataSet user) throws SQLException, ConstraintViolationException {
         Session session = null;
         try {

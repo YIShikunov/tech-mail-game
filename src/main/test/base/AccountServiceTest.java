@@ -1,5 +1,6 @@
 package base;
 
+import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserDataSet;
 import org.junit.*;

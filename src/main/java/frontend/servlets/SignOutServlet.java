@@ -1,7 +1,6 @@
 package frontend.servlets;
 
-import base.AccountService;
-import frontend.AccountService.AccountServiceImpl;
+import base.AccountService.AccountService;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -20,11 +19,6 @@ public class SignOutServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
-    }
-
-    public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         response.setStatus(HttpServletResponse.SC_OK);

@@ -1,7 +1,6 @@
 package frontend.servlets;
 
-import base.AccountService;
-import frontend.AccountService.AccountServiceImpl;
+import base.AccountService.AccountService;
 import utils.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -24,11 +23,6 @@ public class FrontendServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
-    }
-
-    public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
         Map<String, Object> pageVariables = new HashMap<>();
 

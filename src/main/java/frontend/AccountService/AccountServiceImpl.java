@@ -1,44 +1,29 @@
 package frontend.AccountService;
 
-import base.AccountService;
-import org.hibernate.SessionFactory;
+import base.AccountService.AccountService;
 import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
 import org.json.simple.JSONObject;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
-    /*//// SINGLETON NO LONGER
-    private static AccountServiceImpl instance;
-    public static AccountServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new AccountServiceImpl();
-        }
-        return instance;
-    }
-    //// SINGLETON*/
-
-    SessionFactory sessionFactory;
-    UserDataSetDAO userDataSetDAO;
-    static HashMap<String, Long> activeSessions;
+    private final DBService DBService;
+    private final HashMap<String, Long> activeSessions;
 
     public AccountServiceImpl() {
-        sessionFactory = SessionHelper.createSessionFactory();
-        userDataSetDAO = new UserDataSetDAO(sessionFactory);
+        DBService = new DBService(SessionHelper.createSessionFactory());
         activeSessions = new HashMap<>();
     }
 
     public boolean addUser(String username, String email, String password) {
         UserDataSet user = new UserDataSet(username, email, password);
         try {
-            userDataSetDAO.addUser(user);
+            DBService.addUser(user);
             return true;
         } catch (SQLException e) {
             return false;
@@ -49,11 +34,11 @@ public class AccountServiceImpl implements AccountService {
 
     // can return null
     public UserDataSet getUser(long id) throws SQLException {
-        return userDataSetDAO.getUser(id);
+        return DBService.getUser(id);
     }
 
     public void updateUser(UserDataSet user) throws SQLException {
-        userDataSetDAO.updateUser(user);
+        DBService.updateUser(user);
     }
 
     public void addSession(String sessionID, Long userID) {
@@ -66,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
 
     // can return null
     public UserDataSet getUserByName(String username) throws SQLException  {
-        return userDataSetDAO.getUser(username);
+        return DBService.getUser(username);
     }
 
     // can return null
@@ -74,11 +59,11 @@ public class AccountServiceImpl implements AccountService {
         Long userID = activeSessions.get(sessionID);
         if (userID == null)
             return null;
-        return userDataSetDAO.getUser(userID);
+        return DBService.getUser(userID);
     }
 
     public Integer getCountUsers() {
-        return userDataSetDAO.countUsers();
+        return DBService.countUsers();
     }
 
     public Integer getCountLoggedInUsers() {
@@ -102,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
             {
                 return false;
             }
-            userDataSetDAO.deleteUser(user);
+            DBService.deleteUser(user);
             return true;
         } catch (SQLException e)
         {
@@ -127,7 +112,7 @@ public class AccountServiceImpl implements AccountService {
         ArrayList<JSONObject> scores = new ArrayList<>();
         try
         {
-            ArrayList<UserDataSet> users = new ArrayList<>(userDataSetDAO.getAllUsers()) ;
+            ArrayList<UserDataSet> users = new ArrayList<>(DBService.getAllUsers()) ;
             users.sort(new UsersScoreComparator());
             int t =  users.size() - 1;
             for (int i = t  ; i > -1 && i > t -5 ; i-- ) {

@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import base.AccountService;
+import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import org.junit.*;
 

@@ -1,6 +1,6 @@
 package frontend.servlets;
 
-import base.AccountService;
+import base.AccountService.AccountService;
 import frontend.websockets.CustomWebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
