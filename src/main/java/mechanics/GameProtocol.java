@@ -111,21 +111,21 @@ public class GameProtocol {
 
             JSONObject firstPlayerResponse = new JSONObject();
             firstPlayerResponse.put("typeID", 2);
-            firstPlayerResponse.put("status", true);
+            firstPlayerResponse.put("statusOK", true);
             firstPlayerResponse.put("opponentReady", otherReady);
             send(isFirstPlayer, firstPlayerResponse);
 
             if (otherReady) {
                 JSONObject secondPlayerResponse = new JSONObject();
                 secondPlayerResponse.put("typeID", 2);
-                secondPlayerResponse.put("status", true);
+                secondPlayerResponse.put("statusOK", true);
                 secondPlayerResponse.put("opponentReady", true);
                 send(!isFirstPlayer, secondPlayerResponse);
             }
         } else {
             JSONObject firstPlayerResponse = new JSONObject();
             firstPlayerResponse.put("typeID", 2);
-            firstPlayerResponse.put("status", false);
+            firstPlayerResponse.put("statusOK", false);
             firstPlayerResponse.put("opponentReady", false);
             firstPlayerResponse.put("errorMessage",
                     "This is not a valid placement!"); //TODO should come from GameController
