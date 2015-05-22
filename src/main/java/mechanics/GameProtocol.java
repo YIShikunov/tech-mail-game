@@ -81,20 +81,20 @@ public class GameProtocol {
         HashMap<Integer, Element> placement = new HashMap<>();
         boolean status;
         try {
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element0")) {
-                placement.put(fieldID, Element.value(0));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element0")) {
+                placement.put((int) (long) fieldID, Element.value(0));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element1")) {
-                placement.put(fieldID, Element.value(1));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element1")) {
+                placement.put((int) (long) fieldID, Element.value(1));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element2")) {
-                placement.put(fieldID, Element.value(2));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element2")) {
+                placement.put((int) (long) fieldID, Element.value(2));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element3")) {
-                placement.put(fieldID, Element.value(3));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element3")) {
+                placement.put((int) (long) fieldID, Element.value(3));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element4")) {
-                placement.put(fieldID, Element.value(4)); // TODO: collapse it
+            for (Long fieldID : (ArrayList<Long>) packet.get("element4")) {
+                placement.put((int) (long) fieldID, Element.value(4)); // TODO: collapse it
             }
         } catch (ClassCastException e) {
             System.out.print("Class cast exception!");
