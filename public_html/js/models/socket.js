@@ -25,16 +25,18 @@ define([
         onConnect: function () {
         },
         onMessage: function (msg) {
-            var data = JSON.parse(msg.data);
+            var data = JSON.parse(msg.data.replace('=',','));
             console.info(msg.data);
-            if (data.typeID == 0) 
+            if (data.typeID == 0) {
                 localStorage['youStart'] = data.youStart;
-            if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!")
-            // var data = JSON.parse(msg.data);
-            // alert("GEET");
-            // console.info(data);
-            // if (data.type === 'start') {
-            // }
+                alert("connect");
+            }
+            if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!, "+localStorage['youStart'])
+            if (data.typeID == 4 && data.statusOK) {
+                localStorage['from'] = data.piecesMoved[0]-1;
+                localStorage['to'] = data.piecesMoved[1]-1;
+                obj.socket.trigger("move");
+            }
             // if (data.type === 'end') {
             //     this.connection.close();
             // }
@@ -52,7 +54,7 @@ define([
                     element4 : data[4].place,
                     statusOK : true,
                 };
-            }
+            };
 
             if (id == 3) {
                 var sendObj = {
@@ -62,9 +64,13 @@ define([
                     moveTo : data[1],
                     statusOK : true,
                 };
-            }
+            };
+
             this.connection.send(JSON.stringify(sendObj));
-        }
+        },
+        thisReturn: function () {
+            return this;
+        },
     });
 
     return GameModel;

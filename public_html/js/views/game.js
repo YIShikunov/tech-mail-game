@@ -25,10 +25,13 @@ define([
         move: -1,
         from: -1,
         socket: new Socket(),
+        cloud: null,
 
         events: {
             'click canvas' : 'gameClick',
-            'resize' : 'draw'
+            'resize' : 'draw',
+            'storage' : 'moving',
+            'mousedown' : 'test',
         },
 
         initialize: function () {
@@ -36,6 +39,8 @@ define([
             this.$el.appendTo('.gameView');
             this.render();
             this.$el.hide();
+            this.listenTo(this.socket, 'move', this.moving);
+            this.drawEnemy();
         },
 
         render: function () {
@@ -65,7 +70,6 @@ define([
             coords = this.field.coords;
 
             var img = document.createElement('img');
-            img.src = 'images/ptrn.jpg';
             img.onload = function() {
                 var ptrn = context.createPattern(img,"repeat");
                 context.fillStyle=ptrn;
@@ -96,9 +100,7 @@ define([
                     };
                 }
             };
-
-
-
+            img.src = 'images/ptrn.jpg';
         },
 
         drawField: function(context,points) {
@@ -129,8 +131,6 @@ define([
                         break;
                     }
             } else {
-                TRx = this.$el.find("canvas")[0].width/2;
-                TRy = this.$el.find("canvas")[0].height/2;
                 index = this.field.checkField(x-TRx,y-TRy);
                 if (index >= 0) {
                     // Place of elements
@@ -170,22 +170,21 @@ define([
                         this.index = this.field.map[index];
                     } else 
                     if (this.field.map[index] == -1 && this.state == "move" ) {
-                        this.move = this.field.map[index];
+                        this.move = this.field.map[this.from];
+
                         this.state = "game";
-                        this.field.map[this.from] = -1;
                         this.field.map[index] = this.index;
 
                         data = [];
                         if (localStorage['youStart'] == "false") {
                             data.push(this.from+1);
-                            data.push(this.index+1);
+                            data.push(index+1);
                         } else {
                             data.push(this.field.inv[this.from]+1);
-                            data.push(this.field.inv[this.index]+1);
+                            data.push(this.field.inv[index]+1);
                         }
                         this.socket.sendMessage(data, 3);
-                        // this.drawField(this.context,coords[this.from]);
-                        // this.drawElemInField(this.field.coords[index][0],this.field.coords[index][1])
+                        this.index = this.field.map[this.from];
                     } 
                 }
             }
@@ -200,6 +199,8 @@ define([
         },
 
         drawElemInPanel : function(index) {
+            TRx = this.$el.find("canvas")[0].width/2;
+            TRy = this.$el.find("canvas")[0].height/2;
             this.context.fillRect(panel.x+10, this.elements[index].index*90+60-8, panel.width-20,  90);
             this.context.drawImage(this.elements[index].img,
                 panel.x+panel.width/2-this.elements[index].img.width/2, this.elements[index].index*90+60);
@@ -216,12 +217,93 @@ define([
             this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
         },
 
+        drawEnemy: function() {
+            TRx = this.$el.find("canvas")[0].width/2;
+            TRy = this.$el.find("canvas")[0].height/2;
+            var cloud = document.createElement('img');
+            cloud.onload = function() {
+                for (l=0; l<obj.field.baseField.length; l++) {
+                    p1 = obj.field.coords[obj.field.inv[obj.field.baseField[l]]][0];
+                    p2 = obj.field.coords[obj.field.inv[obj.field.baseField[l]]][1];
+                    scale = Math.sqrt(3)/3;
+                    cor = Math.PI/180*30;
+                    x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
+                    y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
+                    obj.context.drawImage(this,x-this.width/2*30/this.width,y-this.height/2*30/this.height,30,30);
+                    obj.field.map[obj.field.inv[obj.field.baseField[l]]] = 5;
+                }
+            };
+            cloud.src = 'images/piece/cloud.png';
+            obj.cloud = cloud;
+        },
+
         drawSelect: function(context,x,y) {
             ptrn = context.fillStyle;
             context.beginPath();
             context.fillStyle = ptrn;
             context.arc(x,y+38  ,42,0,2*Math.PI);
             context.stroke();
+        },
+
+        moving: function() {
+            from = localStorage['from'];
+            to = localStorage['to'];
+            if (localStorage['youStart'] == "true") {
+                from = this.field.inv[localStorage['from']];
+                to = this.field.inv[localStorage['to']];
+            }
+
+            localStorage.removeItem("from");
+            localStorage.removeItem("to");
+
+            this.index = this.field.map[from];
+            this.drawField(this.context,coords[from]);
+            if (this.index != 5) {
+                this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
+            } else {
+                debugger;
+                p1 = obj.field.coords[to][0];
+                p2 = obj.field.coords[to][1];
+                img = this.cloud;
+                scale = Math.sqrt(3)/3;
+                cor = Math.PI/180*30;
+                x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
+                y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
+                this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+            }
+
+            st = this.field.map[from];
+            this.field.map[from] = -1;
+            this.field.map[to] = st;
+        },
+
+        test: function(event) {
+            if ( event.which == 2 ) {
+                if (localStorage['youStart'] == "true") {
+                    this.elements[0].place = [12,5,11];
+                    this.elements[1].place = [10,4,9];
+                    this.elements[2].place = [8,3,17];
+                    this.elements[3].place = [16,7,15];
+                    this.elements[4].place = [14,6,13];
+                } else {
+                    this.elements[0].place = [27,20,26];
+                    this.elements[1].place = [25,19,24];
+                    this.elements[2].place = [23,18,32];
+                    this.elements[3].place = [31,22,30];
+                    this.elements[4].place = [29,21,28];
+                }
+                for (i=0; i<this.elements.length; i++) {
+                    this.index = i;    
+                    for (k=0; k<this.elements[i].place.length; k++) {
+                        pos = this.elements[i].place[k]-1;
+                        if (localStorage['youStart'] == "true") pos = this.field.inv[pos];
+                        this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
+                        this.field.map[pos] = i;
+                    }
+                }
+                this.state = "game";
+                this.socket.sendMessage(this.elements, 1);
+            }
         },
 
 
