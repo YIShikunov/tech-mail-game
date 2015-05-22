@@ -137,15 +137,7 @@ define([
                     if ( this.state =="place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
                         this.drawField(this.context,coords[index]);
                         // draw element
-                        coords = this.field.coords;
-                        p1 = coords[index][0];
-                        p2 = coords[index][1];
-                        img = this.elements[this.index].img;
-                        scale = Math.sqrt(3)/3;
-                        cor = Math.PI/180*30;
-                        x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
-                        y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
-                        this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+                        this.drawElemInField(this.field.coords[index][0],this.field.coords[index][1])
                         // change count
                         this.elements[this.index].count--;
                         // save place of element
@@ -181,32 +173,19 @@ define([
                         this.move = this.field.map[index];
                         this.state = "game";
                         this.field.map[this.from] = -1;
-                        this.field.map[index] = this.index; 
-
-                        this.drawField(this.context,coords[this.from]);
-
-                        coords = this.field.coords;
-                        p1 = coords[index][0];
-                        p2 = coords[index][1];
-                        img = this.elements[this.index].img;
-                        scale = Math.sqrt(3)/3;
-                        cor = Math.PI/180*30;
-                        x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
-                        y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
-
-                        this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
-                        this.elements[this.index].count--;
-                        this.elements[this.index].place.push(index);
                         this.field.map[index] = this.index;
 
-                        if (this.elements[this.index].count == 0) {
-                            this.context.fillRect(panel.x+10, this.elements[this.index].index*90+60-8, 
-                            panel.width-20,  90);
-                        this.context.drawImage(this.elements[this.index].img,
-                            panel.x+panel.width/2-this.elements[this.index].img.width/2, obj.elements[this.index].index*90+60);
-                        this.drawCount(this.context, panel.x+panel.width/2, 
-                            obj.elements[this.index].index*90+135, obj.elements[this.index].count);
+                        data = [];
+                        if (localStorage['youStart'] == "false") {
+                            data.push(this.from+1);
+                            data.push(this.index+1);
+                        } else {
+                            data.push(this.field.inv[this.from]+1);
+                            data.push(this.field.inv[this.index]+1);
                         }
+                        this.socket.sendMessage(data, 3);
+                        // this.drawField(this.context,coords[this.from]);
+                        // this.drawElemInField(this.field.coords[index][0],this.field.coords[index][1])
                     } 
                 }
             }
@@ -228,8 +207,13 @@ define([
                 this.elements[index].index*90+135, this.elements[index].count);
         },
 
-        drawElemInField: function() {
-
+        drawElemInField: function(p1,p2) {
+            img = this.elements[this.index].img;
+            scale = Math.sqrt(3)/3;
+            cor = Math.PI/180*30;
+            x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
+            y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
+            this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
         },
 
         drawSelect: function(context,x,y) {
