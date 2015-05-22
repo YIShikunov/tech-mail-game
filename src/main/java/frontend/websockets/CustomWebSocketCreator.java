@@ -1,7 +1,6 @@
 package frontend.websockets;
 
 import base.AccountService;
-import mechanics.GameMechanics;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -10,15 +9,9 @@ import java.sql.SQLException;
 
 public class CustomWebSocketCreator implements WebSocketCreator {
     private AccountService accountService;
-    private GameMechanics gameMechanics;
-    private WebSocketService webSocketService;
 
-    public CustomWebSocketCreator(AccountService authService,
-                                  GameMechanics gameMechanics,
-                                  WebSocketService webSocketService) {
+    public CustomWebSocketCreator(AccountService authService) {
         this.accountService = authService;
-        this.gameMechanics = gameMechanics;
-        this.webSocketService = webSocketService;
     }
 
     @Override
@@ -30,6 +23,6 @@ public class CustomWebSocketCreator implements WebSocketCreator {
         } catch (SQLException e) {
             throw new RuntimeException();
         }
-        return new GameWebSocket(name, gameMechanics, webSocketService);
+        return new GameWebSocket(name);
     }
 }

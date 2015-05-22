@@ -16,12 +16,10 @@ import java.util.Map;
 
 public class FrontendServlet extends HttpServlet {
 
-    private GameMechanics gameMechanics;
     private AccountService authService;
     private String port;
 
-    public FrontendServlet(GameMechanics gameMechanics, AccountService authService, String port) {
-        this.gameMechanics = gameMechanics;
+    public FrontendServlet(AccountService authService, String port) {
         this.authService = authService;
         this.port = port;
     }
@@ -35,16 +33,25 @@ public class FrontendServlet extends HttpServlet {
                        HttpServletResponse response) throws ServletException, IOException {
         Map<String, Object> pageVariables = new HashMap<>();
 
+        String name;
         try {
-            pageVariables.put("name", authService.getUsernameBySession(request.getSession().getId()));
+            name = authService.getUsernameBySession(request.getSession().getId());
         } catch (SQLException e) {
-            throw new RuntimeException(); // TODO: if user is not logged in, show a different page.
+            name = null;
         }
-        pageVariables.put("port", this.port);
 
-        response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
+        if (name == null) {
+            response.getWriter().println("Please log in.");
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            pageVariables.put("name", name);
+            pageVariables.put("port", this.port);
 
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(PageGenerator.getPage("game.tml", pageVariables));
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
     }
 }

@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
-    //private static Map<String, UserProfile> users = new HashMap<>();
-    //private static Map<String, UserProfile> sessions = new HashMap<>();
 
     //// SINGLETON
     private static AccountServiceImpl instance;
@@ -74,6 +72,8 @@ public class AccountServiceImpl implements AccountService {
     // can return null
     public UserDataSet getUserBySession(String sessionID) throws SQLException {
         Long userID = activeSessions.get(sessionID);
+        if (userID == null)
+            return null;
         return userDataSetDAO.getUser(userID);
     }
 
