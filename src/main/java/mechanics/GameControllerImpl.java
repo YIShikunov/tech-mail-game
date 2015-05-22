@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import mechanics.GameState.*;
 
 import java.security.KeyException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameControllerImpl implements GameController {
@@ -110,7 +111,15 @@ public class GameControllerImpl implements GameController {
                 }
                 if (from.king || to.king)
                 {
-                    if (from.king)
+                    res.king1Status = getKingStatus(true);
+                    res.king2Status = getKingStatus(false);
+
+                    if (from.king && to.king)
+                    {
+                        res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
+                        res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
+                    }
+                    else if (from.king)
                     {
                         res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
                         res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
@@ -137,7 +146,7 @@ public class GameControllerImpl implements GameController {
                             }
                         }
                     }
-                    else if(to.king)
+                    else if (to.king)
                     {
                         res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
                         res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
@@ -204,6 +213,19 @@ public class GameControllerImpl implements GameController {
         res.errorMessage = getErrorMessage("INVALID_TURN");
         res.status = false;
         return res;
+    }
+
+    private ArrayList<Integer> getKingStatus(boolean isFirstPlayer)
+    {
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (Element i: Element.values())
+        {
+            if (i == Element.BLANK || i == Element.ERROR)
+                continue;
+            if (board.getKing(isFirstPlayer).hasElement(i))
+                ret.add(i.id);
+        }
+        return ret;
     }
 
     private TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
@@ -310,11 +332,5 @@ public class GameControllerImpl implements GameController {
             return "I HEARD YOU LIKE ERRORS MESSAGES SO I PUT AN ERROR MESSAGE IN YOUR ERROR MESSAGE";
         }
         return response;
-    }
-
-    public String popErrorMessage() {
-        String result = this.errorMessage;
-        this.errorMessage = null;
-        return result;
     }
 }

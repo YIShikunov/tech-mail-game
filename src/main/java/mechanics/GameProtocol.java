@@ -2,6 +2,7 @@ package mechanics;
 
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
+import javafx.util.Pair;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,6 +78,31 @@ public class GameProtocol {
     protected boolean firstPlayerReady = false;
     protected boolean secondPlayerReady = false;
 
+
+    protected boolean sendKingPongPackets(boolean isFirstPlayer, TurnResult result)
+    {
+        if (result.king1Status != null && result.king2Status != null)
+        {
+            JSONObject player1KingPacket = new JSONObject();
+            JSONObject player2KingPacket = new JSONObject();
+
+            player1KingPacket.put("typeID", 10);
+            player1KingPacket.put("statusOK", true);
+            player1KingPacket.put("isYourKing", isFirstPlayer);
+            player2KingPacket.put("typeID", 10);
+            player2KingPacket.put("statusOK", true);
+            player2KingPacket.put("isYourKing", !isFirstPlayer);
+
+            player1KingPacket.put("Elements", result.king1Status.toArray());
+            player2KingPacket.put("Elements", result.king2Status.toArray());
+            send(isFirstPlayer, player1KingPacket);
+            send(isFirstPlayer, player2KingPacket);
+            return true;
+        }
+        return false;
+    }
+
+
     protected boolean receivePlacement(boolean isFirstPlayer, JSONObject packet) {
         HashMap<Integer, Element> placement = new HashMap<>();
         boolean status;
@@ -135,7 +161,8 @@ public class GameProtocol {
         return true;
     }
 
-    protected JSONObject stashedResult;
+    protected JSONObject stashedResponse;
+    protected TurnResult stashedResult;
 
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
         TurnResult result;
@@ -153,9 +180,12 @@ public class GameProtocol {
             response.put("turn", turn);
             send(isFirstPlayer, response);
             if (result.recolor) {
-                stashedResult = response;
+                stashedResponse = response;
+                stashedResult = result;
             } else {
                 send(!isFirstPlayer, response);
+                sendKingPongPackets(!isFirstPlayer, result);
+                sendKingPongPackets(isFirstPlayer, result);
             }
         } else {
             JSONObject response = new JSONObject();
@@ -181,7 +211,9 @@ public class GameProtocol {
             response.put("statusOK", true);
             response.put("typeID", 6);
             send(isFirstPlayer, response);
-            send(!isFirstPlayer, stashedResult);
+            send(!isFirstPlayer, stashedResponse);
+            sendKingPongPackets(isFirstPlayer, stashedResult);
+            sendKingPongPackets(!isFirstPlayer, stashedResult);
             stashedResult = null;
         } else {
             JSONObject response = new JSONObject();
