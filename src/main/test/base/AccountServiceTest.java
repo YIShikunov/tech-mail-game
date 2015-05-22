@@ -13,7 +13,7 @@ public class AccountServiceTest
     @Before
     public void setUp()
     {
-        accountService = AccountServiceImpl.getInstance();
+        accountService = new AccountServiceImpl();
     }
 
     @After

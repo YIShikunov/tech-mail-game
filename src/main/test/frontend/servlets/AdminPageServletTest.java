@@ -21,7 +21,7 @@ public class AdminPageServletTest {
     @Before
     public void setUp()
     {
-        accountService = AccountServiceImpl.getInstance();
+        accountService =  new AccountServiceImpl();
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);
         adminPageServlet = new AdminPageServlet(accountService);

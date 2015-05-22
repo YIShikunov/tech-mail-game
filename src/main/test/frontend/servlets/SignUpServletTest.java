@@ -14,7 +14,7 @@ public class SignUpServletTest
     @Before
     public void setUp()
     {
-        accountService = AccountServiceImpl.getInstance();
+        accountService = new AccountServiceImpl();
         servlet = new SignUpServlet(accountService);
     }
 

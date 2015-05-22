@@ -1,7 +1,6 @@
 package frontend.servlets;
 
 import base.AccountService;
-import mechanics.GameMechanics;
 import frontend.AccountService.AccountServiceImpl;
 import utils.PageGenerator;
 

@@ -16,7 +16,7 @@ public class SignOutServletTest
     @Before
     public void setUp()
     {
-        accountService = AccountServiceImpl.getInstance();
+        accountService = new AccountServiceImpl();
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);
         accountService.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");

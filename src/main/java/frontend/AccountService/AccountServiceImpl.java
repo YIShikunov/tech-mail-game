@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
-    //// SINGLETON
+    /*//// SINGLETON NO LONGER
     private static AccountServiceImpl instance;
     public static AccountServiceImpl getInstance() {
         if (instance == null) {
@@ -23,13 +23,13 @@ public class AccountServiceImpl implements AccountService {
         }
         return instance;
     }
-    //// SINGLETON
+    //// SINGLETON*/
 
     SessionFactory sessionFactory;
     UserDataSetDAO userDataSetDAO;
     static HashMap<String, Long> activeSessions;
 
-    private AccountServiceImpl() {
+    public AccountServiceImpl() {
         sessionFactory = SessionHelper.createSessionFactory();
         userDataSetDAO = new UserDataSetDAO(sessionFactory);
         activeSessions = new HashMap<>();
