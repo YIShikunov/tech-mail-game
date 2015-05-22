@@ -48,18 +48,28 @@ public class GameProtocol {
         try {
             packet = new JSONObject((JSONObject)(jsonParser.parse(packetString)));
         } catch (ParseException e) {
+            System.out.print(e.toString());
             return false;
         }
-        if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
+        if (!packet.containsKey("typeID")){
+            try {
+                Integer a = (int) (long) packet.get("typeID");
+            } catch (ClassCastException e) {
+                System.out.print("TypeID is not int");
+                return false;
+            }
+            System.out.print("No typeID specified!");
             return false;
         }
-        Integer type = (Integer) packet.get("typeID");
+        Integer type = (int) (long) packet.get("typeID");
         switch (type){
             case 1: return receivePlacement(isFirstPlayer, packet);
             case 3: return receiveTurn(isFirstPlayer, packet);
             case 5: return receiveElementPrompt(isFirstPlayer, packet);
             case 7: return receiveSwapKing(isFirstPlayer, packet);
-            default: return false;
+            default:
+                System.out.print("Wrong typeID specified!");
+                return false;
         }
     }
 
@@ -71,22 +81,23 @@ public class GameProtocol {
         HashMap<Integer, Element> placement = new HashMap<>();
         boolean status;
         try {
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element0")) {
-                placement.put(fieldID, Element.value(0));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element0")) {
+                placement.put((int) (long) fieldID, Element.value(0));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element1")) {
-                placement.put(fieldID, Element.value(1));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element1")) {
+                placement.put((int) (long) fieldID, Element.value(1));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element2")) {
-                placement.put(fieldID, Element.value(2));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element2")) {
+                placement.put((int) (long) fieldID, Element.value(2));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element3")) {
-                placement.put(fieldID, Element.value(3));
+            for (Long fieldID : (ArrayList<Long>) packet.get("element3")) {
+                placement.put((int) (long) fieldID, Element.value(3));
             }
-            for (Integer fieldID : (ArrayList<Integer>) packet.get("element4")) {
-                placement.put(fieldID, Element.value(4)); // TODO: collapse it
+            for (Long fieldID : (ArrayList<Long>) packet.get("element4")) {
+                placement.put((int) (long) fieldID, Element.value(4)); // TODO: collapse it
             }
         } catch (ClassCastException e) {
+            System.out.print("Class cast exception!");
             return false;
         }
         status = gameController.placePieces(isFirstPlayer, placement);
@@ -102,14 +113,14 @@ public class GameProtocol {
             firstPlayerResponse.put("typeID", 2);
             firstPlayerResponse.put("status", true);
             firstPlayerResponse.put("opponentReady", otherReady);
-            send(isFirstPlayer, packet);
+            send(isFirstPlayer, firstPlayerResponse);
 
             if (otherReady) {
                 JSONObject secondPlayerResponse = new JSONObject();
                 secondPlayerResponse.put("typeID", 2);
                 secondPlayerResponse.put("status", true);
                 secondPlayerResponse.put("opponentReady", true);
-                send(!isFirstPlayer, packet);
+                send(!isFirstPlayer, secondPlayerResponse);
             }
         } else {
             JSONObject firstPlayerResponse = new JSONObject();
@@ -119,7 +130,7 @@ public class GameProtocol {
             firstPlayerResponse.put("errorMessage",
                     "This is not a valid placement!"); //TODO should come from GameController
 
-            send(isFirstPlayer, packet);
+            send(isFirstPlayer, firstPlayerResponse);
         }
         return true;
     }

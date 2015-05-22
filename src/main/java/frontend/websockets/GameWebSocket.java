@@ -66,7 +66,7 @@ public class GameWebSocket {
     public void onMessage(String data) {
         System.out.print("onMessage");
         if (gameStarted) {
-            System.out.println(data); // debug purposes
+            System.out.print(data); // debug purposes
             protocol.process(isFirstPlayer, data);
         }
     }

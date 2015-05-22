@@ -1,5 +1,6 @@
 package base;
 
+import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserDataSet;
 import org.junit.*;
@@ -13,7 +14,7 @@ public class AccountServiceTest
     @Before
     public void setUp()
     {
-        accountService = AccountServiceImpl.getInstance();
+        accountService = new AccountServiceImpl();
     }
 
     @After

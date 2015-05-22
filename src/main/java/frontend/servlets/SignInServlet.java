@@ -1,10 +1,8 @@
 package frontend.servlets;
 
-import base.AccountService;
-import frontend.AccountService.AccountServiceImpl;
+import base.AccountService.AccountService;
 import org.json.simple.JSONObject;
 import frontend.AccountService.UserDataSet;
-import utils.PageGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

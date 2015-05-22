@@ -27,6 +27,9 @@ define([
         onMessage: function (msg) {
             var data = JSON.parse(msg.data);
             console.info(msg.data);
+            if (data.typeID == 0) 
+                localStorage['youStart'] = data.youStart;
+            if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!")
             // var data = JSON.parse(msg.data);
             // alert("GEET");
             // console.info(data);
@@ -39,11 +42,11 @@ define([
         sendMessage: function (data) {
             var sendObj = {
                 typeID : 1, // 1=pieces init
-                element0 : [18, 21, 28],
-                element1 : [17, 24, 31],
-                element2 : [19, 22, 23],
-                element3 : [20, 25, 27],
-                element4 : [26, 29, 30],
+                element0 : data[0].place,
+                element1 : data[1].place,
+                element2 : data[2].place,
+                element3 : data[3].place,
+                element4 : data[4].place,
                 statusOK : true,
             };
             this.connection.send(JSON.stringify(sendObj));

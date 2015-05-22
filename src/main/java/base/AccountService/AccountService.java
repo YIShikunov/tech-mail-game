@@ -1,4 +1,4 @@
-package base;
+package base.AccountService;
 
 import frontend.AccountService.UserDataSet;
 import org.json.simple.JSONObject;

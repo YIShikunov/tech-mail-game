@@ -154,8 +154,9 @@ define([
 
                         this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
                         this.elements[this.index].count--;
-                        // for opponent this.field.inv[index]
-                        this.elements[this.index].place.push(index);
+                        idField = index+1;
+                        if (localStorage['youStart'] == "true") idField = this.field.inv[index]+1;
+                        this.elements[this.index].place.push(idField);
                         this.field.map[index] = this.index;
 
                         if (this.elements[this.index].count == 0) {
@@ -173,10 +174,9 @@ define([
                                 }
                             if (z==5) {
                                 this.state = "game";
-                                alert("SEND TO SERVER");
                                 for (k=0; k<this.elements.length; k++) 
                                     console.info(this.elements[k].place.sort());
-                                this.socket.sendMessage(0);
+                                this.socket.sendMessage(this.elements);
                             }
                             
                         }

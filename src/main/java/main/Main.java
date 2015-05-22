@@ -3,7 +3,7 @@ package main;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourceStatus;
 import ResourceLoader.ResourcesService;
-import base.AccountService;
+import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.GameSessionManager;
@@ -40,7 +40,7 @@ public class Main {
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountService accountService = AccountServiceImpl.getInstance();
+        AccountService accountService = new AccountServiceImpl();
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
