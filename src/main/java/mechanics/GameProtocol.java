@@ -51,7 +51,13 @@ public class GameProtocol {
             System.out.print(e.toString());
             return false;
         }
-        if (!packet.containsKey("typeID") || !(packet.get("typeID") instanceof Integer)){
+        if (!packet.containsKey("typeID")){
+            try {
+                Integer a = (Integer) packet.get("typeID");
+            } catch (ClassCastException e) {
+                System.out.print("TypeID is not int");
+                return false;
+            }
             System.out.print("No typeID specified!");
             return false;
         }
@@ -91,7 +97,7 @@ public class GameProtocol {
                 placement.put(fieldID, Element.value(4)); // TODO: collapse it
             }
         } catch (ClassCastException e) {
-            System.out.print("Calss cast excpetion!");
+            System.out.print("Class cast exception!");
             return false;
         }
         status = gameController.placePieces(isFirstPlayer, placement);
