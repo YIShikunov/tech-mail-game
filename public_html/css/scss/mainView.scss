@@ -1,0 +1,19 @@
+.gameView {
+	overflow: hidden;
+    text-align: center;
+}
+
+.title{
+    &_main {
+        font-size: 70px;
+        margin:80px auto 20px;
+        color: #00AA7F;
+        font-weight: bold;
+        text-shadow: 10px 5px 0px #000000;
+    }
+    &_sub {
+        font-size: 20px;
+        margin: 30px auto 30px;
+        color: #FFFFFF;
+    }
+}
