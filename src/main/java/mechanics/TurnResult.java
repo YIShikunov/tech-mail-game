@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class TurnResult
 {
-    public final ArrayList<Pair<Integer, Integer>> piecesMoved = new ArrayList<>();
-    public final ArrayList<Pair<Integer, Element>> piecesRevealed = new ArrayList<>();
+    public final ArrayList<ArrayList<Integer>> piecesMoved = new ArrayList<>();
+    public final ArrayList<ArrayList<Integer>> piecesRevealed = new ArrayList<>();
     public final ArrayList<Integer> piecesDestroyed = new ArrayList<>();
     public final ArrayList<Integer> piecesHidden = new ArrayList<>();
     public ArrayList<Integer> king1Status = null;
