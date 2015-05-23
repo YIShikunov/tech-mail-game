@@ -167,8 +167,8 @@ public class GameProtocol {
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
         TurnResult result;
         try {
-            Integer from = (Integer) packet.get("moveFrom");
-            Integer to = (Integer) packet.get("moveTo");
+            Integer from = (int) (long) packet.get("moveFrom");
+            Integer to = (int) (long) packet.get("moveTo");
             result = gameController.makeTurn(isFirstPlayer, from, to);
         } catch (ClassCastException e) {
             return false;
@@ -200,7 +200,7 @@ public class GameProtocol {
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
         boolean status;
         try {
-            Integer elementID = (Integer) packet.get("baseRecolor");
+            Integer elementID = (int) (long) packet.get("baseRecolor");
             status = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
@@ -228,7 +228,7 @@ public class GameProtocol {
     protected boolean receiveSwapKing(boolean isFirstPlayer, JSONObject packet) {
         boolean status;
         try {
-            Integer elementID = (Integer) packet.get("kingRecolor");
+            Integer elementID = (int) (long) packet.get("kingRecolor");
             status = gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;

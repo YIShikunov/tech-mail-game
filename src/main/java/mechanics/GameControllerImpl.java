@@ -95,8 +95,17 @@ public class GameControllerImpl implements GameController {
         Piece from = board.fields.get(fromID).getPiece();
         Piece to = board.fields.get(toID).getPiece();
 
-        Element fromKingPreviousElement = from.getElement();
-        Element toKingPreviousElement = to.getElement();
+        Element fromKingPreviousElement = Element.ERROR;
+        Element toKingPreviousElement = Element.ERROR;
+
+        if (from != null)
+        {
+            fromKingPreviousElement = from.getElement();
+        }
+        if (to != null)
+        {
+            toKingPreviousElement = to.getElement();
+        }
 
         Outcome outcome = board.attackPiece(fromID, toID);
         if (outcome != Outcome.ERROR) {

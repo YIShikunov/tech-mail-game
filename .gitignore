@@ -16,6 +16,8 @@ node_modules/
 #Compiled Templates
 public_html/js/tmpl
 target/
+.saas-cache/
+
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 # Directory-based project format:
