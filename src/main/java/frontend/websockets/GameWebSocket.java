@@ -66,14 +66,14 @@ public class GameWebSocket {
     public void onMessage(String data) {
         System.out.print("onMessage");
         if (gameStarted) {
-            System.out.print(data); // debug purposes
+            System.out.println(data); // debug purposes
             protocol.process(isFirstPlayer, data);
         }
     }
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-
+        System.out.println("SOCKET PANIC111!!!");
     }
 
 
