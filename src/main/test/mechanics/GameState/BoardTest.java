@@ -236,6 +236,7 @@ public class BoardTest {
         Assert.assertFalse(king1.hasElement(Element.WATER));
 
         fakeBoard.movePiece(king2, 2);
+        king2.setElement(Element.EARTH);
         Assert.assertEquals(fakeBoard.attackPiece(king2, king1), Outcome.WIN);
         Assert.assertTrue(king1.hasElement(Element.WOOD));
         Assert.assertFalse(king1.hasElement(Element.WATER));

@@ -48,6 +48,9 @@ public class GameWebSocket {
 
     public void send(JSONObject packet) {
         try {
+            System.out.println();
+            System.out.print("sending ");
+            System.out.print(isFirstPlayer);
             System.out.print(packet.toJSONString());
             session.getRemote().sendString(packet.toJSONString());
         } catch (Exception e) {
@@ -64,16 +67,19 @@ public class GameWebSocket {
 
     @OnWebSocketMessage
     public void onMessage(String data) {
-        System.out.print("onMessage");
+        System.out.println();
+        System.out.print("receiving ");
+        System.out.print(isFirstPlayer);
+        System.out.print(data);
         if (gameStarted) {
-            System.out.println(data); // debug purposes
+            System.out.print(data); // debug purposes
             protocol.process(isFirstPlayer, data);
         }
     }
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        System.out.println("SOCKET PANIC111!!!");
+        System.out.println(reason + " code: " + statusCode + " SOCKET PANIC111!!!");
     }
 
 
