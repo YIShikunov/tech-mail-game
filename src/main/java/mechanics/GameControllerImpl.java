@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import mechanics.GameState.*;
 
 import java.security.KeyException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameControllerImpl implements GameController {
@@ -46,7 +47,7 @@ public class GameControllerImpl implements GameController {
         return messages;
     }
 
-    private void flipTurn()
+    private synchronized void flipTurn()
     {
         if (state == WaitingFor.FIRST_TURN)
             state = WaitingFor.SECOND_TURN;
@@ -54,7 +55,7 @@ public class GameControllerImpl implements GameController {
             state = WaitingFor.FIRST_TURN;
     }
 
-    public boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
+    public synchronized boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
         if (state != WaitingFor.PLACEMENT) {
             getErrorMessage("NOT_PLACEMENT");
             return false;
@@ -88,7 +89,7 @@ public class GameControllerImpl implements GameController {
     }
 
 
-    private TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
+    private synchronized TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
     {
         TurnResult res = new TurnResult();
         Piece from = board.fields.get(fromID).getPiece();
@@ -110,10 +111,31 @@ public class GameControllerImpl implements GameController {
                 }
                 if (from.king || to.king)
                 {
-                    if (from.king)
+                    res.king1Status = getKingStatus(true);
+                    res.king2Status = getKingStatus(false);
+
+                    if (from.king && to.king)
                     {
-                        res.piecesRevealed.add(new Pair<>(fromID, fromKingPreviousElement));
-                        res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(toKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(fromKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+                    }
+                    else if (from.king)
+                    {
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(to.getElement().id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(fromKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+
                         switch (outcome)
                         {
                             case DESTRUCTION:
@@ -132,15 +154,24 @@ public class GameControllerImpl implements GameController {
                             case WIN:
                             {
                                 res.piecesDestroyed.add(toID);
-                                res.piecesMoved.add(new Pair<>(fromID, toID));
+                                tmp = new ArrayList<>();
+                                tmp.add(fromID);
+                                tmp.add(toID);
+                                res.piecesMoved.add(tmp);
                                 break;
                             }
                         }
                     }
-                    else if(to.king)
+                    else if (to.king)
                     {
-                        res.piecesRevealed.add(new Pair<>(toID, toKingPreviousElement));
-                        res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
+                        ArrayList<Integer> tmp = new ArrayList<>();
+                        tmp.add(toID);
+                        tmp.add(toKingPreviousElement.id);
+                        res.piecesRevealed.add(tmp);
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(from.getElement().id);
+                        res.piecesRevealed.add(tmp);
                         switch (outcome)
                         {
                             case DESTRUCTION:
@@ -167,8 +198,14 @@ public class GameControllerImpl implements GameController {
                 }
                 else
                 {
-                    res.piecesRevealed.add(new Pair<>(fromID, from.getElement()));
-                    res.piecesRevealed.add(new Pair<>(toID, to.getElement()));
+                    ArrayList<Integer> tmp = new ArrayList<>();
+                    tmp.add(toID);
+                    tmp.add(to.getElement().id);
+                    res.piecesRevealed.add(tmp);
+                    tmp = new ArrayList<>();
+                    tmp.add(fromID);
+                    tmp.add(from.getElement().id);
+                    res.piecesRevealed.add(tmp);
                     switch (outcome)
                     {
                         case DESTRUCTION:
@@ -184,7 +221,11 @@ public class GameControllerImpl implements GameController {
                         case WIN:
                         {
                             res.piecesDestroyed.add(toID);
-                            res.piecesMoved.add(new Pair<>(fromID, toID));
+
+                            tmp = new ArrayList<>();
+                            tmp.add(fromID);
+                            tmp.add(toID);
+                            res.piecesMoved.add(tmp);
                             break;
                         }
                         case LOSS:
@@ -206,7 +247,20 @@ public class GameControllerImpl implements GameController {
         return res;
     }
 
-    private TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
+    private synchronized ArrayList<Integer> getKingStatus(boolean isFirstPlayer)
+    {
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (Element i: Element.values())
+        {
+            if (i == Element.BLANK || i == Element.ERROR)
+                continue;
+            if (board.getKing(isFirstPlayer).hasElement(i))
+                ret.add(i.id);
+        }
+        return ret;
+    }
+
+    private synchronized TurnResult makeMove(boolean isFirstPlayer, int fromID, int toID)
     {
         TurnResult res = new TurnResult();
         if (board.movePiece(fromID, toID)) {
@@ -218,7 +272,10 @@ public class GameControllerImpl implements GameController {
                 promptTarget = toID;
                 res.recolor = true;
             }
-            res.piecesMoved.add(new Pair<>(fromID, toID));
+            ArrayList<Integer> tmp = new ArrayList<>();
+            tmp.add(fromID);
+            tmp.add(toID);
+            res.piecesMoved.add(tmp);
             flipTurn();
             res.status = true;
             return res;
@@ -229,7 +286,7 @@ public class GameControllerImpl implements GameController {
         }
     }
 
-    public TurnResult makeTurn(boolean isFirstPlayer, int fromID, int toID) {
+    public synchronized TurnResult makeTurn(boolean isFirstPlayer, int fromID, int toID) {
         TurnResult res = new TurnResult();
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
             res.errorMessage = getErrorMessage("NOT_YOUR_TURN");
@@ -256,7 +313,7 @@ public class GameControllerImpl implements GameController {
             return res;
     }
 
-    public boolean answerPrompt(boolean isFirstPlayer, Element element) {
+    public synchronized boolean answerPrompt(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE ||
                 !isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE) {
             getErrorMessage("NOT_YOUR_TURN");
@@ -280,18 +337,18 @@ public class GameControllerImpl implements GameController {
     }
 
 
-    public boolean concede(boolean isFirstPlayer) {
+    public synchronized boolean concede(boolean isFirstPlayer) {
        return false; //TODO: implement
     }
 
-    public boolean isWaitingForPrompt(boolean isFirstPlayer){
+    public synchronized boolean isWaitingForPrompt(boolean isFirstPlayer){
         if (isFirstPlayer)
             return state == WaitingFor.FIRST_ELEMENT_CHOICE;
         else
             return state == WaitingFor.SECOND_ELEMENT_CHOICE;
     }
 
-    public boolean changeKingElement(boolean isFirstPlayer, Element element) {
+    public synchronized boolean changeKingElement(boolean isFirstPlayer, Element element) {
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
             getErrorMessage("NOT_YOUR_TURN");
             return false;
@@ -310,11 +367,5 @@ public class GameControllerImpl implements GameController {
             return "I HEARD YOU LIKE ERRORS MESSAGES SO I PUT AN ERROR MESSAGE IN YOUR ERROR MESSAGE";
         }
         return response;
-    }
-
-    public String popErrorMessage() {
-        String result = this.errorMessage;
-        this.errorMessage = null;
-        return result;
     }
 }
