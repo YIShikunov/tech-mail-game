@@ -2,6 +2,7 @@ package mechanics;
 
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
+import javafx.util.Pair;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,6 +78,31 @@ public class GameProtocol {
     protected boolean firstPlayerReady = false;
     protected boolean secondPlayerReady = false;
 
+
+    protected boolean sendKingPongPackets(boolean isFirstPlayer, TurnResult result)
+    {
+        if (result.king1Status != null && result.king2Status != null)
+        {
+            JSONObject player1KingPacket = new JSONObject();
+            JSONObject player2KingPacket = new JSONObject();
+
+            player1KingPacket.put("typeID", 10);
+            player1KingPacket.put("statusOK", true);
+            player1KingPacket.put("isYourKing", isFirstPlayer);
+            player2KingPacket.put("typeID", 10);
+            player2KingPacket.put("statusOK", true);
+            player2KingPacket.put("isYourKing", !isFirstPlayer);
+
+            player1KingPacket.put("Elements", result.king1Status.toArray());
+            player2KingPacket.put("Elements", result.king2Status.toArray());
+            send(isFirstPlayer, player1KingPacket);
+            send(isFirstPlayer, player2KingPacket);
+            return true;
+        }
+        return false;
+    }
+
+
     protected boolean receivePlacement(boolean isFirstPlayer, JSONObject packet) {
         HashMap<Integer, Element> placement = new HashMap<>();
         boolean status;
@@ -111,21 +137,21 @@ public class GameProtocol {
 
             JSONObject firstPlayerResponse = new JSONObject();
             firstPlayerResponse.put("typeID", 2);
-            firstPlayerResponse.put("status", true);
+            firstPlayerResponse.put("statusOK", true);
             firstPlayerResponse.put("opponentReady", otherReady);
             send(isFirstPlayer, firstPlayerResponse);
 
             if (otherReady) {
                 JSONObject secondPlayerResponse = new JSONObject();
                 secondPlayerResponse.put("typeID", 2);
-                secondPlayerResponse.put("status", true);
+                secondPlayerResponse.put("statusOK", true);
                 secondPlayerResponse.put("opponentReady", true);
                 send(!isFirstPlayer, secondPlayerResponse);
             }
         } else {
             JSONObject firstPlayerResponse = new JSONObject();
             firstPlayerResponse.put("typeID", 2);
-            firstPlayerResponse.put("status", false);
+            firstPlayerResponse.put("statusOK", false);
             firstPlayerResponse.put("opponentReady", false);
             firstPlayerResponse.put("errorMessage",
                     "This is not a valid placement!"); //TODO should come from GameController
@@ -135,16 +161,16 @@ public class GameProtocol {
         return true;
     }
 
-    protected JSONObject stashedResult;
+    protected JSONObject stashedResponse;
+    protected TurnResult stashedResult;
 
     protected boolean receiveTurn(boolean isFirstPlayer, JSONObject packet) {
         TurnResult result;
         try {
-            Integer from = (int) (long) packet.get("moveFrom");
-            Integer to =  (int) (long) packet.get("moveTo");
+            Integer from = (Integer) packet.get("moveFrom");
+            Integer to = (Integer) packet.get("moveTo");
             result = gameController.makeTurn(isFirstPlayer, from, to);
         } catch (ClassCastException e) {
-            System.out.print("Class cast exception!");
             return false;
         }
 
@@ -154,9 +180,12 @@ public class GameProtocol {
             response.put("turn", turn);
             send(isFirstPlayer, response);
             if (result.recolor) {
-                stashedResult = response;
+                stashedResponse = response;
+                stashedResult = result;
             } else {
                 send(!isFirstPlayer, response);
+                sendKingPongPackets(!isFirstPlayer, result);
+                sendKingPongPackets(isFirstPlayer, result);
             }
         } else {
             JSONObject response = new JSONObject();
@@ -171,10 +200,9 @@ public class GameProtocol {
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
         boolean status;
         try {
-            Integer elementID = (int) (long) packet.get("baseRecolor");
+            Integer elementID = (Integer) packet.get("baseRecolor");
             status = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
-            System.out.print("Class cast exception!");
             return false;
         }
 
@@ -183,7 +211,9 @@ public class GameProtocol {
             response.put("statusOK", true);
             response.put("typeID", 6);
             send(isFirstPlayer, response);
-            send(!isFirstPlayer, stashedResult);
+            send(!isFirstPlayer, stashedResponse);
+            sendKingPongPackets(isFirstPlayer, stashedResult);
+            sendKingPongPackets(!isFirstPlayer, stashedResult);
             stashedResult = null;
         } else {
             JSONObject response = new JSONObject();
@@ -198,10 +228,9 @@ public class GameProtocol {
     protected boolean receiveSwapKing(boolean isFirstPlayer, JSONObject packet) {
         boolean status;
         try {
-            Integer elementID = (int) (long) packet.get("kingRecolor");
+            Integer elementID = (Integer) packet.get("kingRecolor");
             status = gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
-            System.out.print("Class cast exception!");
             return false;
         }
 
