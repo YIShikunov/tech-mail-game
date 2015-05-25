@@ -126,9 +126,10 @@ public class GameProtocol {
             System.out.print("Class cast exception!");
             return false;
         }
-        status = gameController.placePieces(isFirstPlayer, placement);
+        TurnResult result;
+        result = gameController.placePieces(isFirstPlayer, placement);
 
-        if (status) {
+        if (result.status) {
             if (isFirstPlayer)
                 firstPlayerReady = true;
             else
@@ -154,8 +155,7 @@ public class GameProtocol {
             firstPlayerResponse.put("statusOK", false);
             firstPlayerResponse.put("opponentReady", false);
             firstPlayerResponse.put("errorMessage",
-                    "This is not a valid placement!"); //TODO should come from GameController
-
+                    result.errorMessage);
             send(isFirstPlayer, firstPlayerResponse);
         }
         return true;
@@ -198,15 +198,15 @@ public class GameProtocol {
     }
 
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
-        boolean status;
+        TurnResult result;
         try {
             Integer elementID = (int) (long) packet.get("baseRecolor");
-            status = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
+            result = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
         }
 
-        if (status) {
+        if (result.status) {
             JSONObject response = new JSONObject();
             response.put("statusOK", true);
             response.put("typeID", 6);
@@ -219,22 +219,22 @@ public class GameProtocol {
             JSONObject response = new JSONObject();
             response.put("statusOK", false);
             response.put("typeID", 6);
-            response.put("errorMessage", "This is not a valid element!");
+            response.put("errorMessage", result.errorMessage);
             send(isFirstPlayer, response);
         }
         return true;
     }
 
     protected boolean receiveSwapKing(boolean isFirstPlayer, JSONObject packet) {
-        boolean status;
+        TurnResult result;
         try {
             Integer elementID = (int) (long) packet.get("kingRecolor");
-            status = gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
+            result = gameController.changeKingElement(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
         }
 
-        if (status) {
+        if (result.status) {
             JSONObject response = new JSONObject();
             response.put("statusOK", true);
             response.put("typeID", 8);
@@ -243,7 +243,7 @@ public class GameProtocol {
             JSONObject response = new JSONObject();
             response.put("statusOK", false);
             response.put("typeID", 8);
-            response.put("errorMessage", "This is not a valid element!");
+            response.put("errorMessage", result.errorMessage);
             send(isFirstPlayer, response);
         }
         return true;
