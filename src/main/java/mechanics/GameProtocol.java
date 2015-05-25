@@ -200,7 +200,7 @@ public class GameProtocol {
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
         boolean status;
         try {
-            Integer elementID = (Integer) packet.get("baseRecolor");
+            Integer elementID = (int) (long) packet.get("baseRecolor");
             status = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
