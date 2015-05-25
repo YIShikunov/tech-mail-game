@@ -352,6 +352,7 @@ public class GameControllerImpl implements GameController {
         {
             result.status = false;
             result.errorMessage = getErrorMessage("WRONG_ELEMENT");
+            return result;
         }
         result.status = true;
         return result;
