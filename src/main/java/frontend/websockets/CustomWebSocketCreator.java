@@ -1,28 +1,28 @@
 package frontend.websockets;
 
-import base.AccountService.AccountService;
+import frontend.AccountService.AccountService;
+import mechanics.GameMechanics;
+import frontend.websockets.WebSocketService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 
-import java.sql.SQLException;
-
 public class CustomWebSocketCreator implements WebSocketCreator {
-    private AccountService accountService;
+    private AccountService authService;
+    private GameMechanics gameMechanics;
+    private WebSocketService webSocketService;
 
-    public CustomWebSocketCreator(AccountService authService) {
-        this.accountService = authService;
+    public CustomWebSocketCreator(GameMechanics gameMechanics,
+                                  WebSocketService webSocketService) {
+        this.gameMechanics = gameMechanics;
+        this.webSocketService = webSocketService;
     }
 
     @Override
     public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
         String sessionId = req.getHttpServletRequest().getSession().getId();
-        String name;
-        try {
-            name = accountService.getUsernameBySession(sessionId);
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-        return new GameWebSocket(name);
+        String name = sessionId;
+        System.out.println("Open websocket for "+sessionId);
+        return new GameWebSocket(name, gameMechanics, webSocketService);
     }
 }

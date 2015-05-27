@@ -1,12 +1,12 @@
 package main;
 
 import ResourceLoader.GSResources;
-import ResourceLoader.ResourceStatus;
-import ResourceLoader.ResourcesService;
-import base.AccountService.AccountService;
-import frontend.AccountService.AccountServiceImpl;
+import ResourceLoader.resourcesService;
+import frontend.AccountService.AccountService;
+import frontend.AccountService.UserProfile;
 import frontend.servlets.*;
-import frontend.websockets.GameSessionManager;
+import frontend.websockets.WebSocketService;
+import mechanics.GameMechanics;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -14,43 +14,35 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import java.util.ArrayList;
-
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        ArrayList<GSResources> serverSettings = ResourcesService.getInstance().getResources("settings.xml").getContentByName("server");
+        GSResources serverSettings = resourcesService.getInstance().getResources("settings");
         String portString = "8080";
-        if (serverSettings.size() < 1)
+        if (serverSettings.getSetting("__status__").equals("OK"))
         {
-            System.out.println("Server Settings not found");
-            System.exit(1);
-        }
-        GSResources serverSetting = serverSettings.get(0);
-        if (serverSetting.getStatus() == ResourceStatus.OK)
-        {
-            portString = serverSetting.getSetting("port");
+            portString = serverSettings.getSetting("port");
         }
         else
         {
-            System.out.println(serverSetting.getStatusText());
+            System.out.println(serverSettings.getSetting("__status__"));
         }
-
+        /*if (args.length != 1) {
+            System.out.append("Use port as the first argument");
+            System.exit(1);
+        }
+        String portString = args[0];*/
         int port = Integer.valueOf(portString);
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountService accountService = new AccountServiceImpl();
+
+        WebSocketService webSocketService = new WebSocketService();
+        GameMechanics gameMechanics = new GameMechanics(webSocketService);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService)), "/gameplay");
-        context.addServlet(new ServletHolder(new FrontendServlet(accountService, portString)), "/game");
-        context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
-        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
-        context.addServlet(new ServletHolder(new SignOutServlet(accountService)), "/api/v1/auth/signout");
-        context.addServlet(new ServletHolder(new ScoreboardServlet(accountService)), "/scoreboard");
-        context.addServlet(new ServletHolder(new AdminPageServlet(accountService)), AdminPageServlet.adminPageURL);
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(gameMechanics, webSocketService)), "/gameplay");
 
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);
@@ -61,7 +53,6 @@ public class Main {
 
         server.setHandler(handlers);
         server.start();
-        (new Thread(GameSessionManager.getInstance())).run();
         server.join();
     }
 }

@@ -1,129 +1,58 @@
-.game__field {
-  height: 550px; }
-
-.gameView {
-  overflow: hidden;
-  text-align: center; }
-
-.title_main {
-  font-size: 70px;
-  margin: 80px auto 20px;
-  color: #00AA7F;
-  font-weight: bold;
-  text-shadow: 10px 5px 0px #000000; }
-.title_sub {
-  font-size: 20px;
-  margin: 30px auto 30px;
-  color: #FFFFFF; }
-
-.score__table {
-  margin: 20px auto 20px;
-  padding: 20px;
-  width: 400px;
-  border: 5px solid #00AA7F;
-  border-radius: 20px;
-  background: #004488;
-  font-family: Verdana;
-  font-size: 21px;
-  outline: medium none; }
-  .score__table__tr {
-    background: #FFFFFF; }
-    .score__table__tr:first-child {
-      color: #FFFFFF;
-      background: #22BB7F; }
-  .score__table__td {
-    border-radius: 5px; }
-    .score__table__td_name {
-      width: 70%; }
-    .score__table__td_score {
-      width: 30%; }
-
-.form {
-  width: 900px;
-  margin: 0px auto;
-  text-align: center; }
-  .form_signup {
-    width: 400px;
-    padding: 10px;
-    margin: 0 auto;
-    border: 5px solid #00AA7F;
-    border-radius: 20px;
-    background: #00AA66;
-    float: left;
-    display: block;
-    overflow: hidden;
-    height: 250px; }
-  .form_signin {
-    display: block;
-    overflow: hidden;
-    width: 400px;
-    padding: 10px;
-    margin: 0 auto;
-    border: 5px solid #00AA7F;
-    background: #0066AA;
-    border-radius: 20px;
-    height: 250px;
-    float: none; }
-
-.line {
-  overflow: auto; }
-  .line_input {
-    width: 280px;
-    height: 30px;
-    border: 1px solid #00AA00;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    padding: 0px 5px;
-    font-family: "robotol",Helvetica,Arial; }
-  .line_label {
-    float: left;
-    color: #FFFFFF;
-    display: inline-block;
-    width: 60px;
-    margin-left: 60px; }
-
-.preloader {
-  position: absolute;
-  background: url(../images/preloader.gif) no-repeat;
-  width: 66px;
-  height: 66px;
-  top: 40%;
-  left: 50%;
-  z-index: 999; }
-
 html, body {
-  width: 100%;
-  height: 100%;
-  background: url(../images/graphics.jpg);
-  margin: 0;
-  padding: 0;
-  font-family: Verdana;
-  background-color: #020b15; }
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+    background: black;
+    background: url('../images/wall.jpg') repeat;
+}
+
+.menu {
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin-top: 100px;
+}
 
 .btn {
-  display: block;
-  width: 300px;
-  margin: 10px auto 0px;
-  color: #FFFFFF;
-  border: 10px solid #000000;
-  border-radius: 10px;
-  padding: 10px 0px;
-  text-decoration: none;
-  font-size: 21px;
-  cursor: pointer;
-  text-shadow: 1px 1px 0px #000; }
-  .btn_red {
-    background: #CF000F; }
-  .btn_green {
-    background: #00CC00;
-    color: #000000;
-    text-shadow: 0px 0px; }
-  .btn_yellow {
-    background: #993300; }
-  .btn_auth {
-    width: 250px;
-    border: 3px solid #000000;
-    text-shadow: 0px 0px; }
+    display: block;
+    width: 300px;
+    margin: 10px auto 0px;
+    color: #FFFFFF;
+    border: 10px solid #000000;
+    border-radius: 10px;
+    padding: 10px 0px;
+    text-decoration: none;
+    font-size: 21px;
+    cursor: pointer;
+}
 
-/*# sourceMappingURL=main.css.map */
+.btn_red {
+    background: #CF000F; 
+}
+
+.btn_green {
+    background: #009900;
+    color: #000000;
+}
+
+a {
+    font-family: "robotol",Helvetica,Arial;
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: auto;
+}
+
+#field {
+    border: 10px solid gray;
+    background: url('../images/wall.jpg') repeat;
+    margin: 0px auto;
+    display: block;
+}
+#graph {
+    border: 10px solid gray;
+    background: #EEE;
+    margin: 0px auto;
+    display: block;
+}

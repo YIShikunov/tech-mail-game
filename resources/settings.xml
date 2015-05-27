@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-    <server port="8080">
-    </server>
+    <port>8080</port>
 </settings>
