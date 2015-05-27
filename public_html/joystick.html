@@ -12,17 +12,19 @@
         <div><a onclick="sendMessage(1,'вниз')">Вниз</a></div>
         <div><a onclick="sendMessage(1,'влево')">Влево</a></div>
         <div><a onclick="sendMessage(1,'вправо')">Вправо</a></div>
+        <span id="value"></span>
         <script type="text/javascript" src="js/joystick.js"></script>
     </body>
 
 <script>
 window.addEventListener('deviceorientation', function(event) {
-    alpha = Math.round(event.alpha).toString(16);
-    beta = Math.round(event.beta).toString(16);
-    gamma = Math.round(event.gamma).toString(16);
+    alpha = Math.round((event.alpha+180)/360*255);
+    beta = Math.round((event.beta+180)/360*255);
+    gamma = Math.round((event.gamma+180)/360*255);
     // console.log(Math.round(event.alpha)+180, Math.round(event.beta)+180, Math.round(event.gamma)+180);
-    console.log("#"+alpha+beta+gamma);
-    document.body.style.background = "rgb("+alpha+","+beta+","+gamma+")";
+    color = "rgb("+alpha+","+beta+","+gamma+")";
+    document.getElementById("value").innerHTML = color;
+    document.body.style.background = color;
 });
 </script>
 
