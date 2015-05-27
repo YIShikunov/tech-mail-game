@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public enum Element {
     FIRE(0),METAL(1),WOOD(2),EARTH(3),WATER(4),ERROR(-1),BLANK(-2);
 
-    private final int id;
+    public final int id;
 
     Element(int id){
         this.id = id;
