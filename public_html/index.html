@@ -7,10 +7,12 @@
         <link rel="shortcut icon" href="images/icon.png">
     </head>
     <body>
+        <div class="preloader"></div>
         <div class="gameView"></div>
         <script type="text/javascript" src="js/build.min.js"></script>
         <script>require(['main'], function(){
             console.log("%cКоманда TETRAMINO приветсвует ВАС!!!", "color:white; background:black; font-size: 10pt");
+            $('.preloader').hide();
         });
 </script>
     </body>
