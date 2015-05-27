@@ -55,15 +55,18 @@ public class GameControllerImpl implements GameController {
             state = WaitingFor.FIRST_TURN;
     }
 
-    public synchronized boolean placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
+    public synchronized TurnResult placePieces(boolean isFirstPlayer, HashMap<Integer, Element> placement) {
+        TurnResult result = new TurnResult();
         if (state != WaitingFor.PLACEMENT) {
-            getErrorMessage("NOT_PLACEMENT");
-            return false;
+            result.status = false;
+            result.errorMessage = getErrorMessage("NOT_PLACEMENT");
+            return result;
         }
         for (int fieldID : placement.keySet())
             if (!board.doesOwn(isFirstPlayer, fieldID)) {
-                getErrorMessage("DO_NOT_OWN");
-                return false;
+                result.status = false;
+                result.errorMessage = getErrorMessage("DO_NOT_OWN");
+                return result;
             }
 
         HashMap<Element, Integer> counts = new HashMap<>();
@@ -76,8 +79,9 @@ public class GameControllerImpl implements GameController {
             counts.put(element, counts.get(element)+1);
         for (int count : counts.values())
             if (count != 3) {
-                getErrorMessage("WRONG_PLACEMENT");
-                return false;
+                result.status = false;
+                result.errorMessage = getErrorMessage("WRONG_PLACEMENT");
+                return result;
             }
 
 
@@ -85,7 +89,8 @@ public class GameControllerImpl implements GameController {
         if (board.allSet()) {
             state = WaitingFor.FIRST_TURN;
         }
-        return true;
+        result.status = true;
+        return result;
     }
 
 
@@ -322,16 +327,19 @@ public class GameControllerImpl implements GameController {
             return res;
     }
 
-    public synchronized boolean answerPrompt(boolean isFirstPlayer, Element element) {
+    public synchronized TurnResult answerPrompt(boolean isFirstPlayer, Element element) {
+        TurnResult result = new TurnResult();
         if (isFirstPlayer && state != WaitingFor.FIRST_ELEMENT_CHOICE ||
                 !isFirstPlayer && state != WaitingFor.SECOND_ELEMENT_CHOICE) {
-            getErrorMessage("NOT_YOUR_TURN");
-            return false;
+            result.errorMessage = getErrorMessage("NOT_YOUR_TURN");
+            result.status = false;
+            return result;
         }
 
         if (!board.doesOwn(isFirstPlayer, promptTarget)){
-            getErrorMessage("DO_NOT_OWN");
-            return false;
+            result.errorMessage = getErrorMessage("DO_NOT_OWN");
+            result.status = false;
+            return result;
         }
 
         if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
@@ -341,13 +349,18 @@ public class GameControllerImpl implements GameController {
 
         Boolean success = board.changeElement(promptTarget, element);
         if (!success)
-            getErrorMessage("WRONG_ELEMENT");
-        return success;
+        {
+            result.status = false;
+            result.errorMessage = getErrorMessage("WRONG_ELEMENT");
+            return result;
+        }
+        result.status = true;
+        return result;
     }
 
 
-    public synchronized boolean concede(boolean isFirstPlayer) {
-       return false; //TODO: implement
+    public synchronized TurnResult concede(boolean isFirstPlayer) {
+       return null; //TODO: implement
     }
 
     public synchronized boolean isWaitingForPrompt(boolean isFirstPlayer){
@@ -357,16 +370,22 @@ public class GameControllerImpl implements GameController {
             return state == WaitingFor.SECOND_ELEMENT_CHOICE;
     }
 
-    public synchronized boolean changeKingElement(boolean isFirstPlayer, Element element) {
+    public synchronized TurnResult changeKingElement(boolean isFirstPlayer, Element element) {
+        TurnResult result = new TurnResult();
         if (isFirstPlayer && state != WaitingFor.FIRST_TURN || !isFirstPlayer && state != WaitingFor.SECOND_TURN) {
-            getErrorMessage("NOT_YOUR_TURN");
-            return false;
+            result.errorMessage = getErrorMessage("NOT_YOUR_TURN");
+            result.status = false;
+            return result;
         }
 
         Boolean success = board.changeKingElement(isFirstPlayer, element);
         if (!success)
-            getErrorMessage("WRONG_ELEMENT");
-        return success;
+        {
+            result.errorMessage = getErrorMessage("WRONG_ELEMENT");
+            result.status = false;
+        }
+        result.status = true;
+        return result;
     }
 
     private String getErrorMessage(String id) {
