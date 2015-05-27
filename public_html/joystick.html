@@ -4,6 +4,7 @@
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <title>Canvas - Line</title>
+        <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,minimum-scale=1">
         <link rel="stylesheet" href="/css/main.css"/>
     </head>
     <body>
@@ -13,4 +14,16 @@
         <div><a onclick="sendMessage(1,'вправо')">Вправо</a></div>
         <script type="text/javascript" src="js/joystick.js"></script>
     </body>
+
+<script>
+window.addEventListener('deviceorientation', function(event) {
+    alpha = Math.round(event.alpha).toString(16);
+    beta = Math.round(event.beta).toString(16);
+    gamma = Math.round(event.gamma).toString(16);
+    // console.log(Math.round(event.alpha)+180, Math.round(event.beta)+180, Math.round(event.gamma)+180);
+    console.log("#"+alpha+beta+gamma);
+    document.body.style.background = "rgb("+alpha+","+beta+","+gamma+")";
+});
+</script>
+
 </html>
