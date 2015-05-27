@@ -1,7 +1,7 @@
 var ws;
 
 init = function () {
-    ws = new WebSocket("ws://localhost:8080/gameplay");
+    ws = new WebSocket('ws://' + location.host + '/gameplay');
 
     ws.onopen = function (event) {
         //
