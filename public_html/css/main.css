@@ -89,7 +89,8 @@ html, body {
   background: url(../images/graphics.jpg);
   margin: 0;
   padding: 0;
-  font-family: Marmelad; }
+  font-family: Verdana;
+  background-color: #020b15; }
 
 .btn {
   display: block;
