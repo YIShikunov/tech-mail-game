@@ -1,67 +1,67 @@
+// checking functianality
+if ('ontouchstart' in document.documentElement &&
+    'deviceorientation' in document.documentElement &&
+    'orientationchange' in document.documentElement) {
+    alert("Это джостик!!! Вы можете начать играть!!!");
+} else {
+    alert("Данное устройство не имеет необходимый функционал");
+    window.location.replace("/");
+}
+
+// web-socket 
 var ws;
 
 init = function () {
     ws = new WebSocket('ws://' + location.host + '/gameplay');
 
     ws.onopen = function (event) {
-        //
-        var data = {
-            type : 0,
-            obj : document.cookie.substring(11)
-        }
-        sendMessage(0,data);
+        sendMessage(0,null);
     }
-
-    ws.onmessage = function (event) {
-        //
-        console.log(event.data);
-    }
-
-    ws.onclose = function (event) {
-        //
-    }
-
 };
 
 sendMessage = function (type, action) {
     if (ws != null) {
-        if (type == 0) {
-            ws.send(JSON.stringify(action));
-        } else
-        if (type == 1) {
-            var data = {
-                type : 1,
-                move : action,
-                obj : document.cookie.substring(11)
-            }
-            ws.send(JSON.stringify(data));
+        obj = document.cookie.substring(11);
+        var data = null; 
+        switch (type) {
+            case 0:
+                data = {
+                    type : 0,
+                    obj : obj
+                }
+                break
+            case 1:
+                data = {
+                    type : 1,
+                    move : action,
+                    obj : obj
+                }
+                break
+            case 2:
+                data = {
+                    type : 2,
+                    color : color,
+                    obj : obj
+                }
+                break
+            case 3:
+                data = {
+                    type : 3,
+                    posX : action[0],
+                    posY : action[1],
+                    play : action[2],
+                    obj : obj
+                }
+                break
+            case 4:
+                data = {
+                    type : 4,
+                    land : action,
+                    obj : obj
+                }
+                break
         }
-        if (type == 2) {
-            var data = {
-                type : 2,
-                color : color,
-                obj : document.cookie.substring(11)
-            }
-            ws.send(JSON.stringify(data));
-        }
-        if (type == 3) {
-            var data = {
-                type : 3,
-                posX : action[0],
-                posY : action[1],
-                play : action[2],
-                obj : document.cookie.substring(11)
-            }
-            ws.send(JSON.stringify(data));
-        }
-        if (type == 4) {
-            var data = {
-                type : 4,
-                land : action,
-                obj : document.cookie.substring(11)
-            }
-            ws.send(JSON.stringify(data));
-        }
+        ws.send(JSON.stringify(data));
     }
 }
 
@@ -79,6 +79,7 @@ var initColor = function(){
     context.lineJoin = "round"; 
     context.lineCap = "round";
 }
+initColor();
 
 var alpha=0, beta=0, gamma=0;
 
@@ -143,10 +144,4 @@ var orientationchange = function () {
 }
 
 window.addEventListener('orientationchange', orientationchange);
-initColor();
 
-if ('ontouchstart' in document.documentElement) {
-    alert("YES!!!");
-} else {
-    alert("NO!!!");
-}

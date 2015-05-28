@@ -4,7 +4,6 @@ init = function () {
     ws = new WebSocket('ws://' + location.host + '/gameplay');
 
     ws.onopen = function (event) {
-        //
         var data = {
             type : 0,
             obj : document.cookie.substring(11)
