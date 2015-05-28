@@ -1,7 +1,5 @@
 // checking functianality
-if ('ontouchstart' in document.documentElement &&
-    'deviceorientation' in document.documentElement &&
-    'orientationchange' in document.documentElement) {
+if ('ontouchstart' in document.documentElement) {
     alert("Это джостик!!! Вы можете начать играть!!!");
 } else {
     alert("Данное устройство не имеет необходимый функционал");
