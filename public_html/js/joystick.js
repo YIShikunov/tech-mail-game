@@ -137,10 +137,16 @@ var orientationchange = function () {
     } else {
         sendMessage(4, false);
         canvas.width = document.body.clientWidth;
-        canvas.height = document.body.clientHeight
+        canvas.height = document.body.clientHeight;
     }
     initColor();
 }
 
 window.addEventListener('orientationchange', orientationchange);
 initColor();
+
+if ('ontouchstart' in document.documentElement) {
+    alert("YES!!!");
+} else {
+    alert("NO!!!");
+}
