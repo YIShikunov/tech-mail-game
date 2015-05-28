@@ -137,8 +137,6 @@ public class GameWebSocket {
             gameMechanics.makeMove(packet.get("obj").toString(),packet.get("posX").toString(),
                     packet.get("posY").toString(), packet.get("play").toString());
         }
-        System.out.println(packet.toString());
-        //gameMechanics.makeTurn(name, data);
     }
 
     @OnWebSocketClose

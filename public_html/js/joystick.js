@@ -116,3 +116,10 @@ var onPaint = function(event){
     }
 }
 
+window.addEventListener('orientationchange',function () {
+    if (window.screen.orientation%180===0) {
+        alert(portrait);
+    } else {
+        alert(landscape);
+    }
+});

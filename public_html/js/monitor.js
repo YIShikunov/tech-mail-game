@@ -27,7 +27,10 @@ init = function () {
                 arc.dx = obj.move[0]*5;
                 arc.dy = obj.move[1]*5;
                 play=true;
+                clear_graph();
                 action();
+            } else {
+                play=false;
             }
         }
     }
@@ -65,6 +68,8 @@ var arc = {
     dx: 1,
     dy: -5
 };
+
+var landscape = true;
 
 var thumbImg = document.createElement('img');
 thumbImg.src = 'images/ball.png';
@@ -126,7 +131,7 @@ function in_bubble(x,y) {
 }
 
 function action() {
-    anime = requestAnimationFrame(action);
+    var anime = requestAnimationFrame(action);
     if (!drag && play) {
         if ( arc.y + arc.radius > height ) {   //BOTTOM
             arc.y = height - arc.radius;
@@ -144,15 +149,30 @@ function action() {
             arc.dy = -arc.dy;
             console.log("TOP");
         } else if (arc.x + arc.radius > width ) {  //RIGHT
+            arc.dx *= springX;
             arc.x = width - arc.radius;
             arc.dx = -arc.dx;
             console.log("RIGHT");
-        } else if ( arc.x - arc.radius < 0) {     //LEFT  
+        } else if ( arc.x - arc.radius < 0) {     //LEFT
+            arc.dx *= springX; 
             arc.x = arc.radius;
             arc.dx = -arc.dx;
-            console.log("LEFT");
+            if (!landscape) arc.dy *= springY;
+
+            // console.log("LEFT");
+            delta = Math.round((arc.dx+arc.dy)*5);
+            console.log(delta, arc.x - arc.radius, "+" );
+            if ( (delta == 0 || delta == -1) && arc.x - arc.radius == 0) {
+                console.log("stop");
+                play = false;
+            }
         } else {
-            arc.dy += speed;
+            if (landscape) {
+                arc.dy += speed;
+            } else {
+                arc.dx -= speed;
+            }
+
             arc.x += arc.dx;
             arc.y += arc.dy;
             // console.log("play");
@@ -192,33 +212,42 @@ window.addEventListener("load", function load() {
             dragY = y-arc.y;
             drag = true;
         }
+        document.body.addEventListener("mousemove", onPaint, false);
     });
 
-    document.body.addEventListener("mousemove", function(e) {
-        if (drag) {
-            arc.x = e.pageX - dragX - (innerWidth-width)/2;
-            arc.y = e.pageY - dragY;
-            draw_bubble();
-            posX[1] = posX[0];
-            posX[0] = e.pageX;
-            posY[1] = posY[0];
-            posY[0] = e.pageX;
-        }
-    });
+    var onPaint = function(e){
+        arc.x = e.pageX - dragX - (innerWidth-width)/2;
+        arc.y = e.pageY - dragY;
+        draw_bubble();
+        posX[1] = posX[0];
+        posX[0] = e.pageX;
+        posY[1] = posY[0];
+        posY[0] = e.pageX;
+    };
 
     document.body.addEventListener("mouseup", function(e) {
-        if (drag) {
-            clear_graph();
-            arc.dx=posX[0]-posX[1];
-            arc.dy=posY[0]-posY[1];
-            drag=false;
-            play=true;
-            action();
-        }
+        document.body.removeEventListener('mousemove', onPaint, false);
+        clear_graph();
+        arc.dx=posX[0]-posX[1];
+        arc.dy=posY[0]-posY[1];
+        drag=false;
+        play=true;
+        action();
     });
 
 }, false);
 
 init();
+
+function changeLS() {
+    landscape = !landscape;
+    cur = springX;
+    springX = springY;
+    springY = cur;
+    play=true;
+    action();
+}
+
+// changeLS();
 
 
