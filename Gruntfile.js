@@ -52,7 +52,8 @@ module.exports = function (grunt) {
                 separator: ';\n',
                 src: [
                     'public_html/js/lib/almond.js',
-                    'public_html/js/buildReq.js'
+                    'public_html/js/buildReq.js',
+                    'public_html/js/start.js'
                 ],
                 dest: 'public_html/js/build.js'
             }
