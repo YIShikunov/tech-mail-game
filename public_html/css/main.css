@@ -3,8 +3,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-    background: black;
-    background: url('../images/wall.jpg') repeat;
+    background: white;
 }
 
 .menu {
@@ -55,4 +54,11 @@ a {
     background: #EEE;
     margin: 0px auto;
     display: block;
+}
+
+#joystick {
+    border: 0px;
+    margin: 0px auto;
+    display: block;
+    z-index: 999;
 }

@@ -16,27 +16,20 @@ init = function () {
         //
         var obj = JSON.parse(event.data);
         console.log(event.data);
-        if (obj.move) {
-            if (obj.move == "вверх") {
-                arc.dy= - Math.random()*(50);
-                arc.dx = 0;
-            }
-            if (obj.move == "вправо") {
-                arc.dy = - Math.random()*(20);
-                arc.dx = Math.random()*(5);
-            }
-            if (obj.move == "влево") {
-                arc.dy= - Math.random()*(20);
-                arc.dx = -Math.random()*(5);
-            }
-            clear_graph();
-            play=true;
-            action();
-        }
         if (obj.color) {
             document.getElementsByTagName("canvas")[0].style.background = obj.color;
         }
-
+        if (obj.move) {
+            arc.x = arc.x + obj.move[0];
+            arc.y = arc.y + obj.move[1];
+            draw_bubble();
+            if (obj.play) {
+                arc.dx = obj.move[0]*5;
+                arc.dy = obj.move[1]*5;
+                play=true;
+                action();
+            }
+        }
     }
 
     ws.onclose = function (event) {

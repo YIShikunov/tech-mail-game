@@ -23,8 +23,8 @@ public class WebSocketService {
         userSockets.get(user.getName()).showMyTurn(newFieldState);
     }
 
-    public void showMove(GameProfile user, String newFieldState) {
-        userSockets.get(user.getName()).showEnemyTurn(newFieldState);
+    public void showMove(GameProfile user,  String move1, String move2, String play) {
+        userSockets.get(user.getName()).showEnemyTurn(move1, move2, play);
     }
 
     public void notifyStart(GameProfile user, Boolean amIFirst) {

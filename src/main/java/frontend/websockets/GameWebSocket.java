@@ -12,6 +12,9 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by Artem on 3/29/2015.
  */
@@ -76,10 +79,19 @@ public class GameWebSocket {
         }
     }
 
-    public void showEnemyTurn(String newFieldState) {
+    public void showEnemyTurn( String move1, String move2, String play) {
         try {
             JSONObject jsonStart = new JSONObject();
-            jsonStart.put("move", newFieldState);
+            int x = Integer.valueOf(move1);
+            int y = Integer.valueOf(move2);
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(x); list.add(y);
+            jsonStart.put("move", list);
+            if (play.equals("true")) {
+                jsonStart.put("play", true);
+            } else {
+                jsonStart.put("play", false);
+            }
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -116,15 +128,16 @@ public class GameWebSocket {
         if (packet.get("type").toString().equals("0")) {
             gameMechanics.addUser(packet.get("obj").toString());
         } else
-        if (packet.get("type").toString().equals("1")) {
-            System.out.println("Move to " + packet.get("move"));
-            gameMechanics.makeMove(packet.get("obj").toString(),packet.get("move").toString());
-        }
         if (packet.get("type").toString().equals("2")) {
             System.out.println("Color " + packet.get("color"));
             gameMechanics.makeColor(packet.get("obj").toString(),packet.get("color").toString());
         }
-//        System.out.println(packet.toString());
+        if (packet.get("type").toString().equals("3")) {
+            System.out.println("posX:" + packet.get("posX")+";posY:"+packet.get("posY")+"; PLAY:"+packet.get("play"));
+            gameMechanics.makeMove(packet.get("obj").toString(),packet.get("posX").toString(),
+                    packet.get("posY").toString(), packet.get("play").toString());
+        }
+        System.out.println(packet.toString());
         //gameMechanics.makeTurn(name, data);
     }
 

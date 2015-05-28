@@ -32,12 +32,11 @@ public class GameMechanics {
         }
     }
 
-    public void makeMove(String userName, String action) {
+    public void makeMove(String userName, String move1, String move2, String play) {
         GameSession thisSession = nameToGame.get(userName);
         GameProfile thisUser = thisSession.getSelf(userName);
         GameProfile hisEnemy = thisSession.getEnemy(userName);
-        System.out.println("GOT "+action);
-        webSocketService.showMove(hisEnemy, action);
+        webSocketService.showMove(hisEnemy, move1, move2, play);
 
 //        if (action.equals("legal")) {
 //            String newFieldState;
