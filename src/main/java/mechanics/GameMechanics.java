@@ -37,46 +37,20 @@ public class GameMechanics {
         GameProfile thisUser = thisSession.getSelf(userName);
         GameProfile hisEnemy = thisSession.getEnemy(userName);
         webSocketService.showMove(hisEnemy, move1, move2, play);
-
-//        if (action.equals("legal")) {
-//            String newFieldState;
-//
-//            if (!thisSession.isHisTurn(thisUser)){
-//                webSocketService.showErrorMessage(thisUser, "It is not your turn!");
-//            } else {
-//                double resultOfComplicatedGameMechanics = Math.random();
-//                if (resultOfComplicatedGameMechanics < 0.1) {
-//                    newFieldState = "A piece was moved!";
-//                } else if (resultOfComplicatedGameMechanics < 0.5) {
-//                    newFieldState = "A piece was captured!";
-//                } else if (resultOfComplicatedGameMechanics < 0.8) {
-//                    newFieldState = "That was a Kasparov-level turn!";
-//                } else if (resultOfComplicatedGameMechanics < 0.9) {
-//                    newFieldState = "Ouch, a lethal was missed...";
-//                } else {
-//                    newFieldState = "That was a winning move! Hooray!";
-//                    finishGame(thisUser.getName());
-//                    return;
-//                }
-//                webSocketService.showMyTurn(thisUser, newFieldState);
-//                webSocketService.showEnemyTurn(hisEnemy, newFieldState);
-//                thisSession.flipTurn();
-//            }
-//        }
-//        if (action.equals("illegal")) {
-//            if (!thisSession.isHisTurn(thisUser))
-//                webSocketService.showErrorMessage(thisUser, "It is not your turn!");
-//            else {
-//                webSocketService.showErrorMessage(thisUser, "This is not a legal turn!");
-//            }
-//        }
     }
 
     public void makeColor(String userName, String action) {
         GameSession thisSession = nameToGame.get(userName);
-        GameProfile thisUser = thisSession.getSelf(userName);
         GameProfile hisEnemy = thisSession.getEnemy(userName);
-        webSocketService.showColor(hisEnemy, action);
+        if (hisEnemy != null)
+            webSocketService.showColor(hisEnemy, action);
+    }
+
+    public void makeOrien(String userName, String action) {
+        GameSession thisSession = nameToGame.get(userName);
+        GameProfile hisEnemy = thisSession.getEnemy(userName);
+        if (hisEnemy != null)
+            webSocketService.showOrien(hisEnemy, action);
     }
 
     public void startGame(String first) {

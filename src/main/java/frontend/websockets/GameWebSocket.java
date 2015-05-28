@@ -67,12 +67,14 @@ public class GameWebSocket {
         }
     }
 
-    public void showMyTurn(String newFieldState) {
+    public void showOrien(String land) {
         try {
             JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "turn");
-            jsonStart.put("state", newFieldState);
-            jsonStart.put("isMyTurn", false);
+            if (land.equals("true")) {
+                jsonStart.put("land", "yes");
+            } else {
+                jsonStart.put("land", "no");
+            }
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -136,6 +138,10 @@ public class GameWebSocket {
             System.out.println("posX:" + packet.get("posX")+";posY:"+packet.get("posY")+"; PLAY:"+packet.get("play"));
             gameMechanics.makeMove(packet.get("obj").toString(),packet.get("posX").toString(),
                     packet.get("posY").toString(), packet.get("play").toString());
+        }
+        if (packet.get("type").toString().equals("4")) {
+            System.out.println("Landscape:" + packet.get("land"));
+            gameMechanics.makeOrien(packet.get("obj").toString(), packet.get("land").toString());
         }
     }
 

@@ -19,8 +19,8 @@ public class WebSocketService {
         userSockets.get(user.getName()).showColor(message);
     }
 
-    public void showMyTurn(GameProfile user, String newFieldState) {
-        userSockets.get(user.getName()).showMyTurn(newFieldState);
+    public void showOrien(GameProfile user, String newFieldState) {
+        userSockets.get(user.getName()).showOrien(newFieldState);
     }
 
     public void showMove(GameProfile user,  String move1, String move2, String play) {

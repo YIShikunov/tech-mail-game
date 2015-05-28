@@ -53,6 +53,14 @@ sendMessage = function (type, action) {
         }
         ws.send(JSON.stringify(data));
     }
+    if (type == 4) {
+        var data = {
+            type : 4,
+            land : action,
+            obj : document.cookie.substring(11)
+        }
+        ws.send(JSON.stringify(data));
+    }
 }
 
 init();
@@ -118,9 +126,9 @@ var onPaint = function(event){
 
 var orientationchange = function () {
     if (window.orientation%180===0) {
-        alert(1);
+        sendMessage(4, true);
     } else {
-        alert(2);
+        sendMessage(4, false);
     }
 }
 

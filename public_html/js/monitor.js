@@ -33,6 +33,20 @@ init = function () {
                 play=false;
             }
         }
+        if (obj.land) {
+            if (obj.land == "yes") {
+                landscape = true;
+                springX = 0.9;
+                springY = 0.6;
+                
+            } else {
+                landscape = false;
+                springX = 0.6;
+                springY = 0.9;
+            }
+            play=true;
+            action();
+        }
     }
 
     ws.onclose = function (event) {
@@ -238,16 +252,4 @@ window.addEventListener("load", function load() {
 }, false);
 
 init();
-
-function changeLS() {
-    landscape = !landscape;
-    cur = springX;
-    springX = springY;
-    springY = cur;
-    play=true;
-    action();
-}
-
-// changeLS();
-
 
