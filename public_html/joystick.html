@@ -16,16 +16,4 @@
         <script type="text/javascript" src="js/joystick.js"></script>
     </body>
 
-<script>
-window.addEventListener('deviceorientation', function(event) {
-    alpha = Math.round((event.alpha+180)/360*255);
-    beta = Math.round((event.beta+180)/360*255);
-    gamma = Math.round((event.gamma+180)/360*255);
-    // console.log(Math.round(event.alpha)+180, Math.round(event.beta)+180, Math.round(event.gamma)+180);
-    color = "rgb("+alpha+","+beta+","+gamma+")";
-    document.getElementById("value").innerHTML = color;
-    document.body.style.background = color;
-});
-</script>
-
 </html>

@@ -33,6 +33,9 @@ init = function () {
             play=true;
             action();
         }
+        if (obj.color) {
+            document.getElementsByTagName("canvas")[0].style.background = obj.color;
+        }
 
     }
 

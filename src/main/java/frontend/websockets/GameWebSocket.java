@@ -44,10 +44,6 @@ public class GameWebSocket {
     public void start(GameProfile user, Boolean monitor) {
         try {
             JSONObject jsonStart = new JSONObject();
-//            jsonStart.put("status", "start");
-//            jsonStart.put("enemyName", user.getEnemy());
-//            jsonStart.put("amIFirst", amIFirst);
-//            System.out.print(jsonStart.toJSONString());
             if (monitor)
                 jsonStart.put("role", "monitor");
             else
@@ -58,11 +54,10 @@ public class GameWebSocket {
         }
     }
 
-    public void showErrorMessage(String message) {
+    public void showColor(String color) {
         try {
             JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "rejected");
-            jsonStart.put("message", message);
+            jsonStart.put("color", color);
             session.getRemote().sendString(jsonStart.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
@@ -124,6 +119,10 @@ public class GameWebSocket {
         if (packet.get("type").toString().equals("1")) {
             System.out.println("Move to " + packet.get("move"));
             gameMechanics.makeMove(packet.get("obj").toString(),packet.get("move").toString());
+        }
+        if (packet.get("type").toString().equals("2")) {
+            System.out.println("Color " + packet.get("color"));
+            gameMechanics.makeColor(packet.get("obj").toString(),packet.get("color").toString());
         }
 //        System.out.println(packet.toString());
         //gameMechanics.makeTurn(name, data);

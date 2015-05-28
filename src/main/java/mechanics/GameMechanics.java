@@ -73,6 +73,13 @@ public class GameMechanics {
 //        }
     }
 
+    public void makeColor(String userName, String action) {
+        GameSession thisSession = nameToGame.get(userName);
+        GameProfile thisUser = thisSession.getSelf(userName);
+        GameProfile hisEnemy = thisSession.getEnemy(userName);
+        webSocketService.showColor(hisEnemy, action);
+    }
+
     public void startGame(String first) {
         String second = waiting;
         GameSession gameSession = new GameSession(first, second);

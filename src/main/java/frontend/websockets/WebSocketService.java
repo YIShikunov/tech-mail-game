@@ -15,8 +15,8 @@ public class WebSocketService {
         userSockets.put(user.getName(), user);
     }
 
-    public void showErrorMessage(GameProfile user, String message) {
-        userSockets.get(user.getName()).showErrorMessage(message);
+    public void showColor(GameProfile user, String message) {
+        userSockets.get(user.getName()).showColor(message);
     }
 
     public void showMyTurn(GameProfile user, String newFieldState) {
