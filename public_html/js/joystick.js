@@ -24,42 +24,44 @@ init = function () {
 };
 
 sendMessage = function (type, action) {
-    if (type == 0) {
-        ws.send(JSON.stringify(action));
-    } else
-    if (type == 1) {
-        var data = {
-            type : 1,
-            move : action,
-            obj : document.cookie.substring(11)
+    if (ws != null) {
+        if (type == 0) {
+            ws.send(JSON.stringify(action));
+        } else
+        if (type == 1) {
+            var data = {
+                type : 1,
+                move : action,
+                obj : document.cookie.substring(11)
+            }
+            ws.send(JSON.stringify(data));
         }
-        ws.send(JSON.stringify(data));
-    }
-    if (type == 2) {
-        var data = {
-            type : 2,
-            color : color,
-            obj : document.cookie.substring(11)
+        if (type == 2) {
+            var data = {
+                type : 2,
+                color : color,
+                obj : document.cookie.substring(11)
+            }
+            ws.send(JSON.stringify(data));
         }
-        ws.send(JSON.stringify(data));
-    }
-    if (type == 3) {
-        var data = {
-            type : 3,
-            posX : action[0],
-            posY : action[1],
-            play : action[2],
-            obj : document.cookie.substring(11)
+        if (type == 3) {
+            var data = {
+                type : 3,
+                posX : action[0],
+                posY : action[1],
+                play : action[2],
+                obj : document.cookie.substring(11)
+            }
+            ws.send(JSON.stringify(data));
         }
-        ws.send(JSON.stringify(data));
-    }
-    if (type == 4) {
-        var data = {
-            type : 4,
-            land : action,
-            obj : document.cookie.substring(11)
+        if (type == 4) {
+            var data = {
+                type : 4,
+                land : action,
+                obj : document.cookie.substring(11)
+            }
+            ws.send(JSON.stringify(data));
         }
-        ws.send(JSON.stringify(data));
     }
 }
 
@@ -70,10 +72,13 @@ var canvas = document.getElementById("joystick");
 var context = canvas.getContext('2d');
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
-context.strokeStyle = "blue";
-context.lineWidth=10;
-context.lineJoin = "round"; 
-context.lineCap = "round"; 
+
+var initColor = function(){
+    context.strokeStyle = "blue";
+    context.lineWidth=10;
+    context.lineJoin = "round"; 
+    context.lineCap = "round";
+}
 
 var alpha=0, beta=0, gamma=0;
 
@@ -126,11 +131,16 @@ var onPaint = function(event){
 
 var orientationchange = function () {
     if (window.orientation%180===0) {
+        canvas.width = document.body.clientHeight;
+        canvas.height = document.body.clientWidth;
         sendMessage(4, true);
     } else {
         sendMessage(4, false);
+        canvas.width = document.body.clientWidth;
+        canvas.height = document.body.clientHeight
     }
+    initColor();
 }
 
 window.addEventListener('orientationchange', orientationchange);
-orientationchange();
+initColor();
