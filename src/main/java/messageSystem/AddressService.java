@@ -1,38 +1,37 @@
 package messageSystem;
 
-import base.AccountService.AccountService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import messageSystem.FakeProject.FakeAccountService.FakeAccountService;
+import messageSystem.FakeProject.FakeFrontend.FakeFrontend;
+import messageSystem.FakeProject.FakeGameMechanics.FakeGameMechanics;
 
 /**
  * Created by Artem on 5/28/2015.
  */
 
 public final class AddressService {
-    private Address frontEnd;
-    private List<Address> accountServiceList = new ArrayList<>();
+    private Address frontend;
+    private Address gameMechanics;
+    private Address accountService;
 
-    private AtomicInteger accountServiceCounter = new AtomicInteger();
-
-    /*public void registerFrontEnd(FrontEnd frontEnd) {
-        this.frontEnd = frontEnd.getAddress();
+    public void registerFrontEnd(FakeFrontend frontend) {
+        this.frontend = frontend.getAddress();
     }
 
-    public void registerAccountService(AccountService accountService) {
-        accountServiceList.add(accountService.getAddress());
-    }*/
+    public void registerAccountService(FakeAccountService accountService) {
+        this.accountService = accountService.getAddress();
+    }
+
+    public void registerGameMechanics(FakeGameMechanics gameMechanics) {
+        this.gameMechanics = gameMechanics.getAddress();
+    }
 
     public Address getFrontEndAddress() {
-        return frontEnd;
+        return frontend;
     }
-
-    public synchronized Address getAccountServiceAddress() {
-        int index = accountServiceCounter.getAndIncrement();
-        if (index >= accountServiceList.size()) {
-            index = 0;
-        }
-        return accountServiceList.get(index);
+    public Address getGameMechanicsAddress() {
+        return gameMechanics;
+    }
+    public Address getAccountServiceAddress() {
+        return accountService;
     }
 }

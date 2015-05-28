@@ -8,6 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.SynchronousQueue;
 
 public class DBService {
     private final SessionFactory sessionFactory;
@@ -71,7 +72,7 @@ public class DBService {
         return result;
     }
 
-    // can return null
+    /*// can return null
     public UserDataSet getAuthorisedUser(String username, String password) throws SQLException {
         Session session = null;
         UserDataSet result = null;
@@ -85,7 +86,7 @@ public class DBService {
                 session.close();
         }
         return result;
-    }
+    }*/
 
     public List<UserDataSet> getAllUsers() throws SQLException
     {
@@ -101,7 +102,6 @@ public class DBService {
         return result;
     }
 
-    // (!) unused, untested, untrusted
     public void deleteUser(UserDataSet user) throws SQLException {
         Session session = null;
         try {
