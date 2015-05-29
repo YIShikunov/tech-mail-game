@@ -3,6 +3,7 @@ package frontend.AccountService;
 import base.AccountService.AccountService;
 import messageSystem.Abonent;
 import messageSystem.Address;
+import messageSystem.MessageSystem;
 import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
 import org.json.simple.JSONObject;
@@ -15,10 +16,14 @@ import java.util.HashMap;
 public class AccountServiceImpl implements AccountService{
 
     private final Address address = new Address();
+    private final MessageSystem messageSystem;
     private final DBService DBService;
     private final HashMap<String, Long> activeSessions;
 
-    public AccountServiceImpl() {
+    public AccountServiceImpl(MessageSystem messageSystem) {
+        this.messageSystem = messageSystem;
+        messageSystem.addService(this);
+        messageSystem.getAddressService().registerAccountService(this);
         DBService = new DBService(SessionHelper.createSessionFactory());
         activeSessions = new HashMap<>();
     }

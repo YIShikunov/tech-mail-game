@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import mechanics.GameState.Element;
 import messageSystem.Abonent;
 import messageSystem.Address;
+import messageSystem.MessageSystem;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 public class GameProtocol implements Abonent, Runnable {
 
     private final Address address = new Address();
+    private final MessageSystem messageSystem;
     protected GameController gameController;
 
     private GameWebSocket firstPlayerSocket;
@@ -23,8 +25,10 @@ public class GameProtocol implements Abonent, Runnable {
 
     protected int turn;
 
-    public GameProtocol() {
-
+    public GameProtocol(MessageSystem messageSystem) {
+        this.messageSystem = messageSystem;
+        messageSystem.addService(this);
+        messageSystem.getAddressService().registerGameMechanics(this);
     }
 
     public boolean start(GameWebSocket first, GameWebSocket second) {
@@ -35,6 +39,7 @@ public class GameProtocol implements Abonent, Runnable {
         this.gameController.init();
         this.notifyStartGame(true, second.getName());
         this.notifyStartGame(false, first.getName());
+
         return true;
     }
 
