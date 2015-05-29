@@ -1,6 +1,8 @@
 package frontend.AccountService;
 
 import base.AccountService.AccountService;
+import messageSystem.Abonent;
+import messageSystem.Address;
 import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
 import org.json.simple.JSONObject;
@@ -10,8 +12,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService{
 
+    private final Address address = new Address();
     private final DBService DBService;
     private final HashMap<String, Long> activeSessions;
 
@@ -128,5 +131,23 @@ public class AccountServiceImpl implements AccountService {
             return scores;
         }
         return scores;
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            //TODO
+//            messageSystem.execForAbonent(this);
+//            try {
+//                Thread.sleep(ThreadSettings.SERVICE_SLEEP_TIME);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
     }
 }

@@ -1,12 +1,13 @@
 package base.AccountService;
 
 import frontend.AccountService.UserDataSet;
+import messageSystem.Abonent;
 import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface AccountService
+public interface AccountService extends Abonent, Runnable
 {
     public boolean addUser(String username, String email, String password);
     public UserDataSet getUser(long id) throws SQLException;

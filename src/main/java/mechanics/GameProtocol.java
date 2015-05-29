@@ -4,6 +4,8 @@ import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
 import javafx.util.Pair;
 import mechanics.GameState.Element;
+import messageSystem.Abonent;
+import messageSystem.Address;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,8 +13,9 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameProtocol {
+public class GameProtocol implements Abonent, Runnable {
 
+    private final Address address = new Address();
     protected GameController gameController;
 
     private GameWebSocket firstPlayerSocket;
@@ -291,5 +294,23 @@ public class GameProtocol {
         result.put("errorMessage", turnResult.errorMessage);
         result.put("battleResult", turnResult.battleResult);
         return result;
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            //TODO
+//            messageSystem.execForAbonent(this);
+//            try {
+//                Thread.sleep(ThreadSettings.SERVICE_SLEEP_TIME);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
     }
 }
