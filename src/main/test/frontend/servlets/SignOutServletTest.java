@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import utils.SessionHelper;
 
 public class SignOutServletTest
 {
@@ -16,6 +17,7 @@ public class SignOutServletTest
     @Before
     public void setUp()
     {
+        SessionHelper.enableTestingMode();
         accountService = new AccountServiceImpl();
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);

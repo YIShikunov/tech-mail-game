@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import utils.SessionHelper;
 
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ public class AdminPageServletTest {
     @Before
     public void setUp()
     {
+        SessionHelper.enableTestingMode();
         accountService =  new AccountServiceImpl();
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);
