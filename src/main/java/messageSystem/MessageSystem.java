@@ -2,7 +2,6 @@ package messageSystem;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -19,19 +18,19 @@ public final class MessageSystem {
         return addressService;
     }
 
-    public void addService(Abonent abonent) {
-        messages.put(abonent.getAddress(), new ConcurrentLinkedQueue<Message>());
+    public void addService(Recipient recipient) {
+        messages.put(recipient.getAddress(), new ConcurrentLinkedQueue<Message>());
     }
 
     public void sendMessage(Message message) {
         messages.get(message.getTo()).add(message);
     }
 
-    public void execForAbonent(Abonent abonent) {
-        ConcurrentLinkedQueue<Message> queue = messages.get(abonent.getAddress());
+    public void execForRecipient(Recipient recipient) {
+        ConcurrentLinkedQueue<Message> queue = messages.get(recipient.getAddress());
         while (!queue.isEmpty()) {
             Message message = queue.poll();
-            message.exec(abonent);
+            message.exec(recipient);
         }
     }
 }

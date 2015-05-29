@@ -18,7 +18,6 @@ public final class MessageRegisterUser extends MessageToAccountService {
 
     @Override
     protected void exec(FakeAccountService service) {
-        boolean result = service.registerUser(name, password);
-        // send a result message back or whatever
+        service.registerUser(name, password);
     }
 }

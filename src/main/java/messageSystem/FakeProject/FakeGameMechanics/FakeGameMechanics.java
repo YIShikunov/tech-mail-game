@@ -1,13 +1,10 @@
 package messageSystem.FakeProject.FakeGameMechanics;
 
-import messageSystem.Abonent;
+import messageSystem.Recipient;
 import messageSystem.Address;
 import messageSystem.MessageSystem;
 
-/**
- * Created by Artem on 5/28/2015.
- */
-public class FakeGameMechanics implements Abonent, Runnable {
+public class FakeGameMechanics implements Recipient, Runnable {
     private final Address address = new Address();
     private final MessageSystem messageSystem;
 
@@ -29,11 +26,11 @@ public class FakeGameMechanics implements Abonent, Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()){
-            messageSystem.execForAbonent(this);
+            messageSystem.execForRecipient(this);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                return;
             }
         }
     }

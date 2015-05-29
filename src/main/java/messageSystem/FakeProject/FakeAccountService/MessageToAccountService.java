@@ -1,6 +1,6 @@
 package messageSystem.FakeProject.FakeAccountService;
 
-import messageSystem.Abonent;
+import messageSystem.Recipient;
 import messageSystem.Address;
 import messageSystem.Message;
 
@@ -13,9 +13,9 @@ public abstract class MessageToAccountService extends Message {
     }
 
     @Override
-    public final void exec(Abonent abonent) {
-        if (abonent instanceof FakeAccountService) {
-            exec((FakeAccountService) abonent);
+    public final void exec(Recipient recipient) {
+        if (recipient instanceof FakeAccountService) {
+            exec((FakeAccountService) recipient);
         }
     }
 

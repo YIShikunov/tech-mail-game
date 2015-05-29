@@ -20,5 +20,5 @@ public abstract class Message {
         return to;
     }
 
-    public abstract void exec(Abonent abonent);
+    public abstract void exec(Recipient recipient);
 }

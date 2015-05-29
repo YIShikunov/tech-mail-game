@@ -3,6 +3,7 @@ package messageSystem;
 /**
  * Created by Artem on 5/28/2015.
  */
-public interface Abonent {
+public interface Recipient
+{
     Address getAddress();
 }

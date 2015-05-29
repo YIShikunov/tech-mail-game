@@ -1,20 +1,18 @@
 package messageSystem.FakeProject.FakeAccountService;
 
 import javafx.util.Pair;
-import messageSystem.Abonent;
+import messageSystem.Recipient;
 import messageSystem.Address;
 import messageSystem.MessageSystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-/**
- * Created by Artem on 5/28/2015.
- */
-public final class FakeAccountService implements Abonent, Runnable {
+public final class FakeAccountService extends Thread implements Recipient{
     private final Address address = new Address();
     private final MessageSystem messageSystem;
 
-    private final ArrayList<Pair<String, String>> users = new ArrayList<>();
+    protected final HashMap<String, String> users = new HashMap<>();
 
     public FakeAccountService(MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
@@ -34,17 +32,21 @@ public final class FakeAccountService implements Abonent, Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()){
-            messageSystem.execForAbonent(this);
+            messageSystem.execForRecipient(this);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                return;
             }
         }
     }
 
-    public boolean registerUser(String username, String password) {
-        users.add(new Pair<String, String>(username, password));
-        return true;
+    public void registerUser(String username, String password) {
+        users.put(username, password);
     }
+    public boolean verifyUser(String username, String password)
+    {
+        return users.getOrDefault(username, "") == password;
+    }
+    public String getPassword(String username) {return users.get(username);}
 }

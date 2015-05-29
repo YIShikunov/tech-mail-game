@@ -1,15 +1,14 @@
 package messageSystem.FakeProject.FakeFrontend;
 
-import messageSystem.Abonent;
+import messageSystem.Recipient;
 import messageSystem.Address;
 import messageSystem.MessageSystem;
 
-/**
- * Created by Artem on 5/28/2015.
- */
-public class FakeFrontend  implements Abonent, Runnable {
+public class FakeFrontend extends Thread implements Recipient {
     private final Address address = new Address();
     private final MessageSystem messageSystem;
+
+    private String authResult;
 
     public FakeFrontend(MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
@@ -26,14 +25,21 @@ public class FakeFrontend  implements Abonent, Runnable {
         return address;
     }
 
+    public void isAuthorized(boolean auth)
+    {
+        authResult = (auth ? "True" : "False");
+    }
+
+    public String getAuthResult() {return authResult;}
+
     @Override
     public void run() {
         while (!Thread.interrupted()){
-            messageSystem.execForAbonent(this);
+            messageSystem.execForRecipient(this);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                return;
             }
         }
     }
