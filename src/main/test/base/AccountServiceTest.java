@@ -3,6 +3,7 @@ package base;
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.AccountService.UserDataSet;
+import messageSystem.MessageSystem;
 import org.junit.*;
 
 import java.sql.SQLException;
@@ -10,11 +11,12 @@ import java.sql.SQLException;
 public class AccountServiceTest
 {
     private AccountService accountService;
+    private MessageSystem messageSystem;
 
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = new AccountServiceImpl(messageSystem);
     }
 
     @After

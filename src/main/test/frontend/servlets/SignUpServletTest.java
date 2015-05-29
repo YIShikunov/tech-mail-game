@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import messageSystem.MessageSystem;
 import org.junit.*;
 
 import java.sql.SQLException;
@@ -9,12 +10,13 @@ import java.sql.SQLException;
 public class SignUpServletTest
 {
     private AccountService accountService;
+    private MessageSystem messageSystem;
     SignUpServlet servlet;
 
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = new AccountServiceImpl(messageSystem);
         servlet = new SignUpServlet(accountService);
     }
 

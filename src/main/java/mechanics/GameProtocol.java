@@ -1,8 +1,8 @@
 package mechanics;
 
+import base.AccountService.AccountService;
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
-import javafx.util.Pair;
 import mechanics.GameState.Element;
 import messageSystem.Abonent;
 import messageSystem.Address;
@@ -23,9 +23,12 @@ public class GameProtocol implements Abonent, Runnable {
     private GameWebSocket firstPlayerSocket;
     private GameWebSocket secondPlayerSocket;
 
+    private AccountService accountService;
+
     protected int turn;
 
-    public GameProtocol(MessageSystem messageSystem) {
+    public GameProtocol(MessageSystem messageSystem, AccountService accountService) {
+        this.accountService = accountService;
         this.messageSystem = messageSystem;
         messageSystem.addService(this);
         messageSystem.getAddressService().registerGameMechanics(this);
@@ -39,6 +42,9 @@ public class GameProtocol implements Abonent, Runnable {
         this.gameController.init();
         this.notifyStartGame(true, second.getName());
         this.notifyStartGame(false, first.getName());
+
+        accountService.increaseScore(10);
+
 
         return true;
     }
@@ -299,6 +305,10 @@ public class GameProtocol implements Abonent, Runnable {
         result.put("errorMessage", turnResult.errorMessage);
         result.put("battleResult", turnResult.battleResult);
         return result;
+    }
+
+    public void setScore(int score) {
+        System.out.println("We got score:" + score);
     }
 
     @Override

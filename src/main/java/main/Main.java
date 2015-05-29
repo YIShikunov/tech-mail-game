@@ -7,6 +7,7 @@ import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.GameSessionManager;
+import messageSystem.MessageSystem;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -40,11 +41,13 @@ public class Main {
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
         Server server = new Server(port);
 
-        AccountService accountService = new AccountServiceImpl();
+        final MessageSystem messageSystem = new MessageSystem();
+
+        AccountService accountService = new AccountServiceImpl(messageSystem);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService)), "/gameplay");
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(accountService, messageSystem)), "/gameplay");
         context.addServlet(new ServletHolder(new FrontendServlet(accountService, portString)), "/game");
         context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/api/v1/auth/signin");
         context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/api/v1/auth/signup");
@@ -61,7 +64,7 @@ public class Main {
 
         server.setHandler(handlers);
         server.start();
-        (new Thread(GameSessionManager.getInstance())).run();
+        (new Thread(GameSessionManager.getInstance(messageSystem, accountService))).run();
         server.join();
     }
 }

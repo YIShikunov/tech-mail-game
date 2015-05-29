@@ -22,4 +22,5 @@ public interface AccountService extends Abonent, Runnable
     public void updateUser(UserDataSet user) throws SQLException;
     public boolean deleteUser(String username);
     public ArrayList<JSONObject> getScoreBoard();
+    public int increaseScore(int delta);
 }

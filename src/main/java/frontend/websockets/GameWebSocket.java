@@ -1,6 +1,8 @@
 package frontend.websockets;
 
+import base.AccountService.AccountService;
 import mechanics.GameProtocol;
+import messageSystem.MessageSystem;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -11,6 +13,9 @@ import org.json.simple.JSONObject;
 
 @WebSocket
 public class GameWebSocket {
+
+    private MessageSystem messageSystem;
+    private AccountService accountService;
     final private String name;
     private boolean isFirstPlayer;
     private Session session;
@@ -18,8 +23,10 @@ public class GameWebSocket {
 
     private boolean gameStarted = false;
 
-    public GameWebSocket(String name) {
+    public GameWebSocket(String name, MessageSystem messageSystem, AccountService accountService) {
         this.name = name;
+        this.messageSystem = messageSystem;
+        this.accountService = accountService;
     }
 
     public String getName() {
@@ -62,7 +69,7 @@ public class GameWebSocket {
     @OnWebSocketConnect
     public void onOpen(Session session) {
         setSession(session);
-        GameSessionManager.getInstance().addSocket(this);
+        GameSessionManager.getInstance(messageSystem, accountService).addSocket(this);
     }
 
     @OnWebSocketMessage

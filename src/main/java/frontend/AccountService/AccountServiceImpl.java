@@ -1,8 +1,8 @@
 package frontend.AccountService;
 
 import base.AccountService.AccountService;
-import messageSystem.Abonent;
 import messageSystem.Address;
+import messageSystem.Message;
 import messageSystem.MessageSystem;
 import org.hibernate.exception.ConstraintViolationException;
 import utils.SessionHelper;
@@ -26,6 +26,10 @@ public class AccountServiceImpl implements AccountService{
         messageSystem.getAddressService().registerAccountService(this);
         DBService = new DBService(SessionHelper.createSessionFactory());
         activeSessions = new HashMap<>();
+    }
+
+    public MessageSystem getMessageSystem() {
+        return messageSystem;
     }
 
     public boolean addUser(String username, String email, String password) {
@@ -136,6 +140,13 @@ public class AccountServiceImpl implements AccountService{
             return scores;
         }
         return scores;
+    }
+
+    public int increaseScore(int delta) {
+        final Message messageRegister = new MessageIncreaseScore(getAddress(), messageSystem.getAddressService().getAccountServiceAddress(), delta);
+        messageSystem.sendMessage(messageRegister);
+        // TODO
+        return 50+delta;
     }
 
     @Override

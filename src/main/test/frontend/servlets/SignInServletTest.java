@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import messageSystem.MessageSystem;
 import org.junit.*;
 
 import java.util.HashMap;
@@ -9,12 +10,13 @@ import java.util.HashMap;
 public class SignInServletTest
 {
     private AccountService accountService;
+    private MessageSystem messageSystem;
     SignInServlet servlet;
 
     @Before
     public void setUp()
     {
-        accountService = new AccountServiceImpl();
+        accountService = new AccountServiceImpl(messageSystem);
         servlet = new SignInServlet(accountService);
         accountService.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");
     }

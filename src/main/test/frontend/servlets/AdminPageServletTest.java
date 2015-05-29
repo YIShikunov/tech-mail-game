@@ -2,6 +2,7 @@ package frontend.servlets;
 
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
+import messageSystem.MessageSystem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 
 public class AdminPageServletTest {
     private AccountService accountService;
+    private MessageSystem messageSystem;
     SignInServlet signInServlet;
     SignOutServlet signOutServlet;
     AdminPageServlet adminPageServlet;
@@ -21,7 +23,7 @@ public class AdminPageServletTest {
     @Before
     public void setUp()
     {
-        accountService =  new AccountServiceImpl();
+        accountService =  new AccountServiceImpl(messageSystem);
         signInServlet = new SignInServlet(accountService);
         signOutServlet = new SignOutServlet(accountService);
         adminPageServlet = new AdminPageServlet(accountService);
