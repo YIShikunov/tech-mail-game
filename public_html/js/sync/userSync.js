@@ -38,7 +38,7 @@ define([
             type: methodMap[method].method,
             url: methodMap[method].url,
             data: data,
-            async: false,
+            // async: false,
             dataType: 'json'
         }).done(success).fail(error);
 

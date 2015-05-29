@@ -1,11 +1,12 @@
 package mechanics;
 
-import base.AccountService.AccountService;
 import base.mechanics.GameController;
+import frontend.AccountService.MessageIncreaseScore;
 import frontend.websockets.GameWebSocket;
 import mechanics.GameState.Element;
 import messageSystem.Abonent;
 import messageSystem.Address;
+import messageSystem.Message;
 import messageSystem.MessageSystem;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,7 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameProtocol implements Abonent, Runnable {
+public class GameProtocol implements Abonent , Runnable {
 
     private final Address address = new Address();
     private final MessageSystem messageSystem;
@@ -23,12 +24,9 @@ public class GameProtocol implements Abonent, Runnable {
     private GameWebSocket firstPlayerSocket;
     private GameWebSocket secondPlayerSocket;
 
-    private AccountService accountService;
-
     protected int turn;
 
-    public GameProtocol(MessageSystem messageSystem, AccountService accountService) {
-        this.accountService = accountService;
+    public GameProtocol(MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
         messageSystem.addService(this);
         messageSystem.getAddressService().registerGameMechanics(this);
@@ -42,15 +40,12 @@ public class GameProtocol implements Abonent, Runnable {
         this.gameController.init();
         this.notifyStartGame(true, second.getName());
         this.notifyStartGame(false, first.getName());
-
-        accountService.increaseScore(10);
-
-
         return true;
     }
 
     public void process(boolean isFirstPlayer, String packetString) {
         boolean result = execute(isFirstPlayer, packetString);
+
         if (!result) {
             notifyError(isFirstPlayer);
         }
@@ -119,7 +114,7 @@ public class GameProtocol implements Abonent, Runnable {
 
     protected boolean receivePlacement(boolean isFirstPlayer, JSONObject packet) {
         HashMap<Integer, Element> placement = new HashMap<>();
-        boolean status;
+
         try {
             for (Long fieldID : (ArrayList<Long>) packet.get("element0")) {
                 placement.put((int) (long) fieldID, Element.value(0));
@@ -144,10 +139,12 @@ public class GameProtocol implements Abonent, Runnable {
         result = gameController.placePieces(isFirstPlayer, placement);
 
         if (result.status) {
-            if (isFirstPlayer)
+            if (isFirstPlayer) {
                 firstPlayerReady = true;
-            else
+            }
+            else {
                 secondPlayerReady = true;
+            }
             boolean otherReady = isFirstPlayer ? secondPlayerReady : firstPlayerReady;
 
             JSONObject firstPlayerResponse = new JSONObject();
@@ -157,11 +154,15 @@ public class GameProtocol implements Abonent, Runnable {
             send(isFirstPlayer, firstPlayerResponse);
 
             if (otherReady) {
+
                 JSONObject secondPlayerResponse = new JSONObject();
                 secondPlayerResponse.put("typeID", 2);
                 secondPlayerResponse.put("statusOK", true);
                 secondPlayerResponse.put("opponentReady", true);
                 send(!isFirstPlayer, secondPlayerResponse);
+                //Message to AccountService
+                increaseScore(firstPlayerSocket.getName(), 5);
+                increaseScore(secondPlayerSocket.getName(),5);
             }
         } else {
             JSONObject firstPlayerResponse = new JSONObject();
@@ -307,6 +308,12 @@ public class GameProtocol implements Abonent, Runnable {
         return result;
     }
 
+    public void increaseScore(String name, int delta) {
+        final Message messageIncreaseScore = new MessageIncreaseScore(getAddress(), messageSystem.getAddressService().getAccountServiceAddress(), name, delta);
+        messageSystem.sendMessage(messageIncreaseScore);
+    };
+
+
     public void setScore(int score) {
         System.out.println("We got score:" + score);
     }
@@ -319,13 +326,13 @@ public class GameProtocol implements Abonent, Runnable {
     @Override
     public void run() {
         while (true) {
-            //TODO
-//            messageSystem.execForAbonent(this);
-//            try {
-//                Thread.sleep(ThreadSettings.SERVICE_SLEEP_TIME);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            messageSystem.execForAbonent(this);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 }

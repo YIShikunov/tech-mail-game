@@ -7,6 +7,7 @@ import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
 import frontend.websockets.GameSessionManager;
+import mechanics.GameProtocol;
 import messageSystem.MessageSystem;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -42,8 +43,12 @@ public class Main {
         Server server = new Server(port);
 
         final MessageSystem messageSystem = new MessageSystem();
+        final AccountService accountService = new AccountServiceImpl(messageSystem);
 
-        AccountService accountService = new AccountServiceImpl(messageSystem);
+        final Thread accountServiceThread = new Thread(accountService);
+        accountServiceThread.setDaemon(true);
+        accountServiceThread.setName("Account Service");
+        accountServiceThread.start();
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 

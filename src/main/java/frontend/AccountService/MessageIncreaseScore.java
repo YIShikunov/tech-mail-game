@@ -10,15 +10,17 @@ import messageSystem.Message;
 
 public final class MessageIncreaseScore extends MessageToAS {
     private int delta;
+    private String name;
 
-    public MessageIncreaseScore(Address from, Address to, int delta) {
+    public MessageIncreaseScore(Address from, Address to, String name, int delta) {
         super(from, to);
         this.delta = delta;
+        this.name = name;
     }
 
     @Override
     protected void exec(AccountServiceImpl accountService) {
-        int score = accountService.increaseScore(delta);
+        int score = accountService.increaseScore(name, delta);
         Message back = new MessageScoreIncreased(getTo(), getFrom(), score);
         accountService.getMessageSystem().sendMessage(back);
     }

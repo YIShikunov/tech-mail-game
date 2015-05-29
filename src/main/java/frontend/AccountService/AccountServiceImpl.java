@@ -142,11 +142,18 @@ public class AccountServiceImpl implements AccountService{
         return scores;
     }
 
-    public int increaseScore(int delta) {
-        final Message messageRegister = new MessageIncreaseScore(getAddress(), messageSystem.getAddressService().getAccountServiceAddress(), delta);
-        messageSystem.sendMessage(messageRegister);
-        // TODO
-        return 50+delta;
+    public int increaseScore(String name, int delta) {
+        try
+        {
+            UserDataSet user = getUserByName(name);
+            int score = user.getScore();
+            user.setScore(score+delta);
+            updateUser(user);
+            return score+delta;
+        } catch (SQLException e)
+        {
+            throw new RuntimeException();
+        }
     }
 
     @Override
@@ -157,13 +164,12 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public void run() {
         while (true) {
-            //TODO
-//            messageSystem.execForAbonent(this);
-//            try {
-//                Thread.sleep(ThreadSettings.SERVICE_SLEEP_TIME);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            messageSystem.execForAbonent(this);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

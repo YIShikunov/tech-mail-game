@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class GameSessionManager implements Runnable  {
     private MessageSystem messageSystem;
-    private AccountService accountService;
 
     //// SINGLETON (for a reason, shut up)
     private static GameSessionManager instance;
@@ -27,8 +26,6 @@ public class GameSessionManager implements Runnable  {
 
     public GameSessionManager(MessageSystem messageSystem, AccountService accountService) {
         this.messageSystem = messageSystem;
-        this.accountService = accountService;
-
     }
 
     private volatile boolean stopped = false;
@@ -59,7 +56,14 @@ public class GameSessionManager implements Runnable  {
     }
 
     private void startGame(GameWebSocket first, GameWebSocket second) {
-        GameProtocol protocol = new GameProtocol(messageSystem, accountService);
+        GameProtocol protocol = new GameProtocol(messageSystem);
+
+        System.out.println("Create: "+protocol.getAddress().hashCode());
+        final Thread gameMechanicsThread = new Thread(protocol);
+        gameMechanicsThread.setDaemon(true);
+        gameMechanicsThread.setName("Game Mechanics");
+        gameMechanicsThread.start();
+
         first.setProtocol(protocol);
         first.setFirstPlayer(true);
         second.setProtocol(protocol);
