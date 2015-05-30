@@ -19,13 +19,11 @@ define([
             }
 
         },
-        // send: function (data) {
-        //     this.connection.send(JSON.stringify(data));
-        // },
+        
         onConnect: function () {
         },
         onMessage: function (msg) {
-            var data = JSON.parse(msg.data.replace('=',','));
+            var data = JSON.parse(msg.data);
             console.info(msg.data);
             if (data.typeID == 0) {
                 localStorage['youStart'] = data.youStart;
@@ -33,9 +31,9 @@ define([
             }
             if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!, "+localStorage['youStart'])
             if (data.typeID == 4 && data.statusOK) {
-                localStorage['from'] = data.piecesMoved[0]-1;
-                localStorage['to'] = data.piecesMoved[1]-1;
-                obj.socket.trigger("move");
+                localStorage['from'] = data.piecesMoved[0][0]-1;
+                localStorage['to'] = data.piecesMoved[0][1]-1;
+                obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
             }
             // if (data.type === 'end') {
             //     this.connection.close();

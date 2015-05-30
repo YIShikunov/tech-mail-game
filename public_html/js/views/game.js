@@ -169,7 +169,7 @@ define([
                         this.from = index;
                         this.index = this.field.map[index];
                     } else 
-                    if (this.field.map[index] == -1 && this.state == "move" ) {
+                    if ((this.field.map[index] == -1 || this.field.map[index] == 5) && this.state == "move" ) {
                         this.move = this.field.map[this.from];
 
                         this.state = "game";
@@ -245,23 +245,18 @@ define([
             context.stroke();
         },
 
-        moving: function() {
-            from = localStorage['from'];
-            to = localStorage['to'];
+        moving: function(coord) {
+            from = coord.from;
+            to = coord.to;
             if (localStorage['youStart'] == "true") {
-                from = this.field.inv[localStorage['from']];
-                to = this.field.inv[localStorage['to']];
+                from = this.field.inv[coord.from];
+                to = this.field.inv[coord.to];
             }
-
-            localStorage.removeItem("from");
-            localStorage.removeItem("to");
-
             this.index = this.field.map[from];
             this.drawField(this.context,coords[from]);
             if (this.index != 5) {
                 this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
             } else {
-                debugger;
                 p1 = obj.field.coords[to][0];
                 p2 = obj.field.coords[to][1];
                 img = this.cloud;
