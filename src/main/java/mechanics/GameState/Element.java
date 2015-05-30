@@ -53,4 +53,8 @@ public enum Element {
         }
         return result;
     }
+
+    public boolean valid() {
+        return this.id >= 0 && this.id <= 4;
+    }
 }

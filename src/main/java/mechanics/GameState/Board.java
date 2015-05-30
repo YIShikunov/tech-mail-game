@@ -143,6 +143,9 @@ public class Board {
         if (attacker.firstPlayerOwner == defender.firstPlayerOwner) {
             return Outcome.ERROR;
         }
+        if (!attacker.getElement().valid() || !defender.getElement().valid()) {
+            return Outcome.ERROR;
+        }
 
         attacker.reveal();
         defender.reveal();

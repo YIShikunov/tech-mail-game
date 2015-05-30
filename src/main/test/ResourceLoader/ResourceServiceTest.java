@@ -51,6 +51,16 @@ public class ResourceServiceTest {
     {
         GSResources res = ResourcesService.getInstance().getResources("resourceTest.xml");
         Assert.assertEquals(res.getContentByName("test").get(0).getSetting("test"), "TEST");
+        try
+        {
+            res = null;
+            Files.delete(FileSystems.getDefault().getPath("resources/resourceTest.xml"));
+        }catch (java.io.IOException e)
+        {
+            System.out.println(e);
+        }
+        res = ResourcesService.getInstance().getResources("resourceTest.xml");
+        Assert.assertEquals(res.getContentByName("test").get(0).getSetting("test"), "TEST");
     }
 
     @Test

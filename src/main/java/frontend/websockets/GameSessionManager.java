@@ -22,8 +22,9 @@ public class GameSessionManager implements Runnable {
 
     private volatile boolean stopped = false;
 
+    @Override
     public void run() {
-        while (!stopped) {
+        while (!stopped && !(Thread.interrupted())) {
             /// Marvel at my GENIUS matchmaking
             /// Combines ideas from Elo, StarCraft ladder, and whatever that DotA has.
             if (unmatchedSockets.size() > 1) {
@@ -62,7 +63,4 @@ public class GameSessionManager implements Runnable {
     public void addSocket(GameWebSocket socket) {
         unmatchedSockets.add(socket);
     }
-
-
-
 }

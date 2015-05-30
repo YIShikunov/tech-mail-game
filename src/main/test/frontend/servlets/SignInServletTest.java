@@ -3,6 +3,7 @@ package frontend.servlets;
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import org.junit.*;
+import utils.SessionHelper;
 
 import java.util.HashMap;
 
@@ -14,6 +15,7 @@ public class SignInServletTest
     @Before
     public void setUp()
     {
+        SessionHelper.enableTestingMode();
         accountService = new AccountServiceImpl();
         servlet = new SignInServlet(accountService);
         accountService.addUser("__TEST_USERNAME", "__TEST@EMAIL.EMAIL", "password");

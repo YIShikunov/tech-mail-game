@@ -3,6 +3,7 @@ package frontend.servlets;
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import org.junit.*;
+import utils.SessionHelper;
 
 import java.sql.SQLException;
 
@@ -14,6 +15,7 @@ public class SignUpServletTest
     @Before
     public void setUp()
     {
+        SessionHelper.enableTestingMode();
         accountService = new AccountServiceImpl();
         servlet = new SignUpServlet(accountService);
     }

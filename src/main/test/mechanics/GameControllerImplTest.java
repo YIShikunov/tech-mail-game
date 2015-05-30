@@ -103,12 +103,12 @@ public class GameControllerImplTest {
         Assert.assertTrue(session.isWaitingForPrompt(false));
 
         Assert.assertEquals(session.board.fields.get(2).getPiece().getElement(), Element.FIRE);
-        Assert.assertTrue(session.answerPrompt(false, Element.WOOD));
+        Assert.assertTrue(session.answerPrompt(false, Element.WOOD).status);
         Assert.assertEquals(session.board.fields.get(2).getPiece().getElement(), Element.WOOD);
 
         Assert.assertEquals(session.state, GameControllerImpl.WaitingFor.FIRST_TURN);
         Assert.assertTrue(session.makeTurn(true, 1, 5).status);
-        Assert.assertTrue(session.changeKingElement(false, Element.FIRE));
+        Assert.assertTrue(session.changeKingElement(false, Element.FIRE).status);
         Assert.assertTrue(session.makeTurn(false, 42, 12).status);
         Assert.assertFalse(session.board.fields.get(42).getPiece().hasElement(Element.FIRE));
         Assert.assertTrue(session.makeTurn(true, 11, 42).status);

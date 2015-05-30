@@ -1,6 +1,6 @@
 package mechanics.GameState;
 /*
-    This class in JUST A STUPID CONTAINER.
+    This class is JUST A STUPID CONTAINER.
     It doesn't try to manage pieces, maintain consistency of the board or something otherwise smart.
     GameState.Board does that.
 */

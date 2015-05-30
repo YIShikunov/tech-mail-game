@@ -61,7 +61,7 @@ public class Main {
 
         server.setHandler(handlers);
         server.start();
-        (new Thread(GameSessionManager.getInstance())).run();
+        (new Thread(GameSessionManager.getInstance())).start();
         server.join();
     }
 }
