@@ -6,7 +6,7 @@ import ResourceLoader.ResourcesService;
 import base.AccountService.AccountService;
 import frontend.AccountService.AccountServiceImpl;
 import frontend.servlets.*;
-import frontend.websockets.GameSessionManager;
+import frontend.GameSessionManager;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;

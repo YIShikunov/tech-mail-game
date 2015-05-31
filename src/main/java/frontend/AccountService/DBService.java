@@ -17,7 +17,7 @@ public class DBService {
         this.sessionFactory = sessionFactory;
     }
 
-    public void addUser(UserDataSet user) throws SQLException, ConstraintViolationException {
+    public synchronized void addUser(UserDataSet user) throws SQLException, ConstraintViolationException {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -30,7 +30,7 @@ public class DBService {
         }
     }
 
-    public void updateUser(UserDataSet user) throws SQLException, ConstraintViolationException {
+    public synchronized void updateUser(UserDataSet user) throws SQLException, ConstraintViolationException {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -44,7 +44,7 @@ public class DBService {
     }
 
     // can return null
-    public UserDataSet getUser(long id) throws SQLException  {
+    public synchronized UserDataSet getUser(long id) throws SQLException  {
         Session session = null;
         UserDataSet result = null;
         try {
@@ -58,7 +58,7 @@ public class DBService {
     }
 
     // can return null
-    public UserDataSet getUser(String username) throws SQLException {
+    public synchronized UserDataSet getUser(String username) throws SQLException {
         Session session = null;
         UserDataSet result = null;
         try {
@@ -88,7 +88,7 @@ public class DBService {
         return result;
     }*/
 
-    public List<UserDataSet> getAllUsers() throws SQLException
+    public synchronized List<UserDataSet> getAllUsers() throws SQLException
     {
         Session session = null;
         List<UserDataSet> result = null;
@@ -102,7 +102,7 @@ public class DBService {
         return result;
     }
 
-    public void deleteUser(UserDataSet user) throws SQLException {
+    public synchronized void deleteUser(UserDataSet user) throws SQLException {
         Session session = null;
         try {
             session = sessionFactory.openSession();

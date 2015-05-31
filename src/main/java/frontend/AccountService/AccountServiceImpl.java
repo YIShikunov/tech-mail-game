@@ -8,19 +8,19 @@ import org.json.simple.JSONObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AccountServiceImpl implements AccountService {
 
     private final DBService DBService;
-    private final HashMap<String, Long> activeSessions;
+    private final ConcurrentHashMap<String, Long> activeSessions;
 
     public AccountServiceImpl() {
         DBService = new DBService(SessionHelper.createSessionFactory());
-        activeSessions = new HashMap<>();
+        activeSessions = new ConcurrentHashMap<>();
     }
 
-    public boolean addUser(String username, String email, String password) {
+    public synchronized boolean addUser(String username, String email, String password) {
         UserDataSet user = new UserDataSet(username, email, password);
         try {
             DBService.addUser(user);
@@ -41,11 +41,11 @@ public class AccountServiceImpl implements AccountService {
         DBService.updateUser(user);
     }
 
-    public void addSession(String sessionID, Long userID) {
+    public synchronized void addSession(String sessionID, Long userID) {
         activeSessions.put(sessionID, userID);
     }
 
-    public void deleteSession(String sessionID) {
+    public synchronized void deleteSession(String sessionID) {
         activeSessions.remove(sessionID);
     }
 
@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     // can return null
-    public UserDataSet getUserBySession(String sessionID) throws SQLException {
+    public synchronized UserDataSet getUserBySession(String sessionID) throws SQLException {
         Long userID = activeSessions.get(sessionID);
         if (userID == null)
             return null;
@@ -74,11 +74,11 @@ public class AccountServiceImpl implements AccountService {
         return activeSessions.containsKey(sessionID);
     }
 
-    public String getUsernameBySession(String sessionID) throws SQLException{
+    public synchronized String getUsernameBySession(String sessionID) throws SQLException{
         UserDataSet user = getUserBySession(sessionID);
         return user == null ? null : user.getUsername();
     }
-    public boolean deleteUser(String username)
+    public synchronized boolean deleteUser(String username)
     {
         try
         {
@@ -108,7 +108,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public ArrayList<JSONObject> getScoreBoard(){
+    public synchronized ArrayList<JSONObject> getScoreBoard(){
         ArrayList<JSONObject> scores = new ArrayList<>();
         try
         {

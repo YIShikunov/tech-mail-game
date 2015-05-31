@@ -1,18 +1,17 @@
-package frontend.websockets;
+package frontend;
 
+import frontend.websockets.GameWebSocket;
 import mechanics.GameProtocol;
+import org.eclipse.jetty.util.ConcurrentArrayQueue;
 
 import java.util.ArrayList;
-
-/**
- * Created by Artem on 5/19/2015.
- */
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GameSessionManager implements Runnable {
 
     //// SINGLETON (for a reason, shut up)
     private static GameSessionManager instance;
-    public static GameSessionManager getInstance() {
+    public static synchronized GameSessionManager getInstance() {
         if (instance == null) {
             instance = new GameSessionManager();
         }
@@ -22,14 +21,16 @@ public class GameSessionManager implements Runnable {
 
     private volatile boolean stopped = false;
 
+    ConcurrentLinkedQueue<GameWebSocket> unmatchedSockets = new ConcurrentLinkedQueue<>();
+
+    ConcurrentLinkedQueue<GameProtocol> runningSessions = new ConcurrentLinkedQueue<>();
+
     public void run() {
         while (!stopped && !(Thread.interrupted())) {
             /// Marvel at my GENIUS matchmaking
             /// Combines ideas from Elo, StarCraft ladder, and whatever that DotA has.
             if (unmatchedSockets.size() > 1) {
-                startGame(unmatchedSockets.get(0), unmatchedSockets.get(1));
-                unmatchedSockets.remove(0);
-                unmatchedSockets.remove(0);
+                startGame(unmatchedSockets.poll(), unmatchedSockets.poll());
             }
             try {
                 Thread.sleep(1000);
@@ -38,10 +39,6 @@ public class GameSessionManager implements Runnable {
             }
         }
     }
-
-    ArrayList<GameWebSocket> unmatchedSockets = new ArrayList<>();
-
-    ArrayList<GameProtocol> runningSessions = new ArrayList<>();
 
     public void stop() {
         stopped = true;

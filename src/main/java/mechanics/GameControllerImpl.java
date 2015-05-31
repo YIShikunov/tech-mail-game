@@ -304,11 +304,6 @@ public class GameControllerImpl implements GameController {
             res.status = false;
             return res;
         }
-        /*Piece king = board.getKing(isFirstPlayer);
-        if (king.getElement() == Element.BLANK || !king.hasBackupElement()){
-            getErrorMessage("KING_NOT_SET");
-            return false;
-        }*/ // TODO: resolve king question
 
         if (!board.doesOwn(isFirstPlayer, fromID))  {
             res.errorMessage = getErrorMessage("DO_NOT_OWN");
@@ -385,7 +380,7 @@ public class GameControllerImpl implements GameController {
         return result;
     }
 
-    private String getErrorMessage(String id) {
+    public String getErrorMessage(String id) {
         String response = messages.get(id);
         if (response == null) {
             // the "totally erroneous and obnoxious output so we would see there is a problem with our resource file"
