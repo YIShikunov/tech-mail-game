@@ -27,7 +27,7 @@ define([
             console.info(msg.data);
             if (data.typeID == 0) {
                 localStorage['youStart'] = data.youStart;
-                alert("connect");
+                alert("Играем с " + data.opponent);
                 $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
             }
             if (data.typeID == 2 && data.opponentReady) {

@@ -6,7 +6,7 @@ module.exports = function (grunt) {
                 stderr: true
             },
             server: {
-                command: 'java -cp Tech-Mail.jar main.Main'
+                command: 'java -jar Tech-Mail.jar'
             }
         },
         fest: {
