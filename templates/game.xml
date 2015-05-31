@@ -1,6 +1,8 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
     <div class="game">
         <a class="btn btn_red" href="#">НАЗАД</a>
+        <div><span class="turn" style="color: white;"></span></div>
+        <div>_<span class="state" style="color: yellow;"></span>_</div>
         <canvas width="800" height="550" class="game__field"></canvas>
 
 
@@ -11,8 +13,6 @@
 	<script>
 	function auth(name) {
 	    //document.getElementById("myCheck").click(); // Click on the checkbox
-	    alert("Это " +name)
-
 	    var xhr = $.ajax({
             method: 'POST',
             url: '/api/v1/auth/signin',

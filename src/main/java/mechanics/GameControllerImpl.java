@@ -3,10 +3,8 @@ package mechanics;
 import ResourceLoader.GSResources;
 import ResourceLoader.ResourcesService;
 import base.mechanics.GameController;
-import javafx.util.Pair;
 import mechanics.GameState.*;
 
-import java.security.KeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -94,7 +92,7 @@ public class GameControllerImpl implements GameController {
     }
 
 
-    private synchronized TurnResult MakeBattle(boolean isFirstPlayer, int fromID, int toID)
+    private synchronized TurnResult makeBattle(boolean isFirstPlayer, int fromID, int toID)
     {
         TurnResult res = new TurnResult();
         Piece from = board.fields.get(fromID).getPiece();
@@ -114,107 +112,73 @@ public class GameControllerImpl implements GameController {
 
         Outcome outcome = board.attackPiece(fromID, toID);
         if (outcome != Outcome.ERROR) {
-            if (board.doesOwn(isFirstPlayer, toID)) {
-                if (board.fieldType(toID) == FieldType.THRONE) {
-                    if (isFirstPlayer)
-                        state = WaitingFor.FIRST_ELEMENT_CHOICE;
-                    else
-                        state = WaitingFor.SECOND_ELEMENT_CHOICE;
-                    res.recolor = true;
-                    promptTarget = toID;
-                }
-                if (from.king || to.king)
-                {
-                    res.king1Status = getKingStatus(true);
-                    res.king2Status = getKingStatus(false);
 
-                    if (from.king && to.king)
-                    {
-                        ArrayList<Integer> tmp = new ArrayList<>();
-                        tmp.add(toID);
-                        tmp.add(toKingPreviousElement.id);
-                        res.piecesRevealed.add(tmp);
-                        tmp = new ArrayList<>();
-                        tmp.add(fromID);
-                        tmp.add(fromKingPreviousElement.id);
-                        res.piecesRevealed.add(tmp);
-                    }
-                    else if (from.king)
-                    {
-                        ArrayList<Integer> tmp = new ArrayList<>();
-                        tmp.add(toID);
-                        tmp.add(to.getElement().id);
-                        res.piecesRevealed.add(tmp);
-                        tmp = new ArrayList<>();
-                        tmp.add(fromID);
-                        tmp.add(fromKingPreviousElement.id);
-                        res.piecesRevealed.add(tmp);
-
-                        switch (outcome)
-                        {
-                            case DESTRUCTION:
-                            {
-                                res.piecesDestroyed.add(toID);
-                                break;
-                            }
-                            case DRAW:
-                            {
-                                break;
-                            }
-                            case LOSS:
-                            {
-                                break;
-                            }
-                            case WIN:
-                            {
-                                res.piecesDestroyed.add(toID);
-                                tmp = new ArrayList<>();
-                                tmp.add(fromID);
-                                tmp.add(toID);
-                                res.piecesMoved.add(tmp);
-                                break;
-                            }
-                        }
-                    }
-                    else if (to.king)
-                    {
-                        ArrayList<Integer> tmp = new ArrayList<>();
-                        tmp.add(toID);
-                        tmp.add(toKingPreviousElement.id);
-                        res.piecesRevealed.add(tmp);
-                        tmp = new ArrayList<>();
-                        tmp.add(fromID);
-                        tmp.add(from.getElement().id);
-                        res.piecesRevealed.add(tmp);
-                        switch (outcome)
-                        {
-                            case DESTRUCTION:
-                            {
-                                res.piecesDestroyed.add(fromID);
-                                break;
-                            }
-                            case DRAW:
-                            {
-                                break;
-                            }
-                            case LOSS:
-                            {
-                                res.piecesDestroyed.add(fromID);
-                                break;
-                            }
-
-                            case WIN:
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
+            if (board.fieldType(toID) == FieldType.THRONE && (board.doesOwn(isFirstPlayer, toID)) ) {
+                if (isFirstPlayer)
+                    state = WaitingFor.FIRST_ELEMENT_CHOICE;
                 else
+                    state = WaitingFor.SECOND_ELEMENT_CHOICE;
+                res.recolor = true;
+                promptTarget = toID;
+            }
+            if (from.king || to.king)
+            {
+                res.king1Status = getKingStatus(true);
+                res.king2Status = getKingStatus(false);
+
+                if (from.king && to.king)
+                {
+                    ArrayList<Integer> tmp = new ArrayList<>();
+                    tmp.add(toID);
+                    tmp.add(toKingPreviousElement.id);
+                    res.piecesRevealed.add(tmp);
+                    tmp = new ArrayList<>();
+                    tmp.add(fromID);
+                    tmp.add(fromKingPreviousElement.id);
+                    res.piecesRevealed.add(tmp);
+                }
+                else if (from.king)
                 {
                     ArrayList<Integer> tmp = new ArrayList<>();
                     tmp.add(toID);
                     tmp.add(to.getElement().id);
+                    res.piecesRevealed.add(tmp);
+                    tmp = new ArrayList<>();
+                    tmp.add(fromID);
+                    tmp.add(fromKingPreviousElement.id);
+                    res.piecesRevealed.add(tmp);
+
+                    switch (outcome)
+                    {
+                        case DESTRUCTION:
+                        {
+                            res.piecesDestroyed.add(toID);
+                            break;
+                        }
+                        case DRAW:
+                        {
+                            break;
+                        }
+                        case LOSS:
+                        {
+                            break;
+                        }
+                        case WIN:
+                        {
+                            res.piecesDestroyed.add(toID);
+                            tmp = new ArrayList<>();
+                            tmp.add(fromID);
+                            tmp.add(toID);
+                            res.piecesMoved.add(tmp);
+                            break;
+                        }
+                    }
+                }
+                else if (to.king)
+                {
+                    ArrayList<Integer> tmp = new ArrayList<>();
+                    tmp.add(toID);
+                    tmp.add(toKingPreviousElement.id);
                     res.piecesRevealed.add(tmp);
                     tmp = new ArrayList<>();
                     tmp.add(fromID);
@@ -225,21 +189,10 @@ public class GameControllerImpl implements GameController {
                         case DESTRUCTION:
                         {
                             res.piecesDestroyed.add(fromID);
-                            res.piecesDestroyed.add(toID);
                             break;
                         }
                         case DRAW:
                         {
-                            break;
-                        }
-                        case WIN:
-                        {
-                            res.piecesDestroyed.add(toID);
-
-                            tmp = new ArrayList<>();
-                            tmp.add(fromID);
-                            tmp.add(toID);
-                            res.piecesMoved.add(tmp);
                             break;
                         }
                         case LOSS:
@@ -247,6 +200,50 @@ public class GameControllerImpl implements GameController {
                             res.piecesDestroyed.add(fromID);
                             break;
                         }
+
+                        case WIN:
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ArrayList<Integer> tmp = new ArrayList<>();
+                tmp.add(toID);
+                tmp.add(to.getElement().id);
+                res.piecesRevealed.add(tmp);
+                tmp = new ArrayList<>();
+                tmp.add(fromID);
+                tmp.add(from.getElement().id);
+                res.piecesRevealed.add(tmp);
+                switch (outcome)
+                {
+                    case DESTRUCTION:
+                    {
+                        res.piecesDestroyed.add(fromID);
+                        res.piecesDestroyed.add(toID);
+                        break;
+                    }
+                    case DRAW:
+                    {
+                        break;
+                    }
+                    case WIN:
+                    {
+                        res.piecesDestroyed.add(toID);
+
+                        tmp = new ArrayList<>();
+                        tmp.add(fromID);
+                        tmp.add(toID);
+                        res.piecesMoved.add(tmp);
+                        break;
+                    }
+                    case LOSS:
+                    {
+                        res.piecesDestroyed.add(fromID);
+                        break;
                     }
                 }
             }
@@ -322,7 +319,7 @@ public class GameControllerImpl implements GameController {
         res = makeMove(isFirstPlayer, fromID, toID);
 
         if (res == null)
-            return MakeBattle(isFirstPlayer, fromID, toID);
+            return makeBattle(isFirstPlayer, fromID, toID);
         else
             return res;
     }

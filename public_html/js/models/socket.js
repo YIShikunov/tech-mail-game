@@ -28,12 +28,37 @@ define([
             if (data.typeID == 0) {
                 localStorage['youStart'] = data.youStart;
                 alert("connect");
+                $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
             }
-            if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!, "+localStorage['youStart'])
+            if (data.typeID == 2 && data.opponentReady) {
+                if (localStorage['youStart'] == "true") {
+                    $(".turn").text("ВАШ ХОД");
+                } else {
+                    $(".turn").text("ЖДИТЕ");
+                }
+                alert("Поехали играть!!!")
+            }
             if (data.typeID == 4 && data.statusOK) {
-                localStorage['from'] = data.piecesMoved[0][0]-1;
-                localStorage['to'] = data.piecesMoved[0][1]-1;
-                obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
+                if (data.piecesRevealed.length > 0) {
+                    obj.socket.trigger("reveal", data.piecesRevealed);
+                }
+                if (data.piecesDestroyed.length > 0) {
+                    obj.socket.trigger("destroy", data.piecesDestroyed);
+                }
+                if (data.piecesMoved.length > 0) {
+                    obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
+                }
+                if ($(".turn").text() == "ВАШ ХОД") {
+                    $(".turn").text("ЖДИТЕ...");
+                } else {
+                    $(".turn").text("ВАШ ХОД");
+                }
+                $(".state").text();
+
+            }
+            if (data.typeID == 4 && !data.statusOK) {
+                $(".state").text(data.errorMessage);
+
             }
             // if (data.type === 'end') {
             //     this.connection.close();
