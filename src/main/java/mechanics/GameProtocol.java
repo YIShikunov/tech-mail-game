@@ -2,7 +2,6 @@ package mechanics;
 
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
-import javafx.util.Pair;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +18,7 @@ public class GameProtocol {
     private GameWebSocket secondPlayerSocket;
 
     protected int turn;
+    protected boolean gameActive;
 
     public GameProtocol() {
 
@@ -27,6 +27,7 @@ public class GameProtocol {
     public boolean start(GameWebSocket first, GameWebSocket second) {
         this.firstPlayerSocket = first;
         this.secondPlayerSocket = second;
+        this.gameActive = true;
         this.turn = 0;
         this.gameController = new GameControllerImpl();
         this.gameController.init();
@@ -83,21 +84,26 @@ public class GameProtocol {
     {
         if (result.king1Status != null && result.king2Status != null)
         {
-            JSONObject player1KingPacket = new JSONObject();
-            JSONObject player2KingPacket = new JSONObject();
+            /*if (result.king1Status.size() < 1 || result.king2Status.size() < 1)
+            {
+                notifyEndGame(isFirstPlayer, );*/
+            if (false) {} else {
+                JSONObject player1KingPacket = new JSONObject();
+                JSONObject player2KingPacket = new JSONObject();
 
-            player1KingPacket.put("typeID", 10);
-            player1KingPacket.put("statusOK", true);
-            player1KingPacket.put("isYourKing", isFirstPlayer);
-            player2KingPacket.put("typeID", 10);
-            player2KingPacket.put("statusOK", true);
-            player2KingPacket.put("isYourKing", !isFirstPlayer);
+                player1KingPacket.put("typeID", 10);
+                player1KingPacket.put("statusOK", true);
+                player1KingPacket.put("isYourKing", isFirstPlayer);
+                player2KingPacket.put("typeID", 10);
+                player2KingPacket.put("statusOK", true);
+                player2KingPacket.put("isYourKing", !isFirstPlayer);
 
-            player1KingPacket.put("Elements", result.king1Status.toArray());
-            player2KingPacket.put("Elements", result.king2Status.toArray());
-            send(isFirstPlayer, player1KingPacket);
-            send(isFirstPlayer, player2KingPacket);
-            return true;
+                player1KingPacket.put("Elements", result.king1Status.toArray());
+                player2KingPacket.put("Elements", result.king2Status.toArray());
+                send(isFirstPlayer, player1KingPacket);
+                send(isFirstPlayer, player2KingPacket);
+                return true;
+            }
         }
         return false;
     }
@@ -270,6 +276,23 @@ public class GameProtocol {
             firstPlayerSocket.send(packet);
         else
             secondPlayerSocket.send(packet);
+    }
+
+    public synchronized void notifyEndGame(boolean isFirstPlayer, boolean isWon, boolean isError)
+    {
+        JSONObject packet = new JSONObject();
+        if (!isError)
+        {
+            packet.put("statusOK", !isError);
+            packet.put("typeID", -1);
+            packet.put("iAmWinner", isWon);
+            send(isFirstPlayer, packet);
+        }
+        packet = new JSONObject();
+        packet.put("statusOK", !isError);
+        packet.put("typeID", -1);
+        packet.put("iAmWinner", !isWon);
+        send(!isFirstPlayer, packet);
     }
 
     protected void send(boolean isFirstPlayer, JSONObject packet) {
