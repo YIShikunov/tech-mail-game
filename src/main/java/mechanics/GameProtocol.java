@@ -2,6 +2,7 @@ package mechanics;
 
 import base.mechanics.GameController;
 import frontend.websockets.GameWebSocket;
+import mechanics.GameState.Board;
 import mechanics.GameState.Element;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -94,6 +95,10 @@ public class GameProtocol {
                 player1KingPacket.put("typeID", 10);
                 player1KingPacket.put("statusOK", true);
                 player1KingPacket.put("isYourKing", isFirstPlayer);
+                if (isFirstPlayer)
+                    player1KingPacket.put("element", result.king1Element.id);
+                else
+                    player2KingPacket.put("element", result.king2Element.id);
                 player2KingPacket.put("typeID", 10);
                 player2KingPacket.put("statusOK", true);
                 player2KingPacket.put("isYourKing", !isFirstPlayer);

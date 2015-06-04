@@ -13,6 +13,8 @@ public class TurnResult
     public final ArrayList<Integer> piecesHidden = new ArrayList<>();
     public ArrayList<Integer> king1Status = null;
     public ArrayList<Integer> king2Status = null;
+    public Element king1Element;
+    public Element king2Element;
     public boolean status;
     public boolean recolor;
     public String errorMessage;
