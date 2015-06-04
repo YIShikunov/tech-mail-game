@@ -113,6 +113,7 @@ King-pong packet (показывает новые элементы короля,
 {
 	typeID = 6,
 	statusOK = false //False если ход был плохим, и мы его не приняли
+	element = 1 // Если нет ошибки
 	errorMessage = "This is not a valid element!"
 }  // После этого противнику отправляется пакет с результатом хода.
 

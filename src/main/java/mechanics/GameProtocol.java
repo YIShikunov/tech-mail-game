@@ -205,8 +205,9 @@ public class GameProtocol {
 
     protected boolean receiveElementPrompt(boolean isFirstPlayer, JSONObject packet) {
         TurnResult result;
+        Integer elementID;
         try {
-            Integer elementID = (int) (long) packet.get("baseRecolor");
+            elementID = (int) (long) packet.get("baseRecolor");
             result = gameController.answerPrompt(isFirstPlayer, Element.value(elementID));
         } catch (ClassCastException e) {
             return false;
@@ -216,6 +217,7 @@ public class GameProtocol {
             JSONObject response = new JSONObject();
             response.put("statusOK", true);
             response.put("typeID", 6);
+            response.put("element", elementID);
             send(isFirstPlayer, response);
             send(!isFirstPlayer, stashedResponse);
             sendKingPongPackets(isFirstPlayer, stashedResult);
