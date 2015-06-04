@@ -98,8 +98,8 @@ public class GameProtocol {
                 player2KingPacket.put("statusOK", true);
                 player2KingPacket.put("isYourKing", !isFirstPlayer);
 
-                player1KingPacket.put("Elements", result.king1Status.toArray());
-                player2KingPacket.put("Elements", result.king2Status.toArray());
+                player1KingPacket.put("Elements", result.king1Status);
+                player2KingPacket.put("Elements", result.king2Status);
                 send(isFirstPlayer, player1KingPacket);
                 send(isFirstPlayer, player2KingPacket);
                 return true;
