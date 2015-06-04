@@ -126,7 +126,7 @@ public class GameControllerImpl implements GameController {
                 res.king1Status = getKingStatus(true);
                 res.king2Status = getKingStatus(false);
                 res.king1Element = board.getKing(true).getElement();
-                res.king2Element = board.getKing(true).getElement();
+                res.king2Element = board.getKing(false).getElement();
 
                 if (from.king && to.king)
                 {
