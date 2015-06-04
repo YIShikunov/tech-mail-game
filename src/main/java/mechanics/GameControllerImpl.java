@@ -314,9 +314,10 @@ public class GameControllerImpl implements GameController {
         res = makeMove(isFirstPlayer, fromID, toID);
 
         if (res == null)
-            return makeBattle(isFirstPlayer, fromID, toID);
-        else
-            return res;
+            res = makeBattle(isFirstPlayer, fromID, toID);
+
+        checkAndSetVictory();
+        return res;
     }
 
     public synchronized TurnResult answerPrompt(boolean isFirstPlayer, Element element) {
@@ -379,6 +380,22 @@ public class GameControllerImpl implements GameController {
         result.status = true;
         return result;
     }
+
+    private void checkAndSetVictory() {
+        if (getKingStatus(true).size() < 1)
+            state = WaitingFor.FIRST_PLAYER_WON;
+        else if (getKingStatus(false).size() < 1)
+            state = WaitingFor.SECOND_PLAYER_WON;
+    }
+
+    public boolean isGameFinished() {
+        return (state == WaitingFor.FIRST_PLAYER_WON || state == WaitingFor.SECOND_PLAYER_WON);
+    }
+
+    public boolean getWinner() {
+        return state == WaitingFor.FIRST_PLAYER_WON;
+    }
+
 
     public String getErrorMessage(String id) {
         String response = messages.get(id);

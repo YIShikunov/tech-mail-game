@@ -84,10 +84,7 @@ public class GameProtocol {
     {
         if (result.king1Status != null && result.king2Status != null)
         {
-            /*if (result.king1Status.size() < 1 || result.king2Status.size() < 1)
-            {
-                notifyEndGame(isFirstPlayer, );*/
-            if (false) {} else {
+            if (!checkAndNotifyEndGame()) {
                 JSONObject player1KingPacket = new JSONObject();
                 JSONObject player2KingPacket = new JSONObject();
 
@@ -295,6 +292,16 @@ public class GameProtocol {
         packet.put("typeID", -1);
         packet.put("iAmWinner", !isWon);
         send(!isFirstPlayer, packet);
+    }
+
+    private synchronized boolean checkAndNotifyEndGame() {
+        if (!gameController.isGameFinished())
+            return false;
+        else {
+            notifyEndGame(gameController.getWinner(), true, false);
+            notifyEndGame(!gameController.getWinner(), false, false);
+            return true;
+        }
     }
 
     protected void send(boolean isFirstPlayer, JSONObject packet) {
