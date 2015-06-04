@@ -1,5 +1,6 @@
 package frontend.websockets;
 
+import frontend.GameSessionManager;
 import mechanics.GameProtocol;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -79,6 +80,7 @@ public class GameWebSocket {
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
+        //protocol.notifyEndGame(isFirstPlayer, false, true);
         System.out.println(reason + " code: " + statusCode + " SOCKET PANIC111!!!");
     }
 

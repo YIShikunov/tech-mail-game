@@ -12837,11 +12837,13 @@ define('sync/userSync',[
                 data[model.attributes[num].name] = model.attributes[num].value;
             }
 
+        debugger;
+
         var xhr = $.ajax({
             type: methodMap[method].method,
             url: methodMap[method].url,
             data: data,
-            async: false,
+            // async: false,
             dataType: 'json'
         }).done(success).fail(error);
 
@@ -13069,23 +13071,46 @@ define('models/socket',[
             }
 
         },
-        // send: function (data) {
-        //     this.connection.send(JSON.stringify(data));
-        // },
+        
         onConnect: function () {
         },
         onMessage: function (msg) {
-            var data = JSON.parse(msg.data.replace('=',','));
+            var data = JSON.parse(msg.data);
             console.info(msg.data);
             if (data.typeID == 0) {
                 localStorage['youStart'] = data.youStart;
-                alert("connect");
+                alert("Играем с " + data.opponent);
+                $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
             }
-            if (data.typeID == 2 && data.opponentReady) alert("Поехали играть!!!, "+localStorage['youStart'])
+            if (data.typeID == 2 && data.opponentReady) {
+                if (localStorage['youStart'] == "true") {
+                    $(".turn").text("ВАШ ХОД");
+                } else {
+                    $(".turn").text("ЖДИТЕ");
+                }
+                alert("Поехали играть!!!")
+            }
             if (data.typeID == 4 && data.statusOK) {
-                localStorage['from'] = data.piecesMoved[0]-1;
-                localStorage['to'] = data.piecesMoved[1]-1;
-                obj.socket.trigger("move");
+                if (data.piecesRevealed.length > 0) {
+                    obj.socket.trigger("reveal", data.piecesRevealed);
+                }
+                if (data.piecesDestroyed.length > 0) {
+                    obj.socket.trigger("destroy", data.piecesDestroyed);
+                }
+                if (data.piecesMoved.length > 0) {
+                    obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
+                }
+                if ($(".turn").text() == "ВАШ ХОД") {
+                    $(".turn").text("ЖДИТЕ...");
+                } else {
+                    $(".turn").text("ВАШ ХОД");
+                }
+                $(".state").text();
+
+            }
+            if (data.typeID == 4 && !data.statusOK) {
+                $(".state").text(data.errorMessage);
+
             }
             // if (data.type === 'end') {
             //     this.connection.close();
@@ -13125,7 +13150,7 @@ define('models/socket',[
 
     return GameModel;
 });
-define('tmpl/game',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"game\"><a class=\"btn btn_red\" href=\"#\">НАЗАД</a><canvas width=\"800\" height=\"550\" class=\"game__field\"></canvas></div>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
+define('tmpl/game',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"game\"><a class=\"btn btn_red\" href=\"#\">НАЗАД</a><div><span class=\"turn\" style=\"color: white;\"></span></div><div>_<span class=\"state\" style=\"color: yellow;\"></span>_</div><canvas width=\"800\" height=\"550\" class=\"game__field\"></canvas><input type=\"button\" onclick=\"auth(\'nano\')\" value=\"nano\"/><input type=\"button\" onclick=\"auth(\'cat\')\" value=\"cat\"/></div><script>function auth(name) {\r\n\t    \/\/document.getElementById(\"myCheck\").click(); \/\/ Click on the checkbox\r\n\t    var xhr = $.ajax({\r\n            method: \'POST\',\r\n            url: \'\/api\/v1\/auth\/signin\',\r\n            data: {login: name, password: name},\r\n            \/\/ async: false,\r\n            dataType: \'json\'\r\n        }).done(function (resp) {\r\n                    if (resp.code == 0) {\r\n                        alert(resp.response);\r\n                    }\r\n                });\r\n\t}</script>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
 define('views/game',[
     'backbone',
     'models/field',
@@ -13168,7 +13193,8 @@ define('views/game',[
             this.render();
             this.$el.hide();
             this.listenTo(this.socket, 'move', this.moving);
-            this.drawEnemy();
+            this.listenTo(this.socket, 'destroy', this.destroy);
+            this.listenTo(this.socket, 'reveal', this.reveal);
         },
 
         render: function () {
@@ -13227,6 +13253,8 @@ define('views/game',[
                             obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
                     };
                 }
+
+                obj.drawEnemy();
             };
             img.src = 'images/ptrn.jpg';
         },
@@ -13296,12 +13324,13 @@ define('views/game',[
                         this.state = "move";
                         this.from = index;
                         this.index = this.field.map[index];
+                        $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
                     } else 
-                    if (this.field.map[index] == -1 && this.state == "move" ) {
+                    if ((this.field.map[index] == -1 || this.field.map[index] > 4) && this.state == "move" ) {
                         this.move = this.field.map[this.from];
 
                         this.state = "game";
-                        this.field.map[index] = this.index;
+                        // this.field.map[index] = this.index;
 
                         data = [];
                         if (localStorage['youStart'] == "false") {
@@ -13313,6 +13342,7 @@ define('views/game',[
                         }
                         this.socket.sendMessage(data, 3);
                         this.index = this.field.map[this.from];
+                        $(".state").text("");
                     } 
                 }
             }
@@ -13337,11 +13367,16 @@ define('views/game',[
         },
 
         drawElemInField: function(p1,p2) {
-            img = this.elements[this.index].img;
             scale = Math.sqrt(3)/3;
             cor = Math.PI/180*30;
             x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
             y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
+            if (this.index > 5) {
+                img = this.elements[5].img;
+                this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+                this.index -=6;
+            }
+            img = this.elements[this.index].img;
             this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
         },
 
@@ -13360,6 +13395,7 @@ define('views/game',[
                     obj.context.drawImage(this,x-this.width/2*30/this.width,y-this.height/2*30/this.height,30,30);
                     obj.field.map[obj.field.inv[obj.field.baseField[l]]] = 5;
                 }
+                obj.elements.push({name: "cloud", index: 5, count: 0, img : cloud});
             };
             cloud.src = 'images/piece/cloud.png';
             obj.cloud = cloud;
@@ -13373,33 +13409,43 @@ define('views/game',[
             context.stroke();
         },
 
-        moving: function() {
-            from = localStorage['from'];
-            to = localStorage['to'];
-            if (localStorage['youStart'] == "true") {
-                from = this.field.inv[localStorage['from']];
-                to = this.field.inv[localStorage['to']];
+        reveal: function(array) {
+            for (z = 0; z < array.length; z++) {
+                pos = array[z][0]-1
+                if (localStorage['youStart'] == "true") {
+                    pos = this.field.inv[array[z][0]-1];
+                }
+                enemy = (this.field.map[pos] > 4)
+                this.field.map[pos] = array[z][1];
+                if (enemy) this.field.map[pos] +=6;
+                this.drawField(this.context,coords[pos]);
+                this.index = this.field.map[pos];
+                this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
             }
+        },    
 
-            localStorage.removeItem("from");
-            localStorage.removeItem("to");
+        destroy: function(array) {
+            for (z = 0; z < array.length; z++) {
+                pos = array[z]-1;
+                if (localStorage['youStart'] == "true") {
+                    pos = this.field.inv[array[z]-1];
+                }
+                this.field.map[pos] = -1;
+                this.drawField(this.context,coords[pos]);
+            }
+        },
+
+        moving: function(coord) {
+            from = coord.from;
+            to = coord.to;
+            if (localStorage['youStart'] == "true") {
+                from = this.field.inv[coord.from];
+                to = this.field.inv[coord.to];
+            }
 
             this.index = this.field.map[from];
             this.drawField(this.context,coords[from]);
-            if (this.index != 5) {
-                this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
-            } else {
-                debugger;
-                p1 = obj.field.coords[to][0];
-                p2 = obj.field.coords[to][1];
-                img = this.cloud;
-                scale = Math.sqrt(3)/3;
-                cor = Math.PI/180*30;
-                x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
-                y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
-                this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
-            }
-
+            this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
             st = this.field.map[from];
             this.field.map[from] = -1;
             this.field.map[to] = st;
@@ -13407,26 +13453,18 @@ define('views/game',[
 
         test: function(event) {
             if ( event.which == 2 ) {
-                if (localStorage['youStart'] == "true") {
-                    this.elements[0].place = [12,5,11];
-                    this.elements[1].place = [10,4,9];
-                    this.elements[2].place = [8,3,17];
-                    this.elements[3].place = [16,7,15];
-                    this.elements[4].place = [14,6,13];
-                } else {
-                    this.elements[0].place = [27,20,26];
-                    this.elements[1].place = [25,19,24];
-                    this.elements[2].place = [23,18,32];
-                    this.elements[3].place = [31,22,30];
-                    this.elements[4].place = [29,21,28];
-                }
-                for (i=0; i<this.elements.length; i++) {
-                    this.index = i;    
-                    for (k=0; k<this.elements[i].place.length; k++) {
-                        pos = this.elements[i].place[k]-1;
-                        if (localStorage['youStart'] == "true") pos = this.field.inv[pos];
+                plasement = this.field.baseField;
+
+                for (i=0; i<5; i++) {
+                    this.index = i;
+                    for (k=0; k<3; k++) {
+                        random = Math.floor(Math.random() * plasement.length)
+                        pos = plasement[random];
+                        plasement.splice(random, 1);
                         this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
                         this.field.map[pos] = i;
+                        if (localStorage['youStart'] == "true") pos = this.field.inv[pos];
+                        this.elements[i].place.push(pos+1);
                     }
                 }
                 this.state = "game";

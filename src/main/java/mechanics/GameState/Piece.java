@@ -30,7 +30,7 @@ public class Piece {
         this.elements.add(Element.WOOD);
         this.elements.add(Element.EARTH);
         this.elements.add(Element.WATER);
-        this.element = Element.BLANK;
+        this.element = Element.value(0);
         this.visible = true;
         this.firstPlayerOwner = firstPlayerOwner;
     }

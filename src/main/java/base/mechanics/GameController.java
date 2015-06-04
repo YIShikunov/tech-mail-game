@@ -18,4 +18,8 @@ public interface GameController {
     // public Object allGameData(); - not sure if we need this.
     // TODO pack all game data as seen by a player into a JSON
     //public Object subjectiveGameData(boolean isFirstPlayer); -- Not needed yet.
+
+    public boolean isGameFinished();
+    public boolean getWinner();
+
 }

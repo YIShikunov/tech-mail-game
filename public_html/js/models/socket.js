@@ -36,7 +36,7 @@ define([
                 } else {
                     $(".turn").text("ЖДИТЕ");
                 }
-                alert("Поехали играть!!!")
+                alert("Поехали играть!!!");
             }
             if (data.typeID == 4 && data.statusOK) {
                 if (data.piecesRevealed.length > 0) {
@@ -60,15 +60,46 @@ define([
                 $(".state").text(data.errorMessage);
 
             }
-            // if (data.type === 'end') {
-            //     this.connection.close();
-            // }
+            if (data.typeID == 8) {
+                if (data.statusOK) {
+                    obj.king[0].index = obj.king[0].check;
+                    obj.field.map[obj.king[0].pos] = obj.king[0].index;
+                    obj.recolor(obj.king[0].pos, obj.king[0].index)
+                    $(".state").text("Король перекрашен в " + obj.elements[obj.king[0].index].name);
+                } else {
+                    $(".state").text(data.errorMessage);
+                }
+
+            }
+
+            if (data.typeID == 10) {
+                index = 0;
+                if (!data.isYourKing) index = 1;
+                obj.stFld[index].have = [0,0,0,0,0];
+                if (data.Elements.length != 0) {
+                    for (z=0; z< data.Elements.length; z++) {
+                        obj.stFld[index].have[data.Elements[z]] = 1;
+                    }
+                    if (data.isYourKing) {
+                        obj.king[0].index = data.element;
+                        obj.recolor(obj.king[0].pos, obj.king[0].index)
+                    }
+                } else {
+                    // if (data.isYourKing) alert("Игра окончена. Вы проиграли"); else alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!");
+                    // this.connection.close();
+                }
+                obj.drawStatus();
+            }
+            if (data.typeID == -1) {
+                if (data.iAmWinner) alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!"); else alert("Игра окончена. Вы проиграли");
+                this.connection.close();
+            }
         },
         sendMessage: function (data, id) {
             var sendObj = null;
 
             if (id == 1) {
-                var sendObj = {
+                sendObj = {
                     typeID : 1, // 1=pieces init
                     element0 : data[0].place,
                     element1 : data[1].place,
@@ -80,11 +111,20 @@ define([
             };
 
             if (id == 3) {
-                var sendObj = {
+                sendObj = {
                     typeID : 3,
                     turn : 0,
                     moveFrom : data[0],
                     moveTo : data[1],
+                    statusOK : true,
+                };
+            };
+
+            if (id == 7) {
+                sendObj = {
+                    typeID : 7,
+                    turn : 0,
+                    kingRecolor : data,
                     statusOK : true,
                 };
             };

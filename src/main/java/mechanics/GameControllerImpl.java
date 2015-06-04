@@ -125,6 +125,8 @@ public class GameControllerImpl implements GameController {
             {
                 res.king1Status = getKingStatus(true);
                 res.king2Status = getKingStatus(false);
+                res.king1Element = board.getKing(true).getElement();
+                res.king2Element = board.getKing(false).getElement();
 
                 if (from.king && to.king)
                 {
@@ -304,11 +306,6 @@ public class GameControllerImpl implements GameController {
             res.status = false;
             return res;
         }
-        /*Piece king = board.getKing(isFirstPlayer);
-        if (king.getElement() == Element.BLANK || !king.hasBackupElement()){
-            getErrorMessage("KING_NOT_SET");
-            return false;
-        }*/ // TODO: resolve king question
 
         if (!board.doesOwn(isFirstPlayer, fromID))  {
             res.errorMessage = getErrorMessage("DO_NOT_OWN");
@@ -319,9 +316,10 @@ public class GameControllerImpl implements GameController {
         res = makeMove(isFirstPlayer, fromID, toID);
 
         if (res == null)
-            return makeBattle(isFirstPlayer, fromID, toID);
-        else
-            return res;
+            res = makeBattle(isFirstPlayer, fromID, toID);
+
+        checkAndSetVictory();
+        return res;
     }
 
     public synchronized TurnResult answerPrompt(boolean isFirstPlayer, Element element) {
@@ -385,7 +383,23 @@ public class GameControllerImpl implements GameController {
         return result;
     }
 
-    private String getErrorMessage(String id) {
+    private void checkAndSetVictory() {
+        if (getKingStatus(true).size() < 1)
+            state = WaitingFor.FIRST_PLAYER_WON;
+        else if (getKingStatus(false).size() < 1)
+            state = WaitingFor.SECOND_PLAYER_WON;
+    }
+
+    public boolean isGameFinished() {
+        return (state == WaitingFor.FIRST_PLAYER_WON || state == WaitingFor.SECOND_PLAYER_WON);
+    }
+
+    public boolean getWinner() {
+        return state == WaitingFor.FIRST_PLAYER_WON;
+    }
+
+
+    public String getErrorMessage(String id) {
         String response = messages.get(id);
         if (response == null) {
             // the "totally erroneous and obnoxious output so we would see there is a problem with our resource file"
