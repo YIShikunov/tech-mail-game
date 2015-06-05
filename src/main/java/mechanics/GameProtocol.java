@@ -303,8 +303,11 @@ public class GameProtocol {
         if (!gameController.isGameFinished())
             return false;
         else {
-            notifyEndGame(gameController.getWinner(), true, false);
-            notifyEndGame(!gameController.getWinner(), false, false);
+            if (gameActive) {
+                notifyEndGame(gameController.getWinner(), true, false);
+                notifyEndGame(!gameController.getWinner(), false, false);
+                gameActive = false;
+            }
             return true;
         }
     }

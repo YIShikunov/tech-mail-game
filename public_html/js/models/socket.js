@@ -48,18 +48,35 @@ define([
                 if (data.piecesMoved.length > 0) {
                     obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
                 }
-                if ($(".turn").text() == "ВАШ ХОД") {
-                    $(".turn").text("ЖДИТЕ...");
+
+                if (data.recolor) {
+                    obj.socket.trigger("changeElem");
+                    $(".state").text("Укажите элемент для фигуры на базе");
                 } else {
-                    $(".turn").text("ВАШ ХОД");
+                    if ($(".turn").text() == "ВАШ ХОД") {
+                        $(".turn").text("ЖДИТЕ...");
+                    } else {
+                        $(".turn").text("ВАШ ХОД");
+                    }
+                    $(".state").text();
                 }
-                $(".state").text();
 
             }
             if (data.typeID == 4 && !data.statusOK) {
                 $(".state").text(data.errorMessage);
-
             }
+
+            if (data.typeID == 6) {
+                if (data.statusOK) {
+                    obj.field.map[1] = data.element;
+                    obj.index = data.element;
+                    obj.drawField(obj.context, obj.field.coords[1]);
+                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1])
+                } else {
+                    $(".state").text(data.errorMessage);
+                }
+            }
+
             if (data.typeID == 8) {
                 if (data.statusOK) {
                     obj.king[0].index = obj.king[0].check;
@@ -69,7 +86,6 @@ define([
                 } else {
                     $(".state").text(data.errorMessage);
                 }
-
             }
 
             if (data.typeID == 10) {
@@ -116,6 +132,15 @@ define([
                     turn : 0,
                     moveFrom : data[0],
                     moveTo : data[1],
+                    statusOK : true,
+                };
+            };
+
+            if (id == 5) {
+                sendObj = {
+                    typeID : 5,
+                    turn : 0,
+                    baseRecolor : data,
                     statusOK : true,
                 };
             };

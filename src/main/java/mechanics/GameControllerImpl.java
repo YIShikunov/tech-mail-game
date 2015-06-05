@@ -384,9 +384,9 @@ public class GameControllerImpl implements GameController {
     }
 
     private void checkAndSetVictory() {
-        if (getKingStatus(true).size() < 1)
+        if (getKingStatus(false).size() < 1)
             state = WaitingFor.FIRST_PLAYER_WON;
-        else if (getKingStatus(false).size() < 1)
+        else if (getKingStatus(true).size() < 1)
             state = WaitingFor.SECOND_PLAYER_WON;
     }
 

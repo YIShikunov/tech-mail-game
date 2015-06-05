@@ -22,6 +22,7 @@ define([
                     {name: "water", index: 4, count: 3, place: []}],
         king:[  {name: "King_base",  pos: 1, index: 0, check:0, elem: false, x: 0, y: 0},
                 {name: "King_base",  pos: 0, index: 5, x: 0, y: 0}],
+        base: { centers: [], elem: [0,3,1,4,2]},
         index: 0,
         state: "place",
         move: -1,
@@ -36,7 +37,6 @@ define([
             'click canvas' : 'gameClick',
             'resize' : 'draw',
             'storage' : 'moving',
-            'mousedown' : 'test',
         },
 
         initialize: function () {
@@ -47,6 +47,37 @@ define([
             this.listenTo(this.socket, 'move', this.moving);
             this.listenTo(this.socket, 'destroy', this.destroy);
             this.listenTo(this.socket, 'reveal', this.reveal);
+            this.listenTo(this.socket, 'changeElem', this.changeElem);
+
+            var but = document.createElement("button");
+            but.innerHTML ="Расставить в случайной последовательности";
+            but.style.background = "deepskyblue";
+            but.onclick = function() {
+                plasement = obj.field.baseField;
+
+                for (i=0; i<5; i++) {
+                    obj.index = i;
+                    for (k=0; k<3; k++) {
+                        random = Math.floor(Math.random() * plasement.length)
+                        pos = plasement[random];
+                        plasement.splice(random, 1);
+                        obj.drawElemInField(obj.field.coords[pos][0],obj.field.coords[pos][1])
+                        obj.field.map[pos] = i;
+                        if (localStorage['youStart'] == "true") pos = obj.field.inv[pos];
+                        obj.elements[i].place.push(pos+1);
+                    }
+                }
+                obj.state = "game";
+                obj.socket.sendMessage(obj.elements, 1);
+                obj.index = 0;
+                obj.field.map[1] = 0;
+                obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
+                debugger;
+                obj.context.clearRect(obj.panel.x-10, obj.panel.y-50, obj.panel.width+20, obj.panel.height+100);
+                obj.drawStatus();
+                this.remove();
+            };
+            $(".state").append(but);
         },
 
         render: function () {
@@ -203,7 +234,6 @@ define([
                 obj.drawEnemy();
             };
             img.src = 'images/ptrn.jpg';
-
         },
 
         drawField: function(context,points) {
@@ -225,7 +255,11 @@ define([
             x = event.pageX - coords.left;
             y = event.pageY - coords.top;
             panel = panel;
-            if (x > panel.x && x < panel.x+panel.width && y > panel.y && y < panel.y+panel.height && this.state =="place")
+            if (this.state == "place" && 
+                x > panel.x && 
+                x < panel.x+panel.width && 
+                y > panel.y && 
+                y < panel.y+panel.height)
                 for (i=0; i<this.elements.length; i++) {
                     if (y < this.elements[i].index*90+140) {
                         this.drawElemInPanel(this.index);
@@ -233,22 +267,19 @@ define([
                         this.index = i;
                         break;
                     }
-            } else {
+            } else
+             {
                 index = this.field.checkField((x-TRx)/this.scale,(y-TRy)/this.scale);
                 if (index >= 0) {
                     // Place of elements
-                    if ( this.state =="place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
+                    if ( this.state == "place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
                         this.drawField(this.context,coords[index]);
-                        // draw element
                         this.drawElemInField(this.field.coords[index][0],this.field.coords[index][1])
-                        // change count
                         this.elements[this.index].count--;
-                        // save place of element
-                        idField = index+1;
+                        idField = index + 1;
                         if (localStorage['youStart'] == "true") idField = this.field.inv[index]+1;
                         this.elements[this.index].place.push(idField);
                         this.field.map[index] = this.index;
-                        // change element
                         if (this.elements[this.index].count == 0) {
                             this.drawElemInPanel(this.index);
 
@@ -271,20 +302,15 @@ define([
                             this.context.clearRect(this.panel.x-10, this.panel.y-50, panel.width+20, this.panel.height+100);
                             this.drawStatus();
                         }
-
-                    } else 
-                        if (this.field.map[index] != -1 && this.state == "game" ) {
-                            this.move = this.field.map[index];
-                            this.state = "move";
-                            this.from = index;
-                            this.index = this.field.map[index];
-                            $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
-                    } else 
-                    if ((this.field.map[index] == -1 || this.field.map[index] > 4) && this.state == "move" ) {
+                    } else if ( this.state == "game" && this.field.map[index] != -1) {
+                        this.move = this.field.map[index];
+                        this.state = "move";
+                        this.from = index;
+                        this.index = this.field.map[index];
+                        $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
+                    } else if ( this.state == "move" && (this.field.map[index] == -1 || this.field.map[index] > 4)) {
                         this.move = this.field.map[this.from];
-
                         this.state = "game";
-
                         data = [];
                         if (localStorage['youStart'] == "false") {
                             data.push(this.from+1);
@@ -296,39 +322,47 @@ define([
                         this.socket.sendMessage(data, 3);
                         this.index = this.field.map[this.from];
                         $(".state").text("");
-                    } 
-                }
-
-                // for Status click
-                x = (x - TRx)/obj.scale;
-                y = (y - TRy)/obj.scale;
-                coords = this.stFld[0].field;
-                check = true;
-                min = {index: -1, length: 1000}
-                for (k=0; k<coords.length; k++) {
-                    p1 = k;
-                    if ( k < coords.length -1 ) {
-                        p2 = k+1;
-                    } else {
-                        p2 = 0;
-                    }
-                    if ((coords[p2][0]-coords[p1][0])*(y-coords[p1][1]) - 
-                        (coords[p2][1]-coords[p1][1])*(x-coords[p1][0]) >= 0 ) {
-                            check = false;
+                    } else if ( this.state == "change" && index == 1 ) {
+                        min = {index: -1, length: 1000}
+                        for (k=0; k<this.base.centers.length; k++) {
+                            R = Math.sqrt(Math.pow(x-this.base.centers[k].x,2) + Math.pow(y-this.base.centers[k].y,2));
+                            if ( R < min.length ) {
+                                min.index = k;
+                                min.length = R;
+                            }
                         }
-                        
-                }
-                for (k=0; k<coords.length; k++) {
-                    R = Math.sqrt(Math.pow(x-coords[k][0],2) + Math.pow(y-coords[k][1],2));
+                        this.socket.sendMessage(this.base.elem[min.index], 5);
+                    } 
+                } else {
+                    x = (x - TRx)/obj.scale;
+                    y = (y - TRy)/obj.scale;
+                    coords = this.stFld[0].field;
+                    check = true;
+                    min = {index: -1, length: 1000}
+                    for (k=0; k<coords.length; k++) {
+                        p1 = k;
+                        if ( k < coords.length -1 ) {
+                            p2 = k+1;
+                        } else {
+                            p2 = 0;
+                        }
+                        if ((coords[p2][0]-coords[p1][0])*(y-coords[p1][1]) - 
+                            (coords[p2][1]-coords[p1][1])*(x-coords[p1][0]) >= 0 ) {
+                                check = false;
+                            }  
+                    }
+                    for (k=0; k<coords.length; k++) {
+                        R = Math.sqrt(Math.pow(x-coords[k][0],2) + Math.pow(y-coords[k][1],2));
                         if ( R < min.length ) {
                             min.index = k;
                             min.length = R;
                         }
-                }
-                if (check) {
-                    this.king[0].check = this.stFld[0].elem[min.index];
-                    this.socket.sendMessage(this.stFld[0].elem[min.index],7)
-                    return i;
+                    }
+                    if (check) {
+                        this.king[0].check = this.stFld[0].elem[min.index];
+                        this.socket.sendMessage(this.stFld[0].elem[min.index],7)
+                        return i;
+                    }
                 }
             }
         },
@@ -395,9 +429,7 @@ define([
                 this.context.fill();
             }
 
-            this.context.fillStyle = ptrn;
-
-            
+            this.context.fillStyle = ptrn;   
         },
 
         drawEnemy: function() {
@@ -424,13 +456,45 @@ define([
         },
 
         drawBase: function() {
-            size = 90*obj.scale;
+
+            area = obj.field.coords[1];
+            for ( m = 0; m < area.length; m++ ) {
+                p1 = area[m];
+                if ( m < area.length-1 ) {
+                    p2 = area[m+1];
+                } else {
+                    p2 = area[0];
+                }
+                scale = obj.scale;
+                sc = 0.315;
+                cor = Math.PI/180*55;
+                x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + cX;
+                y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + cY;
+                this.base.centers.push({x:x,y:y});
+            }
+
             img = this.king[0].img;
             this.context.save();
+            size = 90*obj.scale;
             this.context.translate(this.king[0].x,this.king[0].y)
             this.context.rotate(Math.PI);
             obj.context.drawImage(img,-size/2,-size/2,size,size);
             this.context.restore();
+
+            for ( m = 0; m < this.base.centers.length; m++) {
+                pos = this.base.centers[m];
+                elSize = obj.scale*25;
+                ptrn = this.context.fillStyle;
+                this.context.fillStyle = "#FFFFFF";
+                this.context.beginPath();
+                this.context.arc(pos.x,pos.y,elSize/2-obj.scale,0,2*Math.PI);
+                this.context.fill();
+                this.context.fillStyle = ptrn;
+
+                img = this.elements[this.base.elem[m]].img;
+                this.context.drawImage(img, pos.x - elSize/2, pos.y - elSize/2, elSize, elSize);
+
+            };
         },
 
         drawStatus: function( own) {
@@ -528,38 +592,15 @@ define([
             this.field.map[to] = st;
         },
 
-        test: function(event) {
-            if ( event.which == 2 ) {
-                plasement = this.field.baseField;
-
-                for (i=0; i<5; i++) {
-                    this.index = i;
-                    for (k=0; k<3; k++) {
-                        random = Math.floor(Math.random() * plasement.length)
-                        pos = plasement[random];
-                        plasement.splice(random, 1);
-                        this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
-                        this.field.map[pos] = i;
-                        if (localStorage['youStart'] == "true") pos = this.field.inv[pos];
-                        this.elements[i].place.push(pos+1);
-                    }
-                }
-                this.state = "game";
-                this.socket.sendMessage(this.elements, 1);
-
-                this.index = 0;
-                this.field.map[1] = 0;
-                this.drawElemInField(this.field.coords[1][0],this.field.coords[1][1])
-
-                this.context.clearRect(this.panel.x-10, this.panel.y-50, panel.width+20, this.panel.height+100);
-                this.drawStatus();
-            }
+        changeElem: function(coord) {
+            ptrn = this.context.fillStyle;
+            this.context.fillStyle = "#FFAAAA";
+            this.drawField(this.context,this.field.coords[1]);
+            this.context.fillStyle = ptrn;
+            this.state = "change";
+            this.drawBase();
         },
-
-
     });
-
-
 
     return new GameView();
 });
