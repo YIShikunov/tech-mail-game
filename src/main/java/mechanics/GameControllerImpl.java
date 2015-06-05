@@ -277,7 +277,7 @@ public class GameControllerImpl implements GameController {
     {
         TurnResult res = new TurnResult();
         if (board.movePiece(fromID, toID)) {
-            if (board.fieldType(toID) == FieldType.THRONE) {
+            if (board.fieldType(toID) == FieldType.THRONE && !board.fields.get(toID).getPiece().king) {
                 if (isFirstPlayer)
                     state = WaitingFor.FIRST_ELEMENT_CHOICE;
                 else
@@ -337,11 +337,6 @@ public class GameControllerImpl implements GameController {
             return result;
         }
 
-        if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
-            state = WaitingFor.SECOND_TURN;
-        } else if (state == WaitingFor.SECOND_ELEMENT_CHOICE)
-            state = WaitingFor.FIRST_TURN;
-
         Boolean success = board.changeElement(promptTarget, element);
         if (!success)
         {
@@ -349,6 +344,12 @@ public class GameControllerImpl implements GameController {
             result.errorMessage = getErrorMessage("WRONG_ELEMENT");
             return result;
         }
+
+        if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
+            state = WaitingFor.SECOND_TURN;
+        } else if (state == WaitingFor.SECOND_ELEMENT_CHOICE)
+            state = WaitingFor.FIRST_TURN;
+
         result.status = true;
         return result;
     }
