@@ -21,6 +21,17 @@ define([
         },
 
         show: function () {
+            if ( document.cookie.length ) {
+                $("#game").show();
+                $("#logout").show();
+                $("#auth").hide();
+                $("#login").hide();
+            } else {
+                $("#game").hide();
+                $("#logout").hide();
+                $("#auth").show();
+                $("#login").show();
+            }
             this.$el.show();
             this.trigger('show',this);
         },

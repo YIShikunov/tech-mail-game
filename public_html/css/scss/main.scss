@@ -30,16 +30,31 @@ html, body {
 
     &_red {
         background: #CF000F;
+        &:hover { background: #F81726; }
     }
 
     &_green {
-        background: #00CC00;
+        background: #00AA00;
         color: #000000;
         text-shadow: 0px 0px;
+        &:hover { background: #00FF00; }
     }
 
     &_yellow {
         background: #993300;
+        &:hover { background: #D04906; }
+    }
+
+    &_orange {
+        background: #FF8000;
+        color: #000000;
+        text-shadow: 0px 0px;
+        &:hover { background: #FFA040; }
+    }
+
+    &_gray {
+        background: #223344;
+        &:hover { background: #32587F; }
     }
 
     &_auth {

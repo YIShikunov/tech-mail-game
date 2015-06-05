@@ -48,35 +48,6 @@ define([
             this.listenTo(this.socket, 'destroy', this.destroy);
             this.listenTo(this.socket, 'reveal', this.reveal);
             this.listenTo(this.socket, 'changeElem', this.changeElem);
-
-            var but = document.createElement("button");
-            but.innerHTML ="Расставить в случайной последовательности";
-            but.style.background = "deepskyblue";
-            but.onclick = function() {
-                plasement = obj.field.baseField;
-
-                for (i=0; i<5; i++) {
-                    obj.index = i;
-                    for (k=0; k<3; k++) {
-                        random = Math.floor(Math.random() * plasement.length)
-                        pos = plasement[random];
-                        plasement.splice(random, 1);
-                        obj.drawElemInField(obj.field.coords[pos][0],obj.field.coords[pos][1])
-                        obj.field.map[pos] = i;
-                        if (localStorage['youStart'] == "true") pos = obj.field.inv[pos];
-                        obj.elements[i].place.push(pos+1);
-                    }
-                }
-                obj.state = "game";
-                obj.socket.sendMessage(obj.elements, 1);
-                obj.index = 0;
-                obj.field.map[1] = 0;
-                obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
-                obj.context.clearRect(obj.panel.x-10, obj.panel.y-50, obj.panel.width+20, obj.panel.height+100);
-                obj.drawStatus();
-                this.remove();
-            };
-            $(".state").append(but);
         },
 
         render: function () {
@@ -238,7 +209,6 @@ define([
                         elem.src = 'images/King/'+obj.king[i].name+'.png';
                         obj.king[i].img = elem;
                         elem.onload = function() {
-                            //obj.drawBase();
                         };
                     };
                 }
@@ -314,16 +284,15 @@ define([
                             this.context.clearRect(this.panel.x-10, this.panel.y-50, panel.width+20, this.panel.height+100);
                             this.drawStatus();
                         }
-                    } else if ( this.state == "game" && this.field.map[index] != -1) {
-                        this.move = this.field.map[index];
+                    } else if ( this.state == "game" && this.field.map[index] != -1 && this.field.map[index] < 5) {
                         this.state = "move";
                         this.from = index;
                         this.index = this.field.map[index];
                         $(".state").text("(фишка "+this.elements[Math.abs(this.field.map[index])].name+" захвачена)"); 
                     } else if ( this.state == "move" ) {
                         if (this.field.map[index] == -1 || this.field.map[index] > 4) {
-                            this.move = this.field.map[this.from];
                             this.state = "game";
+                            this.move = index;
                             data = [];
                             if (localStorage['youStart'] == "false") {
                                 data.push(this.from+1);
@@ -336,6 +305,7 @@ define([
                             this.index = this.field.map[this.from];
                             $(".state").text("");
                         } else {
+                            this.state = "game";
                             $(".state").text("Вы не можете так сходить. Сделайте другой ход");
                         }
                     } else if ( this.state == "change" && index == 1 ) {
@@ -419,7 +389,7 @@ define([
             ptrn = this.context.fillStyle;
             if (this.index < 0 ) {
                 this.context.fillStyle = "#F5A9BC";
-                this.index += 5;
+                this.index += 6;
             } else {
                 this.context.fillStyle = "#FFFFFF";
             }
@@ -547,7 +517,7 @@ define([
                     if (enemy) {
                         this.field.map[pos] +=6
                     } else {
-                        this.field.map[pos] -=5
+                        this.field.map[pos] -=6
                     }
 
                     this.drawField(this.context,this.field.coords[pos]);
@@ -586,7 +556,7 @@ define([
             st = this.field.map[from];
             this.field.map[from] = -1;
             this.field.map[to] = st;
-            if ( st > 5 ) this.field.map[to] = 5;
+            if ( to == 0 && st > 5 ) this.field.map[to] = 5;
             this.index = this.field.map[to];
             this.drawField(this.context,this.field.coords[from]);
             this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])

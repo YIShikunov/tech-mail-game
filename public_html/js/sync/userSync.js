@@ -34,8 +34,6 @@ define([
                 data[model.attributes[num].name] = model.attributes[num].value;
             }
 
-        debugger;
-
         var xhr = $.ajax({
             type: methodMap[method].method,
             url: methodMap[method].url,

@@ -2,8 +2,10 @@
     <div class="title_main">WuXing</div>
     <div class="title_sub">Главное меню</div>
     <div>
-	    <a class="btn btn_red" href="#game">Играть</a>
-	    <a class="btn btn_green" href="#login">Авторизация</a>
+	    <a class="btn btn_red" href="#game" id="game">Играть</a>
+	    <a class="btn btn_orange" href="#login" id="login">Войти</a>
+	    <a class="btn btn_green" href="#auth" id="auth">Авторизация</a>
+	    <a class="btn btn_gray" href="#logout" id="logout">Выйти</a>
 	    <a class="btn btn_yellow" href="#scoreboard">Рейтинг</a>
 	 </div>
 </fest:template>

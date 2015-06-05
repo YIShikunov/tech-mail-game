@@ -33,6 +33,35 @@ define([
                 localStorage['youStart'] = data.youStart;
                 alert("Играем с " + data.opponent);
                 $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
+
+                var but = document.createElement("button");
+                but.innerHTML ="Расставить в случайной последовательности";
+                but.style.background = "deepskyblue";
+                but.onclick = function() {
+                    plasement = obj.field.baseField;
+
+                    for (i=0; i<5; i++) {
+                        obj.index = i;
+                        for (k=0; k<3; k++) {
+                            random = Math.floor(Math.random() * plasement.length)
+                            pos = plasement[random];
+                            plasement.splice(random, 1);
+                            obj.drawElemInField(obj.field.coords[pos][0],obj.field.coords[pos][1])
+                            obj.field.map[pos] = i;
+                            if (localStorage['youStart'] == "true") pos = obj.field.inv[pos];
+                            obj.elements[i].place.push(pos+1);
+                        }
+                    }
+                    obj.state = "game";
+                    obj.socket.sendMessage(obj.elements, 1);
+                    obj.index = 0;
+                    obj.field.map[1] = 0;
+                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
+                    obj.context.clearRect(obj.panel.x-10, obj.panel.y-50, obj.panel.width+20, obj.panel.height+100);
+                    obj.drawStatus();
+                    this.remove();
+                };
+                $(".state").append(but);
             }
             if (data.typeID == 2 && data.opponentReady) {
                 if (localStorage['youStart'] == "true") {
@@ -54,11 +83,23 @@ define([
                 }
 
                 if (data.recolor) {
-                    obj.socket.trigger("changeElem");
-                    $(".state").text("Укажите элемент для фигуры на базе");
+                    debugger;
+                    if (obj.move != 0) {
+                        obj.socket.trigger("changeElem");
+                        $(".state").text("Укажите элемент для фигуры на базе");
+                    } else {
+                        el = obj.field.map[0];
+                        if ( el < 0 ) el +=5;
+                        obj.socket.sendMessage(el,5);
+                        if ($(".turn").text() == "ВАШ ХОД") {
+                            $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
+                        } else {
+                            $(".turn").text("ВАШ ХОД");
+                        }
+                    }
                 } else {
                     if ($(".turn").text() == "ВАШ ХОД") {
-                        $(".turn").text("ЖДИТЕ...");
+                        $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
                     } else {
                         $(".turn").text("ВАШ ХОД");
                     }
@@ -71,15 +112,14 @@ define([
             }
 
             if (data.typeID == 6) {
-                debugger;
-                if (data.statusOK) {
+                if (data.statusOK && obj.move != 0) {
                     obj.field.map[1] = data.element;
                     obj.index = data.element;
                     obj.state = "game";
                     obj.drawField(obj.context, obj.field.coords[1]);
                     obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
                     if ($(".turn").text() == "ВАШ ХОД") {
-                        $(".turn").text("ЖДИТЕ...");
+                        $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
                     } else {
                         $(".turn").text("ВАШ ХОД");
                     }
@@ -90,7 +130,6 @@ define([
             }
 
             if (data.typeID == 8) {
-                debugger;
                 if (data.statusOK) {
                     obj.king[0].index = obj.king[0].check;
                     obj.field.map[obj.king[0].pos] = obj.king[0].index;
@@ -112,16 +151,22 @@ define([
                     }
                     if (data.isYourKing) {
                         obj.king[0].index = data.element;
+                        obj.field.map[obj.king[0].pos] = obj.king[0].index;
                         obj.recolor(obj.king[0].pos, obj.king[0].index)
                     }
-                } else {
-                    // if (data.isYourKing) alert("Игра окончена. Вы проиграли"); else alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!");
-                    // this.connection.close();
                 }
                 obj.drawStatus();
             }
             if (data.typeID == -1) {
-                if (data.iAmWinner) alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!"); else alert("Игра окончена. Вы проиграли");
+                if (data.iAmWinner) {
+                    obj.stFld[1].have = [0,0,0,0,0];
+                    obj.drawStatus();
+                    alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!"); 
+                }else {
+                    obj.stFld[0].have = [0,0,0,0,0];
+                    obj.drawStatus();
+                    alert("Игра окончена. Вы проиграли");
+                }
                 this.connection.close();
             }
         },
@@ -138,6 +183,7 @@ define([
                     element4 : data[4].place,
                     statusOK : true,
                 };
+                $(".turn").text("СОПЕРНИК РАССТАВЛЯЕТ ФИШКИ");
             };
 
             if (id == 3) {
