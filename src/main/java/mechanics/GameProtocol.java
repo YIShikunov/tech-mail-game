@@ -294,11 +294,6 @@ public class GameProtocol {
             packet.put("iAmWinner", isWon);
             send(isFirstPlayer, packet);
         }
-        packet = new JSONObject();
-        packet.put("statusOK", !isError);
-        packet.put("typeID", -1);
-        packet.put("iAmWinner", !isWon);
-        send(!isFirstPlayer, packet);
     }
 
     private synchronized boolean checkAndNotifyEndGame() {
