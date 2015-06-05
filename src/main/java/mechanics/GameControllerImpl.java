@@ -277,7 +277,7 @@ public class GameControllerImpl implements GameController {
     {
         TurnResult res = new TurnResult();
         if (board.movePiece(fromID, toID)) {
-            if (board.fieldType(toID) == FieldType.THRONE) {
+            if (board.fieldType(toID) == FieldType.THRONE && !board.fields.get(toID).getPiece().king) {
                 if (isFirstPlayer)
                     state = WaitingFor.FIRST_ELEMENT_CHOICE;
                 else
