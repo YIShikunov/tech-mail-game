@@ -221,10 +221,12 @@ public class GameProtocol {
             response.put("typeID", 6);
             response.put("element", elementID);
             send(isFirstPlayer, response);
+            stashedResponse.replace("recolor", false);
             send(!isFirstPlayer, stashedResponse);
             sendKingPongPackets(isFirstPlayer, stashedResult);
             sendKingPongPackets(!isFirstPlayer, stashedResult);
             stashedResult = null;
+            stashedResponse = null;
         } else {
             JSONObject response = new JSONObject();
             response.put("statusOK", false);

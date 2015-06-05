@@ -67,21 +67,31 @@ define([
             }
 
             if (data.typeID == 6) {
+                debugger;
                 if (data.statusOK) {
                     obj.field.map[1] = data.element;
                     obj.index = data.element;
+                    obj.state = "game";
                     obj.drawField(obj.context, obj.field.coords[1]);
-                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1])
+                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
+                    if ($(".turn").text() == "ВАШ ХОД") {
+                        $(".turn").text("ЖДИТЕ...");
+                    } else {
+                        $(".turn").text("ВАШ ХОД");
+                    }
+                    $(".state").text();
                 } else {
                     $(".state").text(data.errorMessage);
                 }
             }
 
             if (data.typeID == 8) {
+                debugger;
                 if (data.statusOK) {
                     obj.king[0].index = obj.king[0].check;
                     obj.field.map[obj.king[0].pos] = obj.king[0].index;
-                    obj.recolor(obj.king[0].pos, obj.king[0].index)
+                    obj.recolor(obj.king[0].pos, obj.king[0].index);
+                    obj.state = "game";
                     $(".state").text("Король перекрашен в " + obj.elements[obj.king[0].index].name);
                 } else {
                     $(".state").text(data.errorMessage);

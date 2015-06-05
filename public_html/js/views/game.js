@@ -72,7 +72,6 @@ define([
                 obj.index = 0;
                 obj.field.map[1] = 0;
                 obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
-                debugger;
                 obj.context.clearRect(obj.panel.x-10, obj.panel.y-50, obj.panel.width+20, obj.panel.height+100);
                 obj.drawStatus();
                 this.remove();
@@ -168,7 +167,20 @@ define([
             this.king[1].x = x;
             this.king[1].y = y;
             
-
+            area = obj.field.coords[1];
+            sc = 0.315;
+            cor = Math.PI/180*55;
+            for ( m = 0; m < area.length; m++ ) {
+                p1 = area[m];
+                if ( m < area.length-1 ) {
+                    p2 = area[m+1];
+                } else {
+                    p2 = area[0];
+                }
+                x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + cX;
+                y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + cY;
+                this.base.centers.push({x:x,y:y});
+            }
 
             var img = document.createElement('img');
             img.onload = function() {
@@ -308,20 +320,24 @@ define([
                         this.from = index;
                         this.index = this.field.map[index];
                         $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
-                    } else if ( this.state == "move" && (this.field.map[index] == -1 || this.field.map[index] > 4)) {
-                        this.move = this.field.map[this.from];
-                        this.state = "game";
-                        data = [];
-                        if (localStorage['youStart'] == "false") {
-                            data.push(this.from+1);
-                            data.push(index+1);
+                    } else if ( this.state == "move" ) {
+                        if (this.field.map[index] == -1 || this.field.map[index] > 4) {
+                            this.move = this.field.map[this.from];
+                            this.state = "game";
+                            data = [];
+                            if (localStorage['youStart'] == "false") {
+                                data.push(this.from+1);
+                                data.push(index+1);
+                            } else {
+                                data.push(this.field.inv[this.from]+1);
+                                data.push(this.field.inv[index]+1);
+                            }
+                            this.socket.sendMessage(data, 3);
+                            this.index = this.field.map[this.from];
+                            $(".state").text("");
                         } else {
-                            data.push(this.field.inv[this.from]+1);
-                            data.push(this.field.inv[index]+1);
+                            $(".state").text("Вы не можете так сходить. Сделайте другой ход");
                         }
-                        this.socket.sendMessage(data, 3);
-                        this.index = this.field.map[this.from];
-                        $(".state").text("");
                     } else if ( this.state == "change" && index == 1 ) {
                         min = {index: -1, length: 1000}
                         for (k=0; k<this.base.centers.length; k++) {
@@ -456,23 +472,6 @@ define([
         },
 
         drawBase: function() {
-
-            area = obj.field.coords[1];
-            for ( m = 0; m < area.length; m++ ) {
-                p1 = area[m];
-                if ( m < area.length-1 ) {
-                    p2 = area[m+1];
-                } else {
-                    p2 = area[0];
-                }
-                scale = obj.scale;
-                sc = 0.315;
-                cor = Math.PI/180*55;
-                x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + cX;
-                y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + cY;
-                this.base.centers.push({x:x,y:y});
-            }
-
             img = this.king[0].img;
             this.context.save();
             size = 90*obj.scale;
