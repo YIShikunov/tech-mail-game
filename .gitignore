@@ -58,3 +58,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 src/main/java/META-INF/MANIFEST.MF
+node_modules

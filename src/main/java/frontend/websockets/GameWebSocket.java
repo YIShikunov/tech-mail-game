@@ -81,7 +81,7 @@ public class GameWebSocket {
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         //protocol.notifyEndGame(isFirstPlayer, false, true);
-        System.out.println(reason + " code: " + statusCode + " SOCKET PANIC111!!!");
+        System.out.println(reason + " code: " + statusCode + " socket closed");
     }
 
 
