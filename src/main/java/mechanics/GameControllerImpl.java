@@ -337,11 +337,6 @@ public class GameControllerImpl implements GameController {
             return result;
         }
 
-        if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
-            state = WaitingFor.SECOND_TURN;
-        } else if (state == WaitingFor.SECOND_ELEMENT_CHOICE)
-            state = WaitingFor.FIRST_TURN;
-
         Boolean success = board.changeElement(promptTarget, element);
         if (!success)
         {
@@ -349,6 +344,12 @@ public class GameControllerImpl implements GameController {
             result.errorMessage = getErrorMessage("WRONG_ELEMENT");
             return result;
         }
+
+        if (state == WaitingFor.FIRST_ELEMENT_CHOICE) {
+            state = WaitingFor.SECOND_TURN;
+        } else if (state == WaitingFor.SECOND_ELEMENT_CHOICE)
+            state = WaitingFor.FIRST_TURN;
+
         result.status = true;
         return result;
     }
