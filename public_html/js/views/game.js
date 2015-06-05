@@ -319,7 +319,7 @@ define([
                         this.state = "move";
                         this.from = index;
                         this.index = this.field.map[index];
-                        $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
+                        $(".state").text("(фишка "+this.elements[Math.abs(this.field.map[index])].name+" захвачена)"); 
                     } else if ( this.state == "move" ) {
                         if (this.field.map[index] == -1 || this.field.map[index] > 4) {
                             this.move = this.field.map[this.from];
@@ -583,12 +583,13 @@ define([
             }
             if (this.king[0].pos == from) this.king[0].pos = to;
             if (this.king[1].pos == from) this.king[1].pos = to;
-            this.index = this.field.map[from];
-            this.drawField(this.context,this.field.coords[from]);
-            this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
             st = this.field.map[from];
             this.field.map[from] = -1;
             this.field.map[to] = st;
+            if ( st > 5 ) this.field.map[to] = 5;
+            this.index = this.field.map[to];
+            this.drawField(this.context,this.field.coords[from]);
+            this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
         },
 
         changeElem: function(coord) {

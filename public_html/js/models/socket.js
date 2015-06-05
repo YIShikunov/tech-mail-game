@@ -14,6 +14,10 @@ define([
             this.connection.onopen = this.onConnect;
             this.connection.onmessage = this.onMessage;
 
+            this.connection.onerror=function(event){
+                alert("Связь с сервером потеряна. Обновите страницу");
+            }
+
             this.connection.onclose = function (event) {
 
             }
