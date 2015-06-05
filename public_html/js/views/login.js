@@ -1,7 +1,7 @@
 define([
     'backbone',
     'models/user',
-    'tmpl/auth',
+    'tmpl/login',
 ], function(
     Backbone,
     UserModel,

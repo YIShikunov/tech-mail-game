@@ -24,12 +24,12 @@ define([
             if ( document.cookie.length ) {
                 $("#game").show();
                 $("#logout").show();
-                $("#auth").hide();
+                $("#logon").hide();
                 $("#login").hide();
             } else {
                 $("#game").hide();
                 $("#logout").hide();
-                $("#auth").show();
+                $("#logon").show();
                 $("#login").show();
             }
             this.$el.show();

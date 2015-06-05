@@ -10,7 +10,7 @@ define([
                 url: '/api/v1/auth/signup',
                 success: function (resp) {
                     if (resp.code == 0) {
-                        alert(resp.response)
+                        alert(resp.response);
                     }
                 },
                 error: function () {}
@@ -20,7 +20,12 @@ define([
                 url: '/api/v1/auth/signin',
                 success: function (resp) {
                     if (resp.code == 0) {
-                        alert(resp.response);
+                        if (resp.response == "Wrong login/password") {
+                            alert("Неверные данные");
+                            document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                        } else {
+                            window.location = "#";
+                        }
                     }
                 },
                 error: function () {}
@@ -38,7 +43,6 @@ define([
             type: methodMap[method].method,
             url: methodMap[method].url,
             data: data,
-            // async: false,
             dataType: 'json'
         }).done(success).fail(error);
 

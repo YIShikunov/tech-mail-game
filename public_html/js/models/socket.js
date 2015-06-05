@@ -19,7 +19,6 @@ define([
             }
 
             this.connection.onclose = function (event) {
-
             }
 
         },
@@ -167,6 +166,7 @@ define([
                     obj.drawStatus();
                     alert("Игра окончена. Вы проиграли");
                 }
+                window.location = "#";
                 this.connection.close();
             }
         },
@@ -175,7 +175,7 @@ define([
 
             if (id == 1) {
                 sendObj = {
-                    typeID : 1, // 1=pieces init
+                    typeID : 1,
                     element0 : data[0].place,
                     element1 : data[1].place,
                     element2 : data[2].place,
@@ -183,7 +183,7 @@ define([
                     element4 : data[4].place,
                     statusOK : true,
                 };
-                $(".turn").text("СОПЕРНИК РАССТАВЛЯЕТ ФИШКИ");
+                $(".turn").text("соперник расставляет элементы");
             };
 
             if (id == 3) {

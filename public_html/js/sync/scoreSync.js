@@ -19,7 +19,6 @@ define([
         var xhr = $.ajax({
             method: methodMap[method].method,
             url: methodMap[method].url,
-            async: false,
             dataType: 'json'
         }).done(methodMap[method].success);
 

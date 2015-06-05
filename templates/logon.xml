@@ -1,0 +1,25 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+    <div class="title_main">WuXing</div>
+    <div class="title_sub">Авторизация</div>
+    <div class="form">
+        <form class="form_signup">
+            <div class="line">
+                <label class="line_label">Логин:
+                    <input class="line_input" name="login" pattern="^[a-zA-Z0-9_]+$" type="text" required="" placeholder="Ваш логин"/>
+                </label>
+            </div>
+            <div class="line">
+                <label class="line_label">Почта:
+                    <input class="line_input" name="email" type="email" required="" placeholder="example@example.ru"/>
+                </label>
+            </div>
+            <div class="line">
+                <label class="line_label">Пароль:
+                    <input class="line_input" name="password" type="password" required="" placeholder="********"/>
+                </label>
+            </div>
+            <button class="btn btn_green btn_auth signup">Зарегистрироваться</button>
+        </form>
+    </div>
+    <a class="btn btn_red" href="#">НАЗАД</a>
+</fest:template>

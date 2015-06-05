@@ -16,6 +16,7 @@ define([
             this.$el.addClass("gameView__scoreView");
             this.$el.appendTo('.gameView');
             this.$el.hide();
+            this.render();
         },
 
         render: function () {
