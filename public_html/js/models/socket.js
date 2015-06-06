@@ -35,7 +35,7 @@ define([
                 $(".game").show();
                 $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
                 alert("Играем с " + data.opponent);
-
+                obj.state = "place";
                 var but = document.createElement("button");
                 but.innerHTML ="Расставить в случайной последовательности";
                 but.style.background = "deepskyblue";

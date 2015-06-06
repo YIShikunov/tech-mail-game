@@ -371,11 +371,13 @@ define([
         },
 
         drawElemInPanel : function(index) {
-            this.context.fillRect(panel.x+10, this.elements[index].index*90+60-8, panel.width-20,  90);
-            this.context.drawImage(this.elements[index].img,
-                panel.x+panel.width/2-this.elements[index].img.width/2, this.elements[index].index*90+60);
-            this.drawCount(this.context, panel.x+panel.width/2, 
-                this.elements[index].index*90+135, this.elements[index].count);
+            if (index < 5) {
+                this.context.fillRect(panel.x+10, this.elements[index].index*90+60-8, panel.width-20,  90);
+                this.context.drawImage(this.elements[index].img,
+                    panel.x+panel.width/2-this.elements[index].img.width/2, this.elements[index].index*90+60);
+                this.drawCount(this.context, panel.x+panel.width/2, 
+                    this.elements[index].index*90+135, this.elements[index].count);
+            }
         },
 
         drawElemInField: function(p1,p2) {
@@ -583,6 +585,7 @@ define([
         lobby: function(coord) {
             plrs = obj.players.getList();
             obj.waitPlrs = [];
+            if ( typeof plrs == 'undefined') plrs = [];
             for ( i = 0; i < plrs.length; i++ ) {
                 obj.waitPlrs.push({name: plrs[i]});
             }
@@ -592,6 +595,7 @@ define([
 
         startGame: function(elem) {
             clearInterval(this.timer);
+            this.state = "place";
             this.players.startGame(elem.target.innerHTML)
             $(".lobby").hide();
             $(".game").show();
