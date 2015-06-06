@@ -2,11 +2,13 @@ define([
     'backbone',
     'models/field',
     'models/socket',
+    'models/player',
     'tmpl/game',
 ], function(
     Backbone,
     FieldModel,
     Socket,
+    Player,
     tmpl
 ){
 
@@ -14,6 +16,8 @@ define([
         template: tmpl,
         field: new FieldModel(),
         context: null,
+        players: new Player(),
+        waitPlrs: [],
         panel: {x: 100, y: 50, width: 150, height: 460},
         elements:[  {name: "fire",  index: 0, count: 3, place: []},
                     {name: "metal", index: 1, count: 3, place: []},
@@ -24,7 +28,8 @@ define([
                 {name: "King_base",  pos: 0, index: 5, x: 0, y: 0}],
         base: { centers: [], elem: [0,3,1,4,2]},
         index: 0,
-        state: "place",
+        state: "find",
+        timer: 0,
         move: -1,
         from: -1,
         socket: new Socket(),
@@ -37,6 +42,7 @@ define([
             'click canvas' : 'gameClick',
             'resize' : 'draw',
             'storage' : 'moving',
+            'click .choose' : 'startGame',
         },
 
         initialize: function () {
@@ -44,6 +50,7 @@ define([
             this.$el.appendTo('.gameView');
             this.render();
             this.$el.hide();
+            
             this.listenTo(this.socket, 'move', this.moving);
             this.listenTo(this.socket, 'destroy', this.destroy);
             this.listenTo(this.socket, 'reveal', this.reveal);
@@ -51,12 +58,14 @@ define([
         },
 
         render: function () {
-            this.$el.html(this.template());
+            this.$el.html(this.template(this.waitPlrs));
             this.draw();
         },
 
         show: function () {
             this.$el.show();
+            $(".game").hide();
+            this.timer = setInterval(this.lobby, 1000);
             this.trigger('show',this);
             this.socket.connect();
         },
@@ -570,6 +579,24 @@ define([
             this.state = "change";
             this.drawBase();
         },
+
+        lobby: function(coord) {
+            plrs = obj.players.getList();
+            obj.waitPlrs = [];
+            for ( i = 0; i < plrs.length; i++ ) {
+                obj.waitPlrs.push({name: plrs[i]});
+            }
+            obj.render();
+            $(".game").hide();
+        },
+
+        startGame: function(elem) {
+            clearInterval(this.timer);
+            this.players.startGame(elem.target.innerHTML)
+            $(".lobby").hide();
+            $(".game").show();
+        },
+
     });
 
     return new GameView();

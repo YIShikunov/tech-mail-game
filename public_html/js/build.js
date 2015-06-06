@@ -13128,7 +13128,6 @@ define('sync/scoreSync',[
         var xhr = $.ajax({
             method: methodMap[method].method,
             url: methodMap[method].url,
-            async: false,
             dataType: 'json'
         }).done(methodMap[method].success);
 
@@ -13173,6 +13172,7 @@ define('views/scoreboard',[
             this.$el.addClass("gameView__scoreView");
             this.$el.appendTo('.gameView');
             this.$el.hide();
+            this.render();
         },
 
         render: function () {
@@ -13196,7 +13196,7 @@ define('views/scoreboard',[
 });
 
 
-define('tmpl/main',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"title_main\">WuXing</div><div class=\"title_sub\">Главное меню</div><div><a class=\"btn btn_red\" href=\"#game\">Играть</a><a class=\"btn btn_green\" href=\"#login\">Авторизация</a><a class=\"btn btn_yellow\" href=\"#scoreboard\">Рейтинг</a></div>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
+define('tmpl/main',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"title_main\">WuXing</div><div class=\"title_sub\">Главное меню</div><div><a class=\"btn btn_red\" href=\"#game\" id=\"game\">Играть</a><a class=\"btn btn_orange\" href=\"#login\" id=\"login\">Войти</a><a class=\"btn btn_green\" href=\"#logon\" id=\"logon\">Авторизация</a><a class=\"btn btn_gray\" href=\"#logout\" id=\"logout\">Выйти</a><a class=\"btn btn_yellow\" href=\"#scoreboard\">Рейтинг</a></div>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
 define('views/main',[
     'backbone',
     'tmpl/main'
@@ -13213,6 +13213,29 @@ define('views/main',[
             this.$el.appendTo('.gameView');
             this.render(); 
             this.$el.hide();
+
+            success = function (resp) {
+                if (resp.code == 0) {
+                    if ( !resp.loggedIn ) {
+                        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                        $("#game").hide();
+                        $("#logout").hide();
+                        $("#logon").show();
+                        $("#login").show();
+                    } else {
+                        $("#game").show();
+                        $("#logout").show();
+                        $("#logon").hide();
+                        $("#login").hide();
+                    }
+                }
+            };
+
+            var xhr = $.ajax({
+                type: "GET",
+                url: "/api/v1/auth/isloggedin",
+                dataType: 'json'
+            }).done(success);
         },
 
         render: function () {
@@ -13220,6 +13243,17 @@ define('views/main',[
         },
 
         show: function () {
+            if ( document.cookie.length ) {
+                $("#game").show();
+                $("#logout").show();
+                $("#logon").hide();
+                $("#login").hide();
+            } else {
+                $("#game").hide();
+                $("#logout").hide();
+                $("#logon").show();
+                $("#login").show();
+            }
             this.$el.show();
             this.trigger('show',this);
         },
@@ -13244,7 +13278,7 @@ define('sync/userSync',[
                 url: '/api/v1/auth/signup',
                 success: function (resp) {
                     if (resp.code == 0) {
-                        alert(resp.response)
+                        alert(resp.response);
                     }
                 },
                 error: function () {}
@@ -13254,7 +13288,12 @@ define('sync/userSync',[
                 url: '/api/v1/auth/signin',
                 success: function (resp) {
                     if (resp.code == 0) {
-                        alert(resp.response);
+                        if (resp.response == "Wrong login/password") {
+                            alert("Неверные данные");
+                            document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                        } else {
+                            window.location = "#";
+                        }
                     }
                 },
                 error: function () {}
@@ -13268,13 +13307,10 @@ define('sync/userSync',[
                 data[model.attributes[num].name] = model.attributes[num].value;
             }
 
-        debugger;
-
         var xhr = $.ajax({
             type: methodMap[method].method,
             url: methodMap[method].url,
             data: data,
-            // async: false,
             dataType: 'json'
         }).done(success).fail(error);
 
@@ -13311,11 +13347,97 @@ define('models/user',[
     return UserModel;
 
 });
-define('tmpl/auth',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"title_main\">WuXing</div><div class=\"title_sub\">Авторизация</div><div class=\"form\"><form class=\"form_signup\"><div class=\"line\"><label class=\"line_label\">Логин:<input class=\"line_input\" name=\"login\" pattern=\"^[a-zA-Z0-9_]+$\" type=\"text\" required=\"\" placeholder=\"Ваш логин\"/></label></div><div class=\"line\"><label class=\"line_label\">Почта:<input class=\"line_input\" name=\"email\" type=\"email\" required=\"\" placeholder=\"example@example.ru\"/></label></div><div class=\"line\"><label class=\"line_label\">Пароль:<input class=\"line_input\" name=\"password\" type=\"password\" required=\"\" placeholder=\"********\"/></label></div><button class=\"btn btn_green btn_auth signup\">Зарегистрироваться</button></form><form class=\"form_signin\" id=\"signup-form\"><div class=\"line\"><label class=\"line_label\">Логин:<input class=\"line_input\" name=\"login\" pattern=\"^[a-zA-Z0-9_]+$\" type=\"text\" required=\"\" placeholder=\"Ваш логин\"/></label></div><div class=\"line\"><label class=\"line_label\">Пароль:<input class=\"line_input\" name=\"password\" type=\"password\" required=\"\" placeholder=\"********\"/></label></div><button class=\"btn btn_green btn_auth\">Войти</button></form></div><a class=\"btn btn_red\" href=\"#\">НАЗАД</a>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
+define('tmpl/logon',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"title_main\">WuXing</div><div class=\"title_sub\">Авторизация</div><div class=\"form\"><form class=\"form_signup\"><div class=\"line\"><label class=\"line_label\">Логин:<input class=\"line_input\" name=\"login\" pattern=\"^[a-zA-Z0-9_]+$\" type=\"text\" required=\"\" placeholder=\"Ваш логин\"/></label></div><div class=\"line\"><label class=\"line_label\">Почта:<input class=\"line_input\" name=\"email\" type=\"email\" required=\"\" placeholder=\"example@example.ru\"/></label></div><div class=\"line\"><label class=\"line_label\">Пароль:<input class=\"line_input\" name=\"password\" type=\"password\" required=\"\" placeholder=\"********\"/></label></div><button class=\"btn btn_green btn_auth signup\">Зарегистрироваться</button></form></div><a class=\"btn btn_red\" href=\"#\">НАЗАД</a>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
+define('views/logon',[
+    'backbone',
+    'models/user',
+    'tmpl/logon',
+], function(
+    Backbone,
+    UserModel,
+    tmpl
+){
+
+    var LogonView = Backbone.View.extend({
+        template: tmpl,
+        user: new UserModel(),
+
+        events: {
+            "submit": "formSubmit",
+            "keyup" : "storage",
+            "change" : "storage", 
+        },
+
+        initialize: function () {
+            this.$el.addClass("gameView__LogonView");
+            this.$el.appendTo('.gameView');
+            this.render();
+
+            $(".form_signup input[name=Logon]").val(localStorage['Logon_up']);
+            $(".form_signup input[name=email]").val(localStorage['email_up']);
+            $(".form_signup input[name=password]").val(localStorage['password_up']);
+            $(".form_signin input[name=Logon]").val(localStorage['Logon_in']);
+            $(".form_signin input[name=email]").val(localStorage['email_in']);
+            $(".form_signin input[name=password]").val(localStorage['password_in']);
+            this.$el.hide();
+        },
+
+        formSubmit: function(e){
+            e.preventDefault();
+            if (e.target.className=="form_signup") {
+                data = this.$el.find(".form_signup").serializeArray();
+                this.user.signup(data);
+            } else {
+                data = this.$el.find(".form_signin").serializeArray();
+                this.user.Logon(data);
+            }
+        },
+
+        render: function () {
+            this.$el.html(this.template());
+        },
+
+        show: function () {
+            this.$el.show();
+            this.trigger('show',this);
+        },
+
+        hide: function () {
+            this.clearFroms();
+            this.$el.hide();
+        },
+
+        storage: function (e) {
+            var postfix;
+            if (e.target.parentElement.parentElement.parentElement.className=="form_signup") {
+                postfix = "_up"
+            } else {
+                postfix = "_in"
+            }
+            localStorage[e.target.name+postfix] = e.target.value;
+        },
+
+        clearFroms: function () {
+            $("input[name=Logon]").val("");
+            $("input[name=email]").val("");
+            $("input[name=password]").val("");
+            localStorage.removeItem("Logon_in");
+            localStorage.removeItem("email_in");
+            localStorage.removeItem("password_in");
+            localStorage.removeItem("Logon_up");
+            localStorage.removeItem("email_up");
+            localStorage.removeItem("password_up");
+        },
+
+
+    });
+    return new LogonView();
+});
+define('tmpl/login',[],function () { return function (__fest_context){"use strict";var __fest_self=this,__fest_buf="",__fest_chunks=[],__fest_chunk,__fest_attrs=[],__fest_select,__fest_if,__fest_iterator,__fest_to,__fest_fn,__fest_html="",__fest_blocks={},__fest_params,__fest_element,__fest_debug_file="",__fest_debug_line="",__fest_debug_block="",__fest_htmlchars=/[&<>"]/g,__fest_htmlchars_test=/[&<>"]/,__fest_short_tags = {"area":true,"base":true,"br":true,"col":true,"command":true,"embed":true,"hr":true,"img":true,"input":true,"keygen":true,"link":true,"meta":true,"param":true,"source":true,"wbr":true},__fest_element_stack = [],__fest_htmlhash={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"},__fest_jschars=/[\\'"\/\n\r\t\b\f<>]/g,__fest_jschars_test=/[\\'"\/\n\r\t\b\f<>]/,__fest_jshash={"\"":"\\\"","\\":"\\\\","/":"\\/","\n":"\\n","\r":"\\r","\t":"\\t","\b":"\\b","\f":"\\f","'":"\\'","<":"\\u003C",">":"\\u003E"},___fest_log_error;if(typeof __fest_error === "undefined"){___fest_log_error = (typeof console !== "undefined" && console.error) ? function(){return Function.prototype.apply.call(console.error, console, arguments)} : function(){};}else{___fest_log_error=__fest_error};function __fest_log_error(msg){___fest_log_error(msg+"\nin block \""+__fest_debug_block+"\" at line: "+__fest_debug_line+"\nfile: "+__fest_debug_file)}function __fest_replaceHTML(chr){return __fest_htmlhash[chr]}function __fest_replaceJS(chr){return __fest_jshash[chr]}function __fest_extend(dest, src){for(var i in src)if(src.hasOwnProperty(i))dest[i]=src[i];}function __fest_param(fn){fn.param=true;return fn}function __fest_call(fn, params,cp){if(cp)for(var i in params)if(typeof params[i]=="function"&&params[i].param)params[i]=params[i]();return fn.call(__fest_self,params)}function __fest_escapeJS(s){if (typeof s==="string") {if (__fest_jschars_test.test(s))return s.replace(__fest_jschars,__fest_replaceJS);} else if (typeof s==="undefined")return "";return s;}function __fest_escapeHTML(s){if (typeof s==="string") {if (__fest_htmlchars_test.test(s))return s.replace(__fest_htmlchars,__fest_replaceHTML);} else if (typeof s==="undefined")return "";return s;}var json=__fest_context;__fest_buf+=("<div class=\"title_main\">WuXing</div><div class=\"title_sub\">Авторизация</div><div class=\"form\"><form class=\"form_signin\" id=\"signup-form\"><div class=\"line\"><label class=\"line_label\">Логин:<input class=\"line_input\" name=\"login\" pattern=\"^[a-zA-Z0-9_]+$\" type=\"text\" required=\"\" placeholder=\"Ваш логин\"/></label></div><div class=\"line\"><label class=\"line_label\">Пароль:<input class=\"line_input\" name=\"password\" type=\"password\" required=\"\" placeholder=\"********\"/></label></div><button class=\"btn btn_green btn_auth\">Войти</button></form></div><a class=\"btn btn_red\" href=\"#\">НАЗАД</a>");__fest_to=__fest_chunks.length;if (__fest_to) {__fest_iterator = 0;for (;__fest_iterator<__fest_to;__fest_iterator++) {__fest_chunk=__fest_chunks[__fest_iterator];if (typeof __fest_chunk==="string") {__fest_html+=__fest_chunk;} else {__fest_fn=__fest_blocks[__fest_chunk.name];if (__fest_fn) __fest_html+=__fest_call(__fest_fn,__fest_chunk.params,__fest_chunk.cp);}}return __fest_html+__fest_buf;} else {return __fest_buf;}} ; });
 define('views/login',[
     'backbone',
     'models/user',
-    'tmpl/auth',
+    'tmpl/login',
 ], function(
     Backbone,
     UserModel,
@@ -13497,8 +13619,11 @@ define('models/socket',[
             this.connection.onopen = this.onConnect;
             this.connection.onmessage = this.onMessage;
 
-            this.connection.onclose = function (event) {
+            this.connection.onerror=function(event){
+                alert("Связь с сервером потеряна. Обновите страницу");
+            }
 
+            this.connection.onclose = function (event) {
             }
 
         },
@@ -13512,6 +13637,35 @@ define('models/socket',[
                 localStorage['youStart'] = data.youStart;
                 alert("Играем с " + data.opponent);
                 $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
+
+                var but = document.createElement("button");
+                but.innerHTML ="Расставить в случайной последовательности";
+                but.style.background = "deepskyblue";
+                but.onclick = function() {
+                    plasement = obj.field.baseField;
+
+                    for (i=0; i<5; i++) {
+                        obj.index = i;
+                        for (k=0; k<3; k++) {
+                            random = Math.floor(Math.random() * plasement.length)
+                            pos = plasement[random];
+                            plasement.splice(random, 1);
+                            obj.drawElemInField(obj.field.coords[pos][0],obj.field.coords[pos][1])
+                            obj.field.map[pos] = i;
+                            if (localStorage['youStart'] == "true") pos = obj.field.inv[pos];
+                            obj.elements[i].place.push(pos+1);
+                        }
+                    }
+                    obj.state = "game";
+                    obj.socket.sendMessage(obj.elements, 1);
+                    obj.index = 0;
+                    obj.field.map[1] = 0;
+                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
+                    obj.context.clearRect(obj.panel.x-10, obj.panel.y-50, obj.panel.width+20, obj.panel.height+100);
+                    obj.drawStatus();
+                    this.remove();
+                };
+                $(".state").append(but);
             }
             if (data.typeID == 2 && data.opponentReady) {
                 if (localStorage['youStart'] == "true") {
@@ -13519,7 +13673,7 @@ define('models/socket',[
                 } else {
                     $(".turn").text("ЖДИТЕ");
                 }
-                alert("Поехали играть!!!")
+                alert("Поехали играть!!!");
             }
             if (data.typeID == 4 && data.statusOK) {
                 if (data.piecesRevealed.length > 0) {
@@ -13531,28 +13685,102 @@ define('models/socket',[
                 if (data.piecesMoved.length > 0) {
                     obj.socket.trigger("move", {from : data.piecesMoved[0][0]-1, to : data.piecesMoved[0][1]-1});
                 }
-                if ($(".turn").text() == "ВАШ ХОД") {
-                    $(".turn").text("ЖДИТЕ...");
+
+                if (data.recolor) {
+                    debugger;
+                    if (obj.move != 0) {
+                        obj.socket.trigger("changeElem");
+                        $(".state").text("Укажите элемент для фигуры на базе");
+                    } else {
+                        el = obj.field.map[0];
+                        if ( el < 0 ) el +=5;
+                        obj.socket.sendMessage(el,5);
+                        if ($(".turn").text() == "ВАШ ХОД") {
+                            $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
+                        } else {
+                            $(".turn").text("ВАШ ХОД");
+                        }
+                    }
                 } else {
-                    $(".turn").text("ВАШ ХОД");
+                    if ($(".turn").text() == "ВАШ ХОД") {
+                        $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
+                    } else {
+                        $(".turn").text("ВАШ ХОД");
+                    }
+                    $(".state").text();
                 }
-                $(".state").text();
 
             }
             if (data.typeID == 4 && !data.statusOK) {
                 $(".state").text(data.errorMessage);
-
             }
-            // if (data.type === 'end') {
-            //     this.connection.close();
-            // }
+
+            if (data.typeID == 6) {
+                if (data.statusOK && obj.move != 0) {
+                    obj.field.map[1] = data.element;
+                    obj.index = data.element;
+                    obj.state = "game";
+                    obj.drawField(obj.context, obj.field.coords[1]);
+                    obj.drawElemInField(obj.field.coords[1][0],obj.field.coords[1][1]);
+                    if ($(".turn").text() == "ВАШ ХОД") {
+                        $(".turn").text("ЖДИТЕ... Соперник думает как сходить");
+                    } else {
+                        $(".turn").text("ВАШ ХОД");
+                    }
+                    $(".state").text();
+                } else {
+                    $(".state").text(data.errorMessage);
+                }
+            }
+
+            if (data.typeID == 8) {
+                if (data.statusOK) {
+                    obj.king[0].index = obj.king[0].check;
+                    obj.field.map[obj.king[0].pos] = obj.king[0].index;
+                    obj.recolor(obj.king[0].pos, obj.king[0].index);
+                    obj.state = "game";
+                    $(".state").text("Король перекрашен в " + obj.elements[obj.king[0].index].name);
+                } else {
+                    $(".state").text(data.errorMessage);
+                }
+            }
+
+            if (data.typeID == 10) {
+                index = 0;
+                if (!data.isYourKing) index = 1;
+                obj.stFld[index].have = [0,0,0,0,0];
+                if (data.Elements.length != 0) {
+                    for (z=0; z< data.Elements.length; z++) {
+                        obj.stFld[index].have[data.Elements[z]] = 1;
+                    }
+                    if (data.isYourKing) {
+                        obj.king[0].index = data.element;
+                        obj.field.map[obj.king[0].pos] = obj.king[0].index;
+                        obj.recolor(obj.king[0].pos, obj.king[0].index)
+                    }
+                }
+                obj.drawStatus();
+            }
+            if (data.typeID == -1) {
+                if (data.iAmWinner) {
+                    obj.stFld[1].have = [0,0,0,0,0];
+                    obj.drawStatus();
+                    alert("Игра окончена. ВЫ ВЫИГРАЛИ!!!"); 
+                }else {
+                    obj.stFld[0].have = [0,0,0,0,0];
+                    obj.drawStatus();
+                    alert("Игра окончена. Вы проиграли");
+                }
+                window.location = "#";
+                this.connection.close();
+            }
         },
         sendMessage: function (data, id) {
             var sendObj = null;
 
             if (id == 1) {
-                var sendObj = {
-                    typeID : 1, // 1=pieces init
+                sendObj = {
+                    typeID : 1,
                     element0 : data[0].place,
                     element1 : data[1].place,
                     element2 : data[2].place,
@@ -13560,14 +13788,33 @@ define('models/socket',[
                     element4 : data[4].place,
                     statusOK : true,
                 };
+                $(".turn").text("соперник расставляет элементы");
             };
 
             if (id == 3) {
-                var sendObj = {
+                sendObj = {
                     typeID : 3,
                     turn : 0,
                     moveFrom : data[0],
                     moveTo : data[1],
+                    statusOK : true,
+                };
+            };
+
+            if (id == 5) {
+                sendObj = {
+                    typeID : 5,
+                    turn : 0,
+                    baseRecolor : data,
+                    statusOK : true,
+                };
+            };
+
+            if (id == 7) {
+                sendObj = {
+                    typeID : 7,
+                    turn : 0,
+                    kingRecolor : data,
                     statusOK : true,
                 };
             };
@@ -13604,18 +13851,23 @@ define('views/game',[
                     {name: "wood",  index: 2, count: 3, place: []},
                     {name: "earth", index: 3, count: 3, place: []},
                     {name: "water", index: 4, count: 3, place: []}],
+        king:[  {name: "King_base",  pos: 1, index: 0, check:0, elem: false, x: 0, y: 0},
+                {name: "King_base",  pos: 0, index: 5, x: 0, y: 0}],
+        base: { centers: [], elem: [0,3,1,4,2]},
         index: 0,
         state: "place",
         move: -1,
         from: -1,
         socket: new Socket(),
         cloud: null,
+        scale: 1.15,        
+        stFld: [ {field : [], centers: [], elem: [0,2,4,1,3], have: [1,1,1,1,1], rotate: false}, 
+                 {field : [], centers: [], elem: [3,1,4,2,0], have: [1,1,1,1,1], rotate: true}],
 
         events: {
             'click canvas' : 'gameClick',
             'resize' : 'draw',
             'storage' : 'moving',
-            'mousedown' : 'test',
         },
 
         initialize: function () {
@@ -13626,6 +13878,7 @@ define('views/game',[
             this.listenTo(this.socket, 'move', this.moving);
             this.listenTo(this.socket, 'destroy', this.destroy);
             this.listenTo(this.socket, 'reveal', this.reveal);
+            this.listenTo(this.socket, 'changeElem', this.changeElem);
         },
 
         render: function () {
@@ -13646,6 +13899,8 @@ define('views/game',[
         draw: function() {
             var canvas = this.$el.find("canvas")[0];
             canvas.width = window.innerWidth;
+            var TRx = this.$el.find("canvas")[0].width/2;
+            var TRy = this.$el.find("canvas")[0].height/2;
             var context = canvas.getContext('2d');
             this.context = context;
             context.strokeStyle = "#09034A";
@@ -13653,6 +13908,81 @@ define('views/game',[
             
             obj = this;
             coords = this.field.coords;
+
+            // elements for king
+            points = this.field.coords[1];
+            cX = this.$el.find("canvas")[0].width/2;
+            cY = this.$el.find("canvas")[0].height/2;
+            scale = obj.scale*2;
+            size = scale*90;
+            
+            for (k=0; k<points.length; k++) {
+                this.stFld[0].field.push([(-scale*points[k][0]-this.$el.find("canvas")[0].width/1.6)/obj.scale, scale*points[k][1]/obj.scale])
+            }
+            dx = (this.stFld[0].field[1][0]-this.stFld[0].field[0][0])*obj.scale;
+            dy = (this.stFld[0].field[1][1]-this.stFld[0].field[0][1])*obj.scale;
+            R = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2))*(Math.sqrt(10)*Math.sqrt(5+Math.sqrt(5))/10);
+            this.stFld[0].x = this.stFld[0].field[0][0]*obj.scale+cX+R;
+            this.stFld[0].y = this.stFld[0].field[0][1]*obj.scale+cY;
+
+            points = this.field.coords[0];
+            for (k = points.length - 1; k >= 0; k--) {
+                this.stFld[1].field.push([(-scale*points[k][0]+this.$el.find("canvas")[0].width/1.6)/obj.scale, scale*points[k][1]/obj.scale])
+            }
+            this.stFld[1].x = this.stFld[1].field[0][0]*obj.scale+cX-R;
+            this.stFld[1].y = this.stFld[1].field[0][1]*obj.scale+cY;
+
+
+            for (j=0; j<2; j++) {
+                for (m=0; m<this.stFld[j].field.length; m++) {
+                    p1 = this.stFld[j].field[m];
+                    if ( m < this.stFld[j].field.length-1 ) {
+                        p2 = this.stFld[j].field[m+1];
+                    } else {
+                        p2 = this.stFld[j].field[0];
+                    }
+                    if (j == 1) p1 = [p2, p2 = p1][0];
+                    scale = obj.scale;
+                    sc = 0.315;
+                    cor = - Math.PI/180*55;
+                    x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + cX;
+                    y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + cY;
+                    this.stFld[j].centers.push({x:x,y:y});
+                }
+            }
+            //elements for base
+            scale = obj.scale;
+            
+            x = obj.field.coords[1][0][0];
+            y = obj.field.coords[1][0][1];
+            R = Math.sqrt(Math.pow(obj.field.coords[1][1][0] - x,2) + Math.pow(obj.field.coords[1][1][1] - y,2))*(Math.sqrt(10)*Math.sqrt(5+Math.sqrt(5))/10);
+            x = x*scale + TRx - R*scale;
+            y = y*scale + TRy;
+            this.king[0].x = x;
+            this.king[0].y = y;
+            
+            x = obj.field.coords[0][4][0];
+            y = obj.field.coords[0][4][1];
+            R = Math.sqrt(Math.pow(obj.field.coords[0][0][0] - x,2) + Math.pow(obj.field.coords[0][0][1] - y,2))*(Math.sqrt(10)*Math.sqrt(5+Math.sqrt(5))/10);
+            x = x*scale + TRx + R*scale;
+            y = y*scale + TRy;
+            this.king[1].x = x;
+            this.king[1].y = y;
+            
+            area = obj.field.coords[1];
+            sc = 0.315;
+            cor = Math.PI/180*55;
+            for ( m = 0; m < area.length; m++ ) {
+                p1 = area[m];
+                if ( m < area.length-1 ) {
+                    p2 = area[m+1];
+                } else {
+                    p2 = area[0];
+                }
+                x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + cX;
+                y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + cY;
+                this.base.centers.push({x:x,y:y});
+            }
 
             var img = document.createElement('img');
             img.onload = function() {
@@ -13674,14 +14004,43 @@ define('views/game',[
 
                 for (i=0; i<obj.elements.length; i++) {
                     elem = document.createElement('img');
-                    elem.src = 'images/piece/'+obj.elements[i].name+'.png';
                     elem.index = i;
+                    elem.src = 'images/piece/'+obj.elements[i].name+'.png';
                     obj.elements[i].img = elem;
                     elem.onload = function() {
                         panel = obj.panel;
                         obj.drawElemInPanel(this.index);
                         if (obj.elements[obj.index].index == 0)
                             obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
+                    };
+                }
+
+                for (i=0; i<obj.elements.length; i++) {
+                    elem = document.createElement('img');
+                    elem.index = i;
+                    elem.onload = function() {
+                        panel = obj.panel;
+                        obj.drawElemInPanel(this.index);
+                        if (obj.elements[obj.index].index == 0)
+                            obj.drawSelect(obj.context, panel.x+panel.width/2, obj.elements[obj.index].index*90+60);
+                    };
+                    elem.src = 'images/piece/'+obj.elements[i].name+'.png';
+                    obj.elements[i].img = elem;
+                }
+
+                for (i=0; i<obj.king.length; i++) {
+                    elem = document.createElement('img');
+                    elem.index = i;
+                    if (obj.king[i].elem) {
+                        elem.src = 'images/King/'+obj.king[i].name+'.png';
+                        obj.king[i].elem = elem;
+                        elem.src = 'images/King/'+obj.king[i].name+'_enabled.png';
+                        obj.king[i].elemEnbl = elem;
+                    } else{
+                        elem.src = 'images/King/'+obj.king[i].name+'.png';
+                        obj.king[i].img = elem;
+                        elem.onload = function() {
+                        };
                     };
                 }
 
@@ -13693,7 +14052,7 @@ define('views/game',[
         drawField: function(context,points) {
             cX = this.$el.find("canvas")[0].width/2;
             cY = this.$el.find("canvas")[0].height/2;
-            scale = 1;
+            scale = obj.scale;
             context.beginPath();
             context.moveTo(scale*points[0][0]+cX, scale*points[0][1]+cY);
             for (k=1; k<points.length; k++) {
@@ -13709,7 +14068,11 @@ define('views/game',[
             x = event.pageX - coords.left;
             y = event.pageY - coords.top;
             panel = panel;
-            if (x > panel.x && x < panel.x+panel.width && y > panel.y && y < panel.y+panel.height)
+            if (this.state == "place" && 
+                x > panel.x && 
+                x < panel.x+panel.width && 
+                y > panel.y && 
+                y < panel.y+panel.height)
                 for (i=0; i<this.elements.length; i++) {
                     if (y < this.elements[i].index*90+140) {
                         this.drawElemInPanel(this.index);
@@ -13717,22 +14080,19 @@ define('views/game',[
                         this.index = i;
                         break;
                     }
-            } else {
-                index = this.field.checkField(x-TRx,y-TRy);
+            } else
+             {
+                index = this.field.checkField((x-TRx)/this.scale,(y-TRy)/this.scale);
                 if (index >= 0) {
                     // Place of elements
-                    if ( this.state =="place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
+                    if ( this.state == "place" && this.field.baseField.indexOf(index) >= 0 && this.field.map[index] == -1) {
                         this.drawField(this.context,coords[index]);
-                        // draw element
                         this.drawElemInField(this.field.coords[index][0],this.field.coords[index][1])
-                        // change count
                         this.elements[this.index].count--;
-                        // save place of element
-                        idField = index+1;
+                        idField = index + 1;
                         if (localStorage['youStart'] == "true") idField = this.field.inv[index]+1;
                         this.elements[this.index].place.push(idField);
                         this.field.map[index] = this.index;
-                        // change element
                         if (this.elements[this.index].count == 0) {
                             this.drawElemInPanel(this.index);
 
@@ -13741,40 +14101,85 @@ define('views/game',[
                                     this.index = z;
                                     break;
                                 }
-                            if (z==5) {
+                            if (z==6) {
                                 this.state = "game";
+                                this.index = 0;
+                                this.field.map[1] = 0;
+                                this.drawElemInField(this.field.coords[1][0],this.field.coords[1][1])
                                 this.socket.sendMessage(this.elements, 1);
                             }
                         }
                         this.drawElemInPanel(this.index);
                         this.drawSelect(this.context, panel.x+panel.width/2, this.elements[this.index].index*90+60)
-
-                    } else 
-                    if (this.field.map[index] != -1 && this.state == "game" ) {
-                        this.move = this.field.map[index];
+                        if (this.state == "game") {
+                            this.context.clearRect(this.panel.x-10, this.panel.y-50, panel.width+20, this.panel.height+100);
+                            this.drawStatus();
+                        }
+                    } else if ( this.state == "game" && this.field.map[index] != -1 && this.field.map[index] < 5) {
                         this.state = "move";
                         this.from = index;
                         this.index = this.field.map[index];
-                        $(".state").text("(фишка "+this.elements[this.field.map[index]].name+" захвачена)");
-                    } else 
-                    if ((this.field.map[index] == -1 || this.field.map[index] > 4) && this.state == "move" ) {
-                        this.move = this.field.map[this.from];
-
-                        this.state = "game";
-                        // this.field.map[index] = this.index;
-
-                        data = [];
-                        if (localStorage['youStart'] == "false") {
-                            data.push(this.from+1);
-                            data.push(index+1);
+                        $(".state").text("(фишка "+this.elements[Math.abs(this.field.map[index])].name+" захвачена)"); 
+                    } else if ( this.state == "move" ) {
+                        if (this.field.map[index] == -1 || this.field.map[index] > 4) {
+                            this.state = "game";
+                            this.move = index;
+                            data = [];
+                            if (localStorage['youStart'] == "false") {
+                                data.push(this.from+1);
+                                data.push(index+1);
+                            } else {
+                                data.push(this.field.inv[this.from]+1);
+                                data.push(this.field.inv[index]+1);
+                            }
+                            this.socket.sendMessage(data, 3);
+                            this.index = this.field.map[this.from];
+                            $(".state").text("");
                         } else {
-                            data.push(this.field.inv[this.from]+1);
-                            data.push(this.field.inv[index]+1);
+                            this.state = "game";
+                            $(".state").text("Вы не можете так сходить. Сделайте другой ход");
                         }
-                        this.socket.sendMessage(data, 3);
-                        this.index = this.field.map[this.from];
-                        $(".state").text("");
+                    } else if ( this.state == "change" && index == 1 ) {
+                        min = {index: -1, length: 1000}
+                        for (k=0; k<this.base.centers.length; k++) {
+                            R = Math.sqrt(Math.pow(x-this.base.centers[k].x,2) + Math.pow(y-this.base.centers[k].y,2));
+                            if ( R < min.length ) {
+                                min.index = k;
+                                min.length = R;
+                            }
+                        }
+                        this.socket.sendMessage(this.base.elem[min.index], 5);
                     } 
+                } else {
+                    x = (x - TRx)/obj.scale;
+                    y = (y - TRy)/obj.scale;
+                    coords = this.stFld[0].field;
+                    check = true;
+                    min = {index: -1, length: 1000}
+                    for (k=0; k<coords.length; k++) {
+                        p1 = k;
+                        if ( k < coords.length -1 ) {
+                            p2 = k+1;
+                        } else {
+                            p2 = 0;
+                        }
+                        if ((coords[p2][0]-coords[p1][0])*(y-coords[p1][1]) - 
+                            (coords[p2][1]-coords[p1][1])*(x-coords[p1][0]) >= 0 ) {
+                                check = false;
+                            }  
+                    }
+                    for (k=0; k<coords.length; k++) {
+                        R = Math.sqrt(Math.pow(x-coords[k][0],2) + Math.pow(y-coords[k][1],2));
+                        if ( R < min.length ) {
+                            min.index = k;
+                            min.length = R;
+                        }
+                    }
+                    if (check) {
+                        this.king[0].check = this.stFld[0].elem[min.index];
+                        this.socket.sendMessage(this.stFld[0].elem[min.index],7)
+                        return i;
+                    }
                 }
             }
         },
@@ -13788,8 +14193,6 @@ define('views/game',[
         },
 
         drawElemInPanel : function(index) {
-            TRx = this.$el.find("canvas")[0].width/2;
-            TRy = this.$el.find("canvas")[0].height/2;
             this.context.fillRect(panel.x+10, this.elements[index].index*90+60-8, panel.width-20,  90);
             this.context.drawImage(this.elements[index].img,
                 panel.x+panel.width/2-this.elements[index].img.width/2, this.elements[index].index*90+60);
@@ -13798,38 +14201,131 @@ define('views/game',[
         },
 
         drawElemInField: function(p1,p2) {
-            scale = Math.sqrt(3)/3;
+            TRx = this.$el.find("canvas")[0].width/2;
+            TRy = this.$el.find("canvas")[0].height/2;
+            scale = obj.scale;
+            size = 30*scale;
+            sc = Math.sqrt(3)/3;
             cor = Math.PI/180*30;
-            x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
-            y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
+            x = ((p2[0]-p1[0])*sc*Math.cos(cor) - (p2[1]-p1[1])*sc*Math.sin(cor) + p1[0])*scale + TRx;
+            y = ((p2[1]-p1[1])*sc*Math.cos(cor) + (p2[0]-p1[0])*sc*Math.sin(cor) + p1[1])*scale + TRy ;
+            if (p1 == this.field.coords[1][0]) {
+                x = this.king[0].x;
+                y = this.king[0].y;
+            }
+            if (p1 == this.field.coords[0][0]) {
+                x = this.king[1].x;
+                y = this.king[1].y;
+            }
+            ptrn = this.context.fillStyle;
+            if (this.index < 0 ) {
+                this.context.fillStyle = "#F5A9BC";
+                this.index += 6;
+            } else {
+                this.context.fillStyle = "#FFFFFF";
+            }
+            if (p1 == this.field.coords[this.king[0].pos][0] ||
+                p1 == this.field.coords[this.king[1].pos][0]) this.context.fillStyle = "#000000";
+            
+            this.context.beginPath();
+            this.context.arc(x,y,size/2.3,0,2*Math.PI);
+            this.context.fill();
+            
             if (this.index > 5) {
                 img = this.elements[5].img;
-                this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+                this.context.drawImage(img,x-img.width/2*size/img.width,y-img.height/2*size/img.height,size,size);
                 this.index -=6;
             }
+
             img = this.elements[this.index].img;
-            this.context.drawImage(img,x-img.width/2*30/img.width,y-img.height/2*30/img.height,30,30);
+            this.context.drawImage(img,x-img.width/2*size/img.width,y-img.height/2*size/img.height,size,size);
+
+            if (this.index == 5 && p1 == this.field.coords[this.king[1].pos][0]) {
+                this.context.beginPath();
+                this.context.arc(x,y,size/2.3,0,2*Math.PI);
+                this.context.fill();
+            }
+
+            this.context.fillStyle = ptrn;   
         },
 
         drawEnemy: function() {
-            TRx = this.$el.find("canvas")[0].width/2;
-            TRy = this.$el.find("canvas")[0].height/2;
             var cloud = document.createElement('img');
             cloud.onload = function() {
-                for (l=0; l<obj.field.baseField.length; l++) {
-                    p1 = obj.field.coords[obj.field.inv[obj.field.baseField[l]]][0];
-                    p2 = obj.field.coords[obj.field.inv[obj.field.baseField[l]]][1];
-                    scale = Math.sqrt(3)/3;
-                    cor = Math.PI/180*30;
-                    x = (p2[0]-p1[0])*scale*Math.cos(cor) - (p2[1]-p1[1])*scale*Math.sin(cor) + TRx + p1[0];
-                    y = (p2[1]-p1[1])*scale*Math.cos(cor) + (p2[0]-p1[0])*scale*Math.sin(cor) + TRy + p1[1];
-                    obj.context.drawImage(this,x-this.width/2*30/this.width,y-this.height/2*30/this.height,30,30);
-                    obj.field.map[obj.field.inv[obj.field.baseField[l]]] = 5;
-                }
                 obj.elements.push({name: "cloud", index: 5, count: 0, img : cloud});
+                obj.index = 5;
+                pos = obj.field.baseField;
+                for (l=0; l < pos.length; l++) {
+                    p1 = obj.field.coords[obj.field.inv[pos[l]]][0];
+                    p2 = obj.field.coords[obj.field.inv[pos[l]]][1];
+                    obj.drawElemInField( p1, p2)
+                    obj.field.map[obj.field.inv[pos[l]]] = 5;
+                }
+                p1 = obj.field.coords[0][0];
+                p2 = obj.field.coords[0][1];
+                obj.drawElemInField( p1, p2)
+                obj.field.map[0] = 5;
+
+                obj.index = 0;
             };
             cloud.src = 'images/piece/cloud.png';
             obj.cloud = cloud;
+        },
+
+        drawBase: function() {
+            img = this.king[0].img;
+            this.context.save();
+            size = 90*obj.scale;
+            this.context.translate(this.king[0].x,this.king[0].y)
+            this.context.rotate(Math.PI);
+            obj.context.drawImage(img,-size/2,-size/2,size,size);
+            this.context.restore();
+
+            for ( m = 0; m < this.base.centers.length; m++) {
+                pos = this.base.centers[m];
+                elSize = obj.scale*25;
+                ptrn = this.context.fillStyle;
+                this.context.fillStyle = "#FFFFFF";
+                this.context.beginPath();
+                this.context.arc(pos.x,pos.y,elSize/2-obj.scale,0,2*Math.PI);
+                this.context.fill();
+                this.context.fillStyle = ptrn;
+
+                img = this.elements[this.base.elem[m]].img;
+                this.context.drawImage(img, pos.x - elSize/2, pos.y - elSize/2, elSize, elSize);
+
+            };
+        },
+
+        drawStatus: function( own) {
+            size = obj.scale*180;
+
+            for (j = 0; j < 2; j++) {
+                this.drawField(this.context, this.stFld[j].field)
+
+                this.context.save();
+                this.context.translate(this.stFld[j].x,this.stFld[j].y)
+                img = this.king[0].img;
+                if (this.stFld[j].rotate) this.context.rotate(Math.PI);
+                this.context.drawImage(img,-size/2,-size/2,size,size);
+                this.context.restore();
+
+                for (m=0; m<this.stFld[j].centers.length; m++) {
+                    if (this.stFld[j].have[this.stFld[j].elem[m]]) {
+                        pos = this.stFld[j].centers[m];
+                        elSize = obj.scale*53;
+                        ptrn = this.context.fillStyle;
+                        this.context.fillStyle = "#FFFFFF";
+                        this.context.beginPath();
+                        this.context.arc(pos.x,pos.y,elSize/2-obj.scale*5,0,2*Math.PI);
+                        this.context.fill();
+                        this.context.fillStyle = ptrn;
+
+                        img = this.elements[this.stFld[j].elem[m]].img;
+                        this.context.drawImage(img, pos.x - elSize/2, pos.y - elSize/2, elSize, elSize);
+                    }
+                }
+            }
         },
 
         drawSelect: function(context,x,y) {
@@ -13842,18 +14338,31 @@ define('views/game',[
 
         reveal: function(array) {
             for (z = 0; z < array.length; z++) {
-                pos = array[z][0]-1
+                pos = array[z][0]-1;
                 if (localStorage['youStart'] == "true") {
                     pos = this.field.inv[array[z][0]-1];
                 }
-                enemy = (this.field.map[pos] > 4)
-                this.field.map[pos] = array[z][1];
-                if (enemy) this.field.map[pos] +=6;
-                this.drawField(this.context,coords[pos]);
-                this.index = this.field.map[pos];
-                this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
+                if (pos != this.king[0].pos && pos != this.king[1].pos) {
+                    enemy = (this.field.map[pos] > 4)
+                    this.field.map[pos] = array[z][1];
+                    if (enemy) {
+                        this.field.map[pos] +=6
+                    } else {
+                        this.field.map[pos] -=6
+                    }
+
+                    this.drawField(this.context,this.field.coords[pos]);
+                    this.index = this.field.map[pos];
+                    this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
+                }
             }
-        },    
+        },
+
+        recolor: function(chip, el) {
+            this.drawField(this.context,this.field.coords[chip]);
+            this.index = el;
+            this.drawElemInField(this.field.coords[chip][0],this.field.coords[chip][1])
+        }, 
 
         destroy: function(array) {
             for (z = 0; z < array.length; z++) {
@@ -13862,7 +14371,7 @@ define('views/game',[
                     pos = this.field.inv[array[z]-1];
                 }
                 this.field.map[pos] = -1;
-                this.drawField(this.context,coords[pos]);
+                this.drawField(this.context,this.field.coords[pos]);
             }
         },
 
@@ -13873,40 +14382,26 @@ define('views/game',[
                 from = this.field.inv[coord.from];
                 to = this.field.inv[coord.to];
             }
-
-            this.index = this.field.map[from];
-            this.drawField(this.context,coords[from]);
-            this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
+            if (this.king[0].pos == from) this.king[0].pos = to;
+            if (this.king[1].pos == from) this.king[1].pos = to;
             st = this.field.map[from];
             this.field.map[from] = -1;
             this.field.map[to] = st;
+            if ( to == 0 && st > 5 ) this.field.map[to] = 5;
+            this.index = this.field.map[to];
+            this.drawField(this.context,this.field.coords[from]);
+            this.drawElemInField(this.field.coords[to][0],this.field.coords[to][1])
         },
 
-        test: function(event) {
-            if ( event.which == 2 ) {
-                plasement = this.field.baseField;
-
-                for (i=0; i<5; i++) {
-                    this.index = i;
-                    for (k=0; k<3; k++) {
-                        random = Math.floor(Math.random() * plasement.length)
-                        pos = plasement[random];
-                        plasement.splice(random, 1);
-                        this.drawElemInField(this.field.coords[pos][0],this.field.coords[pos][1])
-                        this.field.map[pos] = i;
-                        if (localStorage['youStart'] == "true") pos = this.field.inv[pos];
-                        this.elements[i].place.push(pos+1);
-                    }
-                }
-                this.state = "game";
-                this.socket.sendMessage(this.elements, 1);
-            }
+        changeElem: function(coord) {
+            ptrn = this.context.fillStyle;
+            this.context.fillStyle = "#FFAAAA";
+            this.drawField(this.context,this.field.coords[1]);
+            this.context.fillStyle = ptrn;
+            this.state = "change";
+            this.drawBase();
         },
-
-
     });
-
-
 
     return new GameView();
 });
@@ -13950,24 +14445,45 @@ define('router',[
     'backbone',
     'views/scoreboard',
     'views/main',
+    'views/logon',
     'views/login',
     'views/game',
     'views/manager',
 ], function(
-    Backbone, scoreView, mainView, loginView, gameView, manager
+    Backbone, scoreView, mainView, logonView, loginView, gameView, manager
 ){
     manager.addViews([
         scoreView, 
-        mainView, 
+        mainView,
+        logonView,
         loginView, 
         gameView]);
 
     var Router = Backbone.Router.extend({
         routes: {
-            'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
+            'logon': 'logonAction',
             'login': 'loginAction',
+            'logout': 'logoutAction',
+            'scoreboard': 'scoreboardAction',
             '*default': 'defaultActions'
+        },
+        gameAction: function() {
+            gameView.show();
+        },
+        logonAction: function() {
+            logonView.show();
+        },
+        loginAction: function() {
+            loginView.show();
+        },
+        logoutAction: function() {
+            var xmlHttp = new XMLHttpRequest();
+            url = "http://" + location.host + "/api/v1/auth/signout";
+            xmlHttp.open( "GET", url, false );
+            xmlHttp.send( null );
+            document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            window.location = "#";
         },
         defaultActions: function() {
             mainView.show();
@@ -13975,12 +14491,6 @@ define('router',[
         scoreboardAction: function() {
             scoreView.show();
         },
-        gameAction: function() {
-            gameView.show();
-        },
-        loginAction: function() {
-            loginView.show();
-        }
     });
     return new Router();
 });

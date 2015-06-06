@@ -14,6 +14,29 @@ define([
             this.$el.appendTo('.gameView');
             this.render(); 
             this.$el.hide();
+
+            success = function (resp) {
+                if (resp.code == 0) {
+                    if ( !resp.loggedIn ) {
+                        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                        $("#game").hide();
+                        $("#logout").hide();
+                        $("#logon").show();
+                        $("#login").show();
+                    } else {
+                        $("#game").show();
+                        $("#logout").show();
+                        $("#logon").hide();
+                        $("#login").hide();
+                    }
+                }
+            };
+
+            var xhr = $.ajax({
+                type: "GET",
+                url: "/api/v1/auth/isloggedin",
+                dataType: 'json'
+            }).done(success);
         },
 
         render: function () {

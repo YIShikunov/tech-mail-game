@@ -1,29 +1,23 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+    <a class="btn btn_red" href="#">НАЗАД</a>
+    <div class="lobby">
+        <div class="title_sub">Выбрать соперника</div>
+        <div class="score">
+            <table class="score__table">
+                <tr class="score__table__tr">
+                    <td class="score__table__td score__table__td_name">Сразиться с ...</td>
+                </tr>
+                <fest:each iterate="json" index="i" value="waitPlrs">
+                    <tr class="score__table__tr">
+                        <td class="score__table__td score__table__td_name choose"><fest:value>waitPlrs.name</fest:value></td>
+                    </tr>
+                </fest:each>
+            </table>
+        </div>
+    </div>
     <div class="game">
-        <a class="btn btn_red" href="#">НАЗАД</a>
         <div><span class="turn" style="color: white;"></span></div>
         <div>_<span class="state" style="color: yellow;"></span>_</div>
         <canvas width="800" height="550" class="game__field"></canvas>
-
-
-        <input type="button" onclick="auth('nano')" value="nano"/>
-        <input type="button" onclick="auth('cat')" value="cat"/>
-
     </div>  
-	<script>
-	function auth(name) {
-	    //document.getElementById("myCheck").click(); // Click on the checkbox
-	    var xhr = $.ajax({
-            method: 'POST',
-            url: '/api/v1/auth/signin',
-            data: {login: name, password: name},
-            // async: false,
-            dataType: 'json'
-        }).done(function (resp) {
-                    if (resp.code == 0) {
-                        alert(resp.response);
-                    }
-                });
-	}
-	</script>
 </fest:template>

@@ -1,0 +1,19 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+    <div class="title_main">WuXing</div>
+    <div class="title_sub">Выбор противника</div>
+    <div class="score">
+        <table class="score__table">
+            <tr class="score__table__tr">
+                <td class="score__table__td score__table__td_name">Имя игрока</td>
+                <td class="score__table__td score__table__td_score"></td>
+            </tr>
+            <fest:each iterate="json" index="i" value="score">
+                <tr class="score__table__tr">
+                    <td class="score__table__td score__table__td_name "><fest:value>score.name</fest:value></td>
+                    <td class="score__table__td score__table__td_score"><fest:value><button>Сразиться</button></fest:value></td>
+                </tr>
+            </fest:each>
+        </table>
+        <a class="btn btn_red" href="#">НАЗАД</a>
+    </div>
+</fest:template>

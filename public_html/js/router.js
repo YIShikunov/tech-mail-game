@@ -35,7 +35,6 @@ define([
             loginView.show();
         },
         logoutAction: function() {
-            debugger;
             var xmlHttp = new XMLHttpRequest();
             url = "http://" + location.host + "/api/v1/auth/signout";
             xmlHttp.open( "GET", url, false );

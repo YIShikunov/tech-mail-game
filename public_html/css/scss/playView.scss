@@ -3,3 +3,10 @@
         height: 550px;
     }
 }
+
+.choose {
+	cursor: pointer;
+	&:hover {
+		background: #CCCCCC;
+	}
+}

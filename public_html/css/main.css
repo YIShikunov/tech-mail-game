@@ -1,6 +1,11 @@
 .game__field {
   height: 550px; }
 
+.choose {
+  cursor: pointer; }
+  .choose:hover {
+    background: #CCCCCC; }
+
 .gameView {
   overflow: hidden;
   text-align: center; }

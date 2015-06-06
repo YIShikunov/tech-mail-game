@@ -29,9 +29,12 @@ define([
             var data = JSON.parse(msg.data);
             console.info(msg.data);
             if (data.typeID == 0) {
+                clearInterval(obj.timer);
                 localStorage['youStart'] = data.youStart;
-                alert("Играем с " + data.opponent);
+                $(".lobby").hide();
+                $(".game").show();
                 $(".turn").text("РАССТАВЬТЕ СВОИ ФИШКИ");
+                alert("Играем с " + data.opponent);
 
                 var but = document.createElement("button");
                 but.innerHTML ="Расставить в случайной последовательности";
