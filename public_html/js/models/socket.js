@@ -27,7 +27,7 @@ define([
         },
         onMessage: function (msg) {
             var data = JSON.parse(msg.data);
-            console.info(msg.data);
+            // console.info(msg.data);
             if (data.typeID == 0) {
                 clearInterval(obj.timer);
                 localStorage['youStart'] = data.youStart;

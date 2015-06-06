@@ -35,8 +35,8 @@ define([
         socket: new Socket(),
         cloud: null,
         scale: 1.15,        
-        stFld: [ {field : [], centers: [], elem: [0,2,4,1,3], have: [1,1,1,1,1], rotate: false}, 
-                 {field : [], centers: [], elem: [3,1,4,2,0], have: [1,1,1,1,1], rotate: true}],
+        stFld: [ {field : [], centers: [], elem: [0,4,3,2,1], have: [1,1,1,1,1], rotate: false}, 
+                 {field : [], centers: [], elem: [1,2,3,4,0], have: [1,1,1,1,1], rotate: true}],
 
         events: {
             'click canvas' : 'gameClick',

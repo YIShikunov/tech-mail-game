@@ -4,7 +4,7 @@
     <div>
 	    <a class="btn btn_red" href="#game" id="game">Играть</a>
 	    <a class="btn btn_orange" href="#login" id="login">Войти</a>
-	    <a class="btn btn_green" href="#logon" id="logon">Авторизация</a>
+	    <a class="btn btn_green" href="#logon" id="logon">Регистрация</a>
 	    <a class="btn btn_gray" href="#logout" id="logout">Выйти</a>
 	    <a class="btn btn_yellow" href="#scoreboard">Рейтинг</a>
 	 </div>
