@@ -70,7 +70,7 @@ define([
                     (coords[i][0][1]-coords[i][k][1])*(x-coords[i][k][0]) <= 0 )
                         check = false;
                 if (check) { 
-                    console.info('filed: '+i);
+                    // console.info('filed: '+i);
                     return i;
                 }
             }

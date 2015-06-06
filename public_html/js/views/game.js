@@ -251,7 +251,7 @@ define([
                 x < panel.x+panel.width && 
                 y > panel.y && 
                 y < panel.y+panel.height)
-                for (i=0; i<this.elements.length; i++) {
+                for (i=0; i< 5; i++) {
                     if (y < this.elements[i].index*90+140) {
                         this.drawElemInPanel(this.index);
                         this.drawSelect(this.context, panel.x+panel.width/2, this.elements[i].index*90+60)
@@ -274,7 +274,7 @@ define([
                         if (this.elements[this.index].count == 0) {
                             this.drawElemInPanel(this.index);
 
-                            for (z=0; z<this.elements.length; z++)
+                            for (z=0; z<5; z++)
                                 if (this.elements[z].count > 0) {
                                     this.index = z;
                                     break;
